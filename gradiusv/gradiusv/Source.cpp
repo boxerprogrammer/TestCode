@@ -48,7 +48,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	array<Position2f, 4> ctrlPositions;
 
 	for (int i = 0; i < ctrlPositions.size(); ++i) {
-		ctrlPositions[i].x = pos.x + i * 20;
+		ctrlPositions[i].x = pos.x + i * 50;
 		ctrlPositions[i].y = pos.y;// -i * 80 + (i*i) * 30;
 	}
 
@@ -78,6 +78,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		20);
 	list<BendLazerPos> lazer;
 	copy(bs.begin(), bs.end(), back_inserter(lazer));
+
 	while (ProcessMessage()==0) {
 		ClearDrawScreen();
 
@@ -155,8 +156,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ctrlPositions[1],
 				ctrlPositions[2],
 				ctrlPositions[3],
-				20);
-			copy(bz.begin(), bz.end(), front_inserter(lazer));
+				10);
+
+			auto rit = bz.rbegin();
+			for (; rit != bz.rend(); ++rit) {
+				lazer.push_front(*rit);
+			}
+			
 		}
 		for (auto& b : lazer) {
 			if ((b.pos - pos.ToFloatVec() ).Length()==0.0f) {
