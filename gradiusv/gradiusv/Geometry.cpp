@@ -4,11 +4,7 @@
 
 Geometry::Geometry()
 {
-	Vector2D<int> v(1,2);
-	Vector2D<int> v2(3,4);
-	Vector2D<float> vf(5,6);
-	v = v2;
-	Vector2D<int> a[10];
+
 }
 
 

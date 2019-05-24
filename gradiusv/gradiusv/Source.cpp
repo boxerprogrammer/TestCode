@@ -53,7 +53,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 
 
-	array<float, 3> velocities = { 15.0f,15.0f,15.0f };
+	array<float, 3> velocities = { 15.0f,10.0f,5.0f };
+
+	array<float, 3> omegas = { 0.3f,0.2f,0.1f };
 
 	float angle = 0.0f;
 	char keystate[256];
@@ -84,10 +86,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		ctrlPositions[0] = pos.ToFloatVec();
 
+		//ターゲット座標設定
 		for (int i = 0; i < targetpositions.size(); ++i) {
 			targetpositions[i] = ctrlPositions[0] + Vector2f(cos(angle)*lengthes[i], sin(angle)*lengthes[i]);
 		}
 
+		//線形補間
 		for (int i = 0; i < targetpositions.size(); ++i) {
 			if ((ctrlPositions[i + 1] - targetpositions[i]).Length() < velocities[i]*1.6f) {
 				ctrlPositions[i + 1] = targetpositions[i];
@@ -95,6 +99,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ctrlPositions[i + 1] += (targetpositions[i] - ctrlPositions[i + 1]).Normalized()*velocities[i];
 			}
 		}
+
+		//球面線形補間
+		//for (int i = 0; i < targetpositions.size(); ++i) {
+		//	if ((ctrlPositions[i + 1] - targetpositions[i]).Length() < velocities[i]*1.6f) {
+		//		ctrlPositions[i + 1] = targetpositions[i];
+		//	}else{
+		//		ctrlPositions[i + 1] = ctrlPositions[i]+(ctrlPositions[i + 1]+(targetpositions[i] - ctrlPositions[i + 1]).Normalized()*velocities[i]).Normalized()*lengthes[i];
+		//	}
+		//}
 
 		//コントロールポイント描画
 		//for (const auto& p : ctrlPositions) {
