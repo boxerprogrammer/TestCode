@@ -1,87 +1,67 @@
 #include "Geometry.h"
-#include<DxLib.h>
 
 
-Geometry::Geometry()
-{
 
+Vector2f ConvertToVector2f(const Vector2& v) {
+	return Vector2f(v.x, v.y);
+}
+
+float Dot(const Vector2f& lval, const Vector2f& rval) {
+	return lval.x*rval.x + lval.y*rval.y;
+}
+
+float Cross(const Vector2f& lval, const Vector2f& rval) {
+	return lval.x*rval.y - lval.y*rval.x;
+}
+
+Vector2f 
+operator*(const Vector2f& inv, const Mat3x3& mat) {
+	Vector2f ret;
+	ret.x = inv.x*mat.e[0][0] + inv.y*mat.e[1][0]+mat.e[2][0];
+	ret.y = inv.x*mat.e[0][1] + inv.y*mat.e[1][1]+mat.e[2][1];
+	return ret;
+}
+
+Mat3x3
+operator*(const Mat3x3& lval, const Mat3x3& rval) {
+	Mat3x3 ret;
+	//for (int i = 0; i < 3; ++i) {//c
+	//	for (int j = 0; j < 3; ++j) {//‰¡
+	//		ret.e[i][j]= lval.e[i][j]* rval.e[j][i]+
+	//	}
+	//}
+	ret.e[0][0] = lval.e[0][0] * rval.e[0][0] + lval.e[0][0] * rval.e[0][1] + lval.e[0][0] * rval.e[0][2];
+	ret.e[0][1] = lval.e[0][1] * rval.e[1][0] + lval.e[0][1] * rval.e[1][1] + lval.e[0][1] * rval.e[1][2];
+	ret.e[0][2] = lval.e[0][2] * rval.e[2][0] + lval.e[0][2] * rval.e[2][1] + lval.e[0][2] * rval.e[2][2];
+
+	ret.e[1][0] = lval.e[1][0] * rval.e[0][0] + lval.e[1][0] * rval.e[0][1] + lval.e[1][0] * rval.e[0][2];
+	ret.e[1][1] = lval.e[1][1] * rval.e[1][0] + lval.e[1][1] * rval.e[1][1] + lval.e[1][1] * rval.e[1][2];
+	ret.e[1][2] = lval.e[1][2] * rval.e[2][0] + lval.e[1][2] * rval.e[2][1] + lval.e[1][2] * rval.e[2][2];
+
+	ret.e[2][0] = lval.e[2][0] * rval.e[0][0] + lval.e[2][0] * rval.e[0][1] + lval.e[2][0] * rval.e[0][2];
+	ret.e[2][1] = lval.e[2][1] * rval.e[1][0] + lval.e[2][1] * rval.e[1][1] + lval.e[2][1] * rval.e[1][2];
+	ret.e[2][2] = lval.e[2][2] * rval.e[2][0] + lval.e[2][2] * rval.e[2][1] + lval.e[2][2] * rval.e[2][2];
+
+	return ret;
 }
 
 
-Geometry::~Geometry()
-{
+Mat3x3 
+Identity() {
+	Mat3x3 m = { {{1,0,0},{0,1,0},{0,0,1} } };
+	return m;
 }
-
-Size::Size() :w(0),h(0){}
-Size::Size(int inw, int inh) :w(inw),h(inh){}
-
-Rect::Rect() : center(0,0),size(0,0){}
-
-Rect::Rect(int x, int y, int w, int h): center(x,y),size(w,h){}
-
-Rect::Rect(Position2& pos, Size& sz):center(pos),size(sz) {}
-
-const int 
-Rect::Left()const { 
-	return center.x - size.w / 2; 
+Mat3x3 
+Rotate(float angle) {
+	Mat3x3 m = { {{cos(angle),sin(angle),0},{-sin(angle),cos(angle),0},{0,0,1} } };
+	return m;
 }
-const int 
-Rect::Top()const { 
-	return center.y - size.h / 2; 
+Mat3x3 
+Translate(const Vector2f& v) {
+	Mat3x3 m = { {{1,0,0},{0,1,0},{v.x,v.y,1} } };
+	return m;
 }
-const int 
-Rect::Right()const { 
-	return center.x + size.w / 2; 
-}
-const int 
-Rect::Bottom()const { 
-	return center.y + size.h / 2; 
-}
-
-void 
-Rect::Draw(unsigned int color ) {
-	//DrawLine(Left(), Top(), Left(), Bottom(), color, 3);
-	//DrawLine(Right(), Top(), Right(), Bottom(), color, 3);
-	//DrawLine(Left(), Top(), Right(), Top(), color, 3);
-	//DrawLine(Left(), Bottom(), Right(), Bottom(), color, 3);
-	DxLib::SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
-	DxLib::DrawBox(Left(), Top(), Right(), Bottom(), color, true);
-	DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	DxLib::DrawBox(Left(), Top(), Right(), Bottom(), color, false);
-}
-
-void
-Rect::Draw(const Vector2f& offset, unsigned int color) {
-	DxLib::SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
-	DxLib::DrawBox(Left() + offset.x,
-		Top() + offset.y,
-		Right() + offset.x,
-		Bottom() + offset.y,
-		color, true);
-	DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	DxLib::DrawBox(Left() + offset.x,
-		Top() + offset.y,
-		Right() + offset.x,
-		Bottom() + offset.y,
-		color, false);
-}
-
-void
-Rect::Draw(const Vector2& offset,unsigned int color ) {
-	DxLib::DrawBox(Left()+offset.x, 
-		Top()+offset.y, 
-		Right()+offset.x,
-		Bottom()+offset.y, 
-		color, false);
-}
-
-
-Rect 
-Rect::CreateRectFromLRTB(int left, int right, int top, int bottom) {
-	return Rect((left + right) / 2, (top + bottom) / 2, right - left, bottom - top);
-}
-
-Rect
-Rect::CreateOverlappedRangeRect(const Rect& rcA, const Rect& rcB) {
-	return CreateRectFromLRTB(max(rcA.Left(), rcB.Left()), min(rcA.Right(), rcB.Right()), max(rcA.Top(), rcB.Top()), min(rcA.Bottom(), rcB.Bottom()));
+Mat3x3 
+CenteredRotate(const Position2f& p, float angle) {
+	return Translate(-p)*Rotate(angle)*Translate(p);
 }
