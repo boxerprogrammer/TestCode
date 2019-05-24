@@ -53,7 +53,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			rightX = scroll + 384;
 		}
 
-		DrawGraph(180, 288 - 32 - 47, playerH[scroll / 4 % 6], true);
+		DrawGraph(180, 288 - 32 - 42, playerH[scroll / 4 % 6], true);
 
 		++scroll;
 
