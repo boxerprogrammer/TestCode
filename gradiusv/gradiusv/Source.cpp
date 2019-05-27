@@ -62,6 +62,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	auto vicviperH=LoadGraph("img/vicviper.png");
+	auto optionH = LoadGraph("img/option.png");
+
+	vector<Position2f> options(1);
 
 	array<int,20> screenH;
 	for (auto& s : screenH) {
@@ -69,6 +72,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 	
 	Position2 pos(320, 240);
+
+	options[0] = pos.ToFloatVec();
 
 	list<ControlPoint> ctrlPnts(4);
 
@@ -104,6 +109,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float angle =0.0f;
 	auto lastangle = angle;
 	char keystate[256];
+	char lastkeystate[256];
 
 	ctrlpnt = ctrlPnts.begin();
 	vector<BendLazerPos> bs=CalculateCubicBezier(ctrlpnt->pos,
@@ -115,44 +121,59 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 //	copy(bs.begin(), bs.end(), back_inserter(lazer));
 	int frame = 0;
 	int drawframe = 0;
+	const float maxoptdistance = 50.0f;
 	while (ProcessMessage()==0) {
 		ClearDrawScreen();
 
 		GetHitKeyStateAll(keystate);
 		
+		bool isChanged = false;
 		if (keystate[KEY_INPUT_UP]) {
 			pos.y -= 2;
+			isChanged = true;
 		}
 		if (keystate[KEY_INPUT_DOWN]) {
 			pos.y += 2;
+			isChanged = true;
 		}
 		if (keystate[KEY_INPUT_RIGHT]) {
 			pos.x += 2;
+			isChanged = true;
 		}
 		if (keystate[KEY_INPUT_LEFT]) {
 			pos.x -= 2;
+			isChanged = true;
 		}
 
 		if (keystate[KEY_INPUT_Z]) {
 			angle += 1.0f/6.f;
-			ctrlPnts.emplace_front( pos.ToFloatVec());
-			frame = 0;
+			isChanged = true;
 		}
 		if (keystate[KEY_INPUT_X]) {
 			angle -= 1.0f/6.f;
+			isChanged = true;
+			
+		}
+		if (isChanged ) {
 			ctrlPnts.emplace_front(pos.ToFloatVec());
-			frame = 0;
+		}
+		
+		Position2f oplstPos = pos.ToFloatVec();
+		for (auto& o : options) {
+			auto len = (o - oplstPos).Length();
+			o= oplstPos+(o - oplstPos).Normalized()*min(len,maxoptdistance);
+			oplstPos = o;
 		}
 
-		++frame;
+		
 
 
 		//ターゲット座標設定
-		auto length = 0.0f;
-		for (int i = 0; i < targetpositions.size(); ++i) {
-			length += lengthes[i];
-			targetpositions[i] = pos.ToFloatVec() + Vector2f(cos(angle)*length, sin(angle)*length);
-		}
+		//auto length = 0.0f;
+		//for (int i = 0; i < targetpositions.size(); ++i) {
+		//	length += lengthes[i];
+		//	targetpositions[i] = pos.ToFloatVec() + Vector2f(cos(angle)*length, sin(angle)*length);
+		//}
 
 		//線形補間
 		//for (int i = 0; i < targetpositions.size(); ++i) {
@@ -197,11 +218,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			continue;
 		}
 		for (auto& cp : ctrlPnts) {
-			if ((cp.pos - pos.ToFloatVec()).Length() == 0.0f) {
-				cp.vel = Vector2f(cos(angle), sin(angle))*4;
-			}
-			else {
-				cp.vel = (cp.pos - pos.ToFloatVec()).Normalized()*4;
+			//if ((cp.pos - pos.ToFloatVec()).Length() == 0.0f) {
+			//	cp.vel = Vector2f(cos(angle), sin(angle))*4;
+			//}
+			//else {
+			//	cp.vel = (cp.pos - pos.ToFloatVec()).Normalized()*4;
+			//}
+			if (cp.vel == Vector2f()) {
+				cp.vel = Vector2f(cos(angle), sin(angle)) * 4;
 			}
 		}
 
@@ -225,10 +249,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//}
 
 
-		////コントロールポイント描画
-		//for (const auto& p : ctrlPnts) {
-		//	DrawCircle(p.pos.x, p.pos.y, 3, 0xffffff, true);
-		//}
+
 
 		//ctrlpnt0 = ctrlPnts.begin();
 		//ctrlpnt1 = ctrlpnt0;
@@ -393,12 +414,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 		}
 		
+		for (auto& o : options) {
+			DrawRotaGraph(o.x, o.y, 2.0f, 0.0f, optionH, true);
+		}
+
 		DrawRotaGraph(pos.x, pos.y, 2.0f, 0.0f, vicviperH, true);
 
 		lastangle = angle;
 
 		drawframe = (drawframe + 1) % screenH.size();
+		
+		copy(begin(keystate), end(keystate), begin(lastkeystate));
 
+		//デバッグ用
+		//コントロールポイント描画
+		//for (const auto& p : ctrlPnts) {
+		//	DrawCircle(p.pos.x, p.pos.y, 2, 0xff0000, true);
+		//}
 
 		LoopEndProcess();
 	}
