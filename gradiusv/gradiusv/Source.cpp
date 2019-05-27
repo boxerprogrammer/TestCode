@@ -55,7 +55,7 @@ void LoopEndProcess() {
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
-	int optionnum = 1;
+	int optionnum = 3;
 	ChangeWindowMode(true);
 	SetGraphMode(640, 480, 32);
 
@@ -67,7 +67,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	
 
-	array<int,20> screenH;
+	array<int,10> screenH;
 	for (auto& s : screenH) {
 		s = MakeScreen(640, 480);
 	}
@@ -132,7 +132,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 //	copy(bs.begin(), bs.end(), back_inserter(lazer));
 	int frame = 0;
 	int drawframe = 0;
-	const float maxoptdistance = 50.0f;
+	const float maxoptdistance = 80.0f;
 	while (ProcessMessage()==0) {
 		ClearDrawScreen();
 
@@ -141,19 +141,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		bool isChanged = false;
 		auto& pos = poss[0];
 		if (keystate[KEY_INPUT_UP]) {
-			pos.y -= 2;
+			pos.y -= 4;
 			isChanged = true;
 		}
 		if (keystate[KEY_INPUT_DOWN]) {
-			pos.y += 2;
+			pos.y += 4;
 			isChanged = true;
 		}
 		if (keystate[KEY_INPUT_RIGHT]) {
-			pos.x += 2;
+			pos.x += 4;
 			isChanged = true;
 		}
 		if (keystate[KEY_INPUT_LEFT]) {
-			pos.x -= 2;
+			pos.x -= 4;
 			isChanged = true;
 		}
 
@@ -243,7 +243,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//	cp.vel = (cp.pos - pos.ToFloatVec()).Normalized()*4;
 				//}
 				if (cp.vel == Vector2f()) {
-					cp.vel = Vector2f(cos(angle), sin(angle)) * 4;
+					cp.vel = Vector2f(cos(angle), sin(angle)) * 10;
 				}
 			}
 		}
@@ -313,7 +313,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			--cpitend;
 			--cpitend;
 			for (auto cpit = cps.rbegin(); cpit != cpitend; ++cpit) {
-				auto p0 = cpit == cps.rbegin() ? pos.ToFloatVec() : cpit->pos;
+				auto p0 = cpit == cps.rbegin() ? poss[idx].ToFloatVec() : cpit->pos;
 				auto cpit1 = cpit;
 				auto p1 = cpit == cps.rbegin() ? cpit->pos : (++cpit1)->pos;
 				auto cpit2 = cpit1;
@@ -406,14 +406,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//		DrawCircle(p.pos.x, p.pos.y, 10, 0x88aaff, true);
 		//	}
 		//}
-		if (lazer.empty()) {
-			LoopEndProcess();
-			continue;
-		}
+		//if (lazer.empty()) {
+		//	LoopEndProcess();
+		//	continue;
+		//}
 
 		SetDrawScreen(screenH[drawframe]);
 		ClearDrawScreen();
 		for (int i = 0; i < lazer.size(); ++i) {
+			if (lazer[i].empty()) {//レーザーない時は相手にしない。
+				continue;
+			}
 			auto it = lazer[i].begin();
 			it++;
 			for (; it != lazer[i].end(); ++it) {
@@ -428,13 +431,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			////
-			DrawLine(pos.x, pos.y, lazer[i].back().pos.x, lazer[i].back().pos.y, 0x88aaff, 3);
+			DrawLine(poss[i].x, poss[i].y, lazer[i].back().pos.x, lazer[i].back().pos.y, 0x88aaff, 3);
 		}
 		SetDrawScreen(DX_SCREEN_BACK);
 		DrawGraph(0, 0, screenH[drawframe], true);
 		for (int i = 0; i < screenH.size(); ++i) {
 			int idx = (drawframe + i) % screenH.size();
-			SetDrawBlendMode(DX_BLENDMODE_ADD,26*(i+1));
+			SetDrawBlendMode(DX_BLENDMODE_ADD,20*(i+1));
 			GraphFilter(screenH[idx], DX_GRAPH_FILTER_GAUSS, 8, 100);
 			DrawGraph(0, 0, screenH[idx], true);
 
