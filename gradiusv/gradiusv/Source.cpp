@@ -87,26 +87,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 	}
 
-
-
-	//array<float, 3> lengthes;
-	//auto ctrlpnt0 = ctrlPnts.begin();
-	//auto ctrlpnt1 = ctrlpnt0;
-	//++ctrlpnt1;
-	//for (auto& l : lengthes) {
-	//	l = (ctrlpnt1->pos - ctrlpnt0->pos).Length();
-	//	++ctrlpnt0;
-	//	++ctrlpnt1;
-	//}
-	//array<Position2f, 3> targetpositions;
-	//auto ctrlpnt = ctrlPnts.begin();
-	//++ctrlpnt;
-	//for (int i = 0; i < targetpositions.size(); ++i) {
-	//	targetpositions[i] = ctrlpnt->pos;
-	//	++ctrlpnt;
-	//}
-
-
 	array<float, 3> velocities = { 15.0f,10.0f,10.0f };
 
 	array<float, 3> omegas = { 0.25f,0.15f,0.1f };
@@ -185,63 +165,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 
 
-		//ターゲット座標設定
-		//auto length = 0.0f;
-		//for (int i = 0; i < targetpositions.size(); ++i) {
-		//	length += lengthes[i];
-		//	targetpositions[i] = pos.ToFloatVec() + Vector2f(cos(angle)*length, sin(angle)*length);
-		//}
 
-		//線形補間
-		//for (int i = 0; i < targetpositions.size(); ++i) {
-		//	if ((ctrlPositions[i + 1] - targetpositions[i]).Length() < velocities[i]*1.6f) {
-		//		ctrlPositions[i + 1] = targetpositions[i];
-		//	}else{
-		//		ctrlPositions[i + 1] += (targetpositions[i] - ctrlPositions[i + 1]).Normalized()*velocities[i];
-		//	}
-		//}
 		if (ctrlPnts.empty()) {
 			LoopEndProcess();
 			continue;
 		}
-		//ctrlpnt0 = ctrlPnts.begin();
-		//ctrlpnt1 = ctrlpnt0;
-		//++ctrlpnt1;
 
-
-
-//		//球面線形補間
-//		//for (int i = 0; i < targetpositions.size(); ++i) 
-//		{
-///*			if ((ctrlPositions[i + 1] - targetpositions[i]).Length() < velocities[i]*1.2f) {
-//				ctrlPositions[i + 1] = targetpositions[i];
-//			}else*/{
-//				//線形補間座標
-//
-//				//auto tmp = (ctrlpnt0->pos -pos.ToFloatVec()).Normalized();
-//				//auto tmp2 = (targetpositions[0]-pos.ToFloatVec()).Normalized();
-//				//auto cross = Cross(tmp, tmp2);
-//				//auto angle = sin(cross);
-//				//angle = copysign(min(omegas[0], abs(angle)), angle);
-//				//ctrlpnt0->pos = pos.ToFloatVec() + (tmp*Rotate(angle)) *lengthes[0];
-//				//tmp= ctrlpnt1->pos + (targetpositions[i] - ctrlpnt1->pos).Normalized()*velocities[i];
-//				//ctrlpnt1->pos = ctrlpnt0->pos + (tmp - ctrlpnt0->pos).Normalized()*lengthes[i];
-//			}
-//			//++ctrlpnt0;
-//			//++ctrlpnt1;
-//		}
 		if (ctrlPnts.empty()) {
 			LoopEndProcess();
 			continue;
 		}
 		for (auto& cps : ctrlPnts) {
 			for (auto& cp : cps) {
-				//if ((cp.pos - pos.ToFloatVec()).Length() == 0.0f) {
-				//	cp.vel = Vector2f(cos(angle), sin(angle))*4;
-				//}
-				//else {
-				//	cp.vel = (cp.pos - pos.ToFloatVec()).Normalized()*4;
-				//}
 				if (cp.vel == Vector2f()) {
 					cp.vel = Vector2f(cos(angle), sin(angle)) * 10;
 				}
@@ -255,38 +190,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 
-
-		//for (auto& b : lazer) {
-		//	if ((b.pos - pos.ToFloatVec() ).Length()==0.0f) {
-		//		b.vel = Vector2f(cos(angle), sin(angle));
-		//	}
-		//	else {
-		//		b.vel = (b.pos - pos.ToFloatVec()).Normalized();
-		//	}
-		//}
-
-		//for (auto& b : lazer) {
-		//	b.pos += b.vel;
-		//}
-
-
-
-
-		//ctrlpnt0 = ctrlPnts.begin();
-		//ctrlpnt1 = ctrlpnt0;
-		//++ctrlpnt1;
-		//DrawLine(pos.x, pos.y,
-		//	ctrlpnt0->pos.x, ctrlpnt0->pos.y, 0xffffff, 2);
-		//for (; ctrlpnt1 != ctrlPnts.end(); ++ctrlpnt0, ++ctrlpnt1) {
-		//	if (ctrlpnt0->pos.x >= -120 && ctrlpnt0->pos.x <= 760 &&
-		//		ctrlpnt0->pos.y >= -120 && ctrlpnt0->pos.y <= 600 &&
-		//		ctrlpnt1->pos.x >= -120 && ctrlpnt1->pos.x <= 760 &&
-		//		ctrlpnt1->pos.y >= -120 && ctrlpnt1->pos.y <= 600) {
-		//		DrawLine(ctrlpnt0->pos.x, ctrlpnt0->pos.y,
-		//			ctrlpnt1->pos.x, ctrlpnt1->pos.y, 0xffffff, 2);
-		//	}
-
-		//}
 		for (auto& cps : ctrlPnts) {
 			//不必要なコントロールポイントを削除
 			cps.erase(std::remove_if(cps.begin(), cps.end(), [](const ControlPoint& pred) {
@@ -299,15 +202,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		vector<list<BendLazerPos>> lazer(optionnum+1);
 		//ベジェ曲線計算(今回はコントロールポイントすべて通したいため)
 		//中間点は自前で計算する
-		//std::list<ControlPoint>::reverse_iterator lastit = ctrlPnts.rbegin();
 		for (int idx = 0; idx < ctrlPnts.size();++idx) {
 			auto& cps = ctrlPnts[idx];
 			if (cps.size() <= 2) {
 				LoopEndProcess();
 				continue;
 			}
-
-		
 			auto cpitend = cps.rend();
 			--cpitend;
 			--cpitend;
@@ -357,60 +257,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				mp1 = mpos1 - mp1 + p2;
 
 
-				//auto cp3 = cpit;
-				//++cp3;
-				//if (cp3 == ctrlPnts.rend())break;
-
 				std::vector<BendLazerPos> bz;
-				//if (lastit == cp0) {//一番最初
 				bz = CalculateCubicBezier(p1,
 					mp0,
 					mp1,
 					p2,
 					10);
-				//}
-				//else {
-					//bz = CalculateCubicBezier(lastit->pos,
-					//	cp0->pos,
-					//	cp1->pos,
-					//	(cp2 == ctrlPnts.rend()) ? pos.ToFloatVec() : cp2->pos,
-					//	10);
-				//}
-
-				//lastit = cp2;
 				std::copy(bz.begin(), bz.end(), back_inserter(lazer[idx]));
 			}
 		}
-			//auto rit = bz.rbegin();
-			//for (; rit != bz.rend(); ++rit) {
-			//	lazer.push_front(*rit);
-			//}
-		//	
-		//}
-		//for (auto& b : lazer) {
-		//	if ((b.pos - pos.ToFloatVec() ).Length()==0.0f) {
-		//		b.vel = Vector2f(cos(angle), sin(angle));
-		//	}
-		//	else {
-		//		b.vel = (b.pos - pos.ToFloatVec()).Normalized();
-		//	}
-		//}
-
-		//for (auto& b : lazer) {
-		//	b.pos += b.vel;
-		//}
-
-		//ベジェ描画
-		//for (const auto& p : lazer) {
-		//	if ( p.pos.x > 0 && p.pos.x <= 640 && p.pos.y > 0 && p.pos.y <= 480) {
-		//		DrawCircle(p.pos.x, p.pos.y, 10, 0x88aaff, true);
-		//	}
-		//}
-		//if (lazer.empty()) {
-		//	LoopEndProcess();
-		//	continue;
-		//}
-
+			
 		SetDrawScreen(screenH[drawframe]);
 		ClearDrawScreen();
 		for (int i = 0; i < lazer.size(); ++i) {
@@ -456,12 +312,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		drawframe = (drawframe + 1) % screenH.size();
 		
 		copy(begin(keystate), end(keystate), begin(lastkeystate));
-
-		//デバッグ用
-		//コントロールポイント描画
-		//for (const auto& p : ctrlPnts) {
-		//	DrawCircle(p.pos.x, p.pos.y, 2, 0xff0000, true);
-		//}
 
 		LoopEndProcess();
 	}
