@@ -7,7 +7,7 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
 	SetWindowText("atan2ó˚èKÉTÉìÉvÉã");
 	DxLib_Init();
 	SetDrawScreen(DX_SCREEN_BACK);
-	SetDrawMode(DX_DRAWMODE_BILINEAR);
+	//SetDrawMode(DX_DRAWMODE_BILINEAR);
 	auto arrowcatH=LoadGraph("img/arrowcat.png");
 
 	int posx = 320;

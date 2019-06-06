@@ -1,7 +1,7 @@
 #include<DxLib.h>
 #include"Geometry.h"
 
-int WINAPI WinMain() {
+int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
 	ChangeWindowMode(true);
 	SetWindowText("‹éŒ`“–‚½‚è”»’èƒTƒ“ƒvƒ‹");
 	DxLib_Init();
