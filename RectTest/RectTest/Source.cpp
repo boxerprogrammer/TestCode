@@ -35,6 +35,8 @@ int WINAPI WinMain() {
 			rv.Normalize();
 			rcA.pos -= v * rv;
 		}
+
+		//‹éŒ`‚Ì•\Ž¦
 		rcA.Draw(color);
 		rcB.Draw(color);
 
