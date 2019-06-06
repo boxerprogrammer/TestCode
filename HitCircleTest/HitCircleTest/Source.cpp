@@ -1,8 +1,9 @@
 #include<DxLib.h>
 #include<cmath>
 
-bool IsHitCircle() {
-	return false;
+bool IsHitCircle(int ax, int ay, int bx, int by,float ar,float br) {
+
+	return hypot(bx-ax,by-ax)<=ar+br;
 }
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -48,8 +49,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ay += 2;
 		}
 
-
-		if (hypot(bx - ax, by - ay) <= radiusA + radiusB) {
+		//hypot(bx - ax, by - ay) <= radiusA + radiusB
+		if (IsHitCircle(ax,ay,bx,by,radiusA,radiusB)) {
 			col = color_hit;
 			//当たっているので押し戻す…だが、これが難しい。
 			//当たるのははっきり言って児戯に等しいっ…！！
