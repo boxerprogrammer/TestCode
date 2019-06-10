@@ -3,7 +3,7 @@
 
 bool IsHitCircle(int ax, int ay, int bx, int by,float ar,float br) {
 
-	return hypot(bx-ax,by-ax)<=ar+br;
+	return false;
 }
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {

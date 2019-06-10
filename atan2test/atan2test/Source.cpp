@@ -7,12 +7,13 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
 	SetWindowText("atan2ó˚èKÉTÉìÉvÉã");
 	DxLib_Init();
 	SetDrawScreen(DX_SCREEN_BACK);
-	//SetDrawMode(DX_DRAWMODE_BILINEAR);
+	SetDrawMode(DX_DRAWMODE_BILINEAR);
 	auto arrowcatH=LoadGraph("img/arrowcat.png");
 
-	int posx = 320;
-	int posy = 240;
-
+	float posx = 320;
+	float posy = 240;
+	float vx = 0;
+	float vy = 0;
 	while (!ProcessMessage()) {
 		ClearDrawScreen();
 		
@@ -21,6 +22,14 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
 
 		auto angle = atan2(my - posy, mx - posx);
 		DrawRotaGraph(posx, posy, 1.0f, angle, arrowcatH,true);
+
+		auto m=GetMouseInput();
+		if (m) {
+			vx = cos(angle);
+			vy = sin(angle);
+		}
+		posx += vx;
+		posy += vy;
 
 		ScreenFlip();
 	}
