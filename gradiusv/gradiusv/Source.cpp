@@ -56,6 +56,7 @@ void LoopEndProcess() {
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int optionnum = 3;
+	SetWindowText("ベジェの応用例");
 	ChangeWindowMode(true);
 	SetGraphMode(640, 480, 32);
 
