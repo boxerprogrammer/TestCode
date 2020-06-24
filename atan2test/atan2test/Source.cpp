@@ -8,7 +8,7 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
 	DxLib_Init();
 	SetDrawScreen(DX_SCREEN_BACK);
 	SetDrawMode(DX_DRAWMODE_BILINEAR);
-	auto arrowcatH=LoadGraph("img/arrowcat.png");
+	auto arrowcatH=LoadGraph("img/arrow.png");
 
 	float posx = 320;
 	float posy = 240;
