@@ -59,7 +59,7 @@ Fan::Draw(uint32_t color ) {
 	}
 	auto vstart = v1;
 	auto vend =RotateMat(min_angle)*v1;
-	for (int i = 0; i < triangles_num; ++i) {
+	for (size_t i = 0; i < triangles_num; ++i) {
 		if (i < triangles_num - 1) {
 			v[i * 3 + 0].pos = V2V(center);
 			v[i * 3 + 1].pos = V2V(center + vstart);
