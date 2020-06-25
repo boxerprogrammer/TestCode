@@ -35,7 +35,8 @@ bool IsHitCircleAndFan(const Circle& c, const Fan& fan) {
 	if (diff > fan.Radius() + c.radius)return false;
 	//②中心が扇形のv1とv2の間に入っていれば確定当たり。はっきりわかんだね。
 	auto v = (c.center - fan.center);
-	if (0 < Cross(fan.v1, v) && Cross(fan.v2, v) < 0 ){
+	auto betAngle = fan.GetAngle();
+	if ( GetAngle2Vector(fan.v1,v) < betAngle ){
 		return true;
 	}
 	//③最後はそれぞれの線分との距離を測る(ここがちょっとめんどい)
@@ -108,6 +109,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		if (keystate[KEY_INPUT_D]) {
 			rcB.pos.x += speed;
+		}
+
+		if (keystate[KEY_INPUT_Z]) {
+			fan.AddAngle(0.005f);
+		}
+
+		if (keystate[KEY_INPUT_X]) {
+			fan.AddAngle(-0.005f);
 		}
 
 		unsigned int color = 0xffffff;//白

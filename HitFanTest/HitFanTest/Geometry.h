@@ -74,7 +74,11 @@ struct Fan {
 	Fan(const Position2& p, const Vector2& inv, float angle);
 	void Draw(unsigned int color=0xffffff);
 	float Radius()const;
+	void AddAngle(float angle);
+	float GetAngle()const;
 };
+
+float GetAngle2Vector(const Vector2& v1, const Vector2& v2);
 
 struct Rect {
 	Position2 pos; //’†SÀ•W

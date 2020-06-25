@@ -8,14 +8,20 @@ namespace {
 	VECTOR V2V(const Vector2& v) {
 		return VGet(v.x, v.y, 0);
 	}
-	float GetAngle2Vector(const Vector2& v1, const Vector2& v2) {
-		auto tmpv1 = v1.Normalized();
-		auto tmpv2 = v2.Normalized();
-		float dot = Dot(tmpv1, tmpv2);
-		float cross = Cross(tmpv1, tmpv2);
-		return atan2(cross,dot);
-	}
 }
+
+float GetAngle2Vector(const Vector2& v1, const Vector2& v2) {
+	auto tmpv1 = v1.Normalized();
+	auto tmpv2 = v2.Normalized();
+	float dot = Dot(tmpv1, tmpv2);
+	float cross = Cross(tmpv1, tmpv2);
+	auto angle = atan2(cross, dot);
+	if (angle < 0) {
+		angle += DX_PI_F * 2.0f;
+	}
+	return angle;
+}
+
 Fan::Fan(const Position2& p, const Vector2& inv1, const Vector2& inv2) :
 center(p),v1(inv1),v2(inv2){
 
@@ -29,6 +35,17 @@ center(p),v1(inv){
 	v2 = RotateMat(angle)*v1;
 }
 
+float 
+Fan::GetAngle()const {
+	return GetAngle2Vector(v1, v2);
+}
+
+void 
+Fan::AddAngle(float angle) {
+	float tmpAngle = GetAngle2Vector(v1, v2);
+
+	v2 = RotateMat(tmpAngle+angle) * v1;
+}
 
 
 float 
@@ -48,6 +65,7 @@ Fan::Draw(uint32_t color ) {
 	//};
 	constexpr float min_angle = DX_PI_F / 36.0f;//‚¾‚¢‚½‚¢5“x‚­‚ç‚¢
 	float angle = GetAngle2Vector(v1, v2);
+
 	int triangles_num=(int)ceil(angle / min_angle);
 	vector<VERTEX2D> v(3*triangles_num);
 
