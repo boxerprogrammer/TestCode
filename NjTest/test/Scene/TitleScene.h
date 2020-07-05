@@ -4,9 +4,9 @@ class GameoverScene;
 class PauseScene;
 class TitleScene:public Scene 
 {
-	friend PauseScene;
 	friend SceneController;
 	friend GameoverScene;
+	friend PauseScene;
 private:
 	TitleScene(SceneController& c);//ファクトリにしか作らせたくない
 

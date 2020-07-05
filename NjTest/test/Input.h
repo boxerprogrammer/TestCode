@@ -1,7 +1,6 @@
 #pragma once
 class Input
 {
-	
 public:
 	Input();
 	/// <summary>
@@ -37,6 +36,12 @@ public:
 	/// 直前押されて、今押されてない:true
 	///</returns>
 	bool IsReleased(const char* cmd)const;
-
 };
-
+///入力通知を受け取る(インターフェース)
+class InputListener {
+public:
+	virtual ~InputListener() = default;
+	///ぶっちゃけた話毎フレーム呼ばれる
+	///こいつが入力を受け取る
+	virtual void Notify(const Input& input) = 0;
+};

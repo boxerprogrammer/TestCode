@@ -7,9 +7,9 @@
 
 using namespace std;
 
-Rect rcView_ = { {0,0},{800,600} };
 namespace {
-	bool isExit = false;
+	Rect rcView_ = { {0,0},{800,600} };
+	bool isExit_ = false;
 }
 
 Size
@@ -53,15 +53,13 @@ Application::Run() {
 		sceneController_->Update(input);
 		sceneController_->Draw();
 		ScreenFlip();
-		if (isExit) {
-			break;
-		}
+		if (isExit_)break;
 	}
 }
 
-void 
+void
 Application::Exit() {
-	isExit = true;
+	isExit_ = true;
 }
 
 void 

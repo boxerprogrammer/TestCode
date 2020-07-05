@@ -1,24 +1,25 @@
 #include<DxLib.h>
 #include "PauseScene.h"
+#include "TitleScene.h"
 #include"SceneController.h"
 #include"../Input.h"
 #include"../Application.h"
 #include"../Geometry.h"
-#include"TitleScene.h"
 
 
 namespace {
-	constexpr int  menu_multiply_param = 168;
-	constexpr int default_x_offset = 96;
-	constexpr int menu_y_start = 96;
-	constexpr int menu_y_interval = 48;
-
 	Rect rc = { {200,100}, {400,400} };
 	constexpr int appear_time = 25;
 	int frame_ = 0;
-	int indicatorH_;
-	int currentNo_ = 0;
-	Size indicatorSize_;
+	int indicatorH_ = 0;
+	int indicatorWidth_;
+	constexpr int pausetitle_y = 32;//ポーズタイトルのY
+	constexpr int menubase_x = 64;//メニューの左
+	constexpr int menubase_y = 96;//メニューの一番上のY
+	constexpr int menu_y_interval = 48;//メニューの間隔
+	const wchar_t pause_title[] = L"Pause Menu";
+	int titleW_;
+	int currentSelectNo_ = 0;
 }
 
 using namespace std;
@@ -28,32 +29,29 @@ PauseScene::PauseScene(SceneController& c) :
 	updater_(&PauseScene::AppearUpdate),
 	drawer_(&PauseScene::AppearDraw){
 	frame_ = 0;
-
-	int y = menu_y_start;
-	menuItems_.emplace_back(MenuItem( L"ゲームに戻る", 
-		rc.pos + Position2(default_x_offset, y),
+	indicatorH_ = LoadGraph(L"Resource/Image/UI/indicator.png");
+	titleW_ = DxLib::GetDrawStringWidth(pause_title, wcslen(pause_title));
+	//MenuItem(const wchar_t* str, const Position2& p,  std::function<void(void)>& f)
+	int y = menubase_y;
+	menuItems_.emplace_back(L"ゲームに戻る",
+		Position2(menubase_x, y),
 		[this]() {
 			CloseMenu();
-		}));
+		});
 	y += menu_y_interval;
-	menuItems_.emplace_back(MenuItem(L"タイトルに戻る",
-		rc.pos + Position2(default_x_offset, y),
+	menuItems_.emplace_back(L"タイトルに戻る",
+		Position2(menubase_x, y),
 		[this]() {
 			controller_.CleanChangeScene(new TitleScene(controller_));
-		}));
+		});
 	y += menu_y_interval;
-	menuItems_.emplace_back(MenuItem(L"ゲームを終了する",
-		rc.pos + Position2(default_x_offset, y),
-		[this]() {
+	menuItems_.emplace_back(L"ゲームを終了する",
+		Position2(menubase_x, y),
+		[]() {
 			Application::Instance().Exit();
-		}));
-	indicatorH_= DxLib::LoadGraph(L"Resource/Image/UI/indicator.png");
-	GetGraphSize(indicatorH_, &indicatorSize_.w, &indicatorSize_.h);
-	frame_ = 0;
-	currentNo_ = 0;
-	
-	
-	
+		});
+	currentSelectNo_ = 0;
+	DxLib::GetGraphSize(indicatorH_, &indicatorWidth_, nullptr);
 }
 PauseScene::~PauseScene() {
 	DeleteGraph(indicatorH_);
@@ -68,7 +66,7 @@ PauseScene::AppearDraw() {
 	lrc.pos.y = centerY - frame_ * vh / 2;
 	lrc.size.h = vh * frame_;
 	//枠の描画
-	SetDrawBlendMode(DX_BLENDMODE_MULA, menu_multiply_param);
+	SetDrawBlendMode(DX_BLENDMODE_MULA, 128);
 	DrawBox(lrc.Left(), lrc.Top(), lrc.Right(), lrc.Bottom(), 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	DrawBox(lrc.Left(), lrc.Top(), lrc.Right(), lrc.Bottom(), 0xffffff, false);
@@ -83,33 +81,34 @@ PauseScene::AppearUpdate(const Input&) {
 }
 
 void 
-PauseScene::CloseMenu() {
-	updater_ = &PauseScene::DisppearUpdate;
-	drawer_ = &PauseScene::AppearDraw;
-	frame_ = appear_time;
-}
-
-void 
 PauseScene::NormalUpdate(const Input& input) {
 	if (input.IsTriggered("pause")) {
 		CloseMenu();
 	}
 	if (input.IsTriggered("down")) {
-		currentNo_ = (currentNo_ + 1) % menuItems_.size();
+		currentSelectNo_ = (currentSelectNo_ + 1) % menuItems_.size();
 	}
 	if (input.IsTriggered("up")) {
-		currentNo_ = (currentNo_ - 1+menuItems_.size()) % menuItems_.size();
+		currentSelectNo_ = (
+			currentSelectNo_ - 1
+			+ menuItems_.size()) % menuItems_.size();
 	}
-
+	
 	for (auto& m : menuItems_) {
 		m.isActive = false;
 	}
-	menuItems_[currentNo_].isActive = true;
-
+	auto& selectedItem = menuItems_[currentSelectNo_];
+	selectedItem.isActive = true;
 	if (input.IsTriggered("OK")) {
-		menuItems_[currentNo_].func();
+		selectedItem.func();
 	}
-	
+}
+
+void PauseScene::CloseMenu()
+{
+	updater_ = &PauseScene::DisppearUpdate;
+	drawer_ = &PauseScene::AppearDraw;
+	frame_ = appear_time;
 }
 
 void
@@ -129,26 +128,36 @@ PauseScene::Update(const Input& input) {
 void
 PauseScene::NormalDraw() {
 	//枠の描画
-	SetDrawBlendMode(DX_BLENDMODE_MULA, menu_multiply_param);
+	SetDrawBlendMode(DX_BLENDMODE_MULA, 128);
 	DrawBox(rc.Left(), rc.Top(), rc.Right(), rc.Bottom(), 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	DrawBox(rc.Left(), rc.Top(), rc.Right(), rc.Bottom(), 0xffffff, false);
-	const wchar_t* pause_title = L"Pause Menu";
-	auto widOfStr=DxLib::GetDrawStringWidth(pause_title, wcslen(pause_title));
-	DrawString(rc.Left()+(rc.Width()-widOfStr)/2,rc.Top()+	32, pause_title, 0xffffff);
 
-	auto& mpos = menuItems_[currentNo_].pos;
-	
+	//ポーズのタイトル
+	DrawString(rc.Left()+(rc.Width()-titleW_)/2,
+		rc.Top()+pausetitle_y,
+		 pause_title,0xffffff);
+
+	//メニューの表示
 	for (auto& m : menuItems_) {
-		int x = m.pos.x;
 		uint32_t col = 0xffffff;
+		int offset_x = 0;
 		if (m.isActive) {
-			x += 16;
-			col = 0xffaaaaa;
-			DrawGraph(mpos.x - indicatorSize_.w, mpos.y, indicatorH_, true);
+			col = 0xffaaaa;
+			offset_x = 32;
 		}
-		DrawString(x, m.pos.y, m.menuText.c_str(), col);
+
+		DrawString(
+			offset_x+rc.Left() + m.pos.x,
+			rc.Top() + m.pos.y,
+			m.menuText.c_str(),
+			col);
 	}
+	//インジケータ(差し指)の表示
+	auto& indPos=menuItems_[currentSelectNo_].pos;
+	DrawGraph(rc.Left()+indPos.x - indicatorWidth_,
+			rc.Top()+indPos.y, 
+			indicatorH_, true);
 }
 void 
 PauseScene::Draw() {

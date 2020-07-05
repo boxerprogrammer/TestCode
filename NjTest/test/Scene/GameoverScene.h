@@ -1,6 +1,7 @@
 #pragma once
 #include"Scene.h"
 class ContinueScene;
+
 class GameoverScene:public Scene 
 {
 	friend ContinueScene;

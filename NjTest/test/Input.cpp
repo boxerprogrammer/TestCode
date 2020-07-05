@@ -62,12 +62,10 @@ Input::Input() {
 		currentTbl["pause"] = false;
 		currentTbl["up"] = false;
 		currentTbl["down"] = false;
-		currentTbl["right"] = false;
 		currentTbl["left"] = false;
+		currentTbl["right"] = false;
 	}
 }
-
-
 
 void
 Input::Update() {
@@ -81,7 +79,8 @@ Input::Update() {
 	CurrentInput("pause") = keystate[KEY_INPUT_P];
 	CurrentInput("up") = keystate[KEY_INPUT_UP];
 	CurrentInput("down") = keystate[KEY_INPUT_DOWN];
-
+	CurrentInput("left") = keystate[KEY_INPUT_LEFT];
+	CurrentInput("right") = keystate[KEY_INPUT_RIGHT];
 }
 
 bool 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -23,6 +23,7 @@
     <ProjectGuid>{DB1DDA50-11BF-4C95-B007-5EB95ADBDEC8}</ProjectGuid>
     <RootNamespace>test</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>NjTest</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -146,13 +147,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Fighter.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Game\BombEquip.cpp" />
+    <ClCompile Include="Game\BombShot.cpp" />
+    <ClCompile Include="Game\Equipment.cpp" />
+    <ClCompile Include="Game\Enemy.cpp" />
+    <ClCompile Include="Game\Background.cpp" />
+    <ClCompile Include="Game\Character.cpp" />
+    <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Game\Projectile.cpp" />
+    <ClCompile Include="Game\ProjectileManager.cpp" />
     <ClCompile Include="Scene\ContinueScene.cpp" />
     <ClCompile Include="Scene\GameoverScene.cpp" />
     <ClCompile Include="Scene\GameplayingScene.cpp" />
@@ -163,12 +169,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="Fighter.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="Game\BombEquip.h" />
+    <ClInclude Include="Game\BombShot.h" />
+    <ClInclude Include="Game\Equipment.h" />
+    <ClInclude Include="Game\Enemy.h" />
+    <ClInclude Include="Game\Background.h" />
+    <ClInclude Include="Game\Character.h" />
+    <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="Game\Projectile.h" />
+    <ClInclude Include="Game\ProjectileManager.h" />
     <ClInclude Include="Scene\ContinueScene.h" />
     <ClInclude Include="Scene\GameoverScene.h" />
     <ClInclude Include="Scene\GameplayingScene.h" />

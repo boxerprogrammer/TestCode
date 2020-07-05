@@ -41,14 +41,14 @@ public:
 	void Run();
 
 	/// <summary>
-	/// メインループを終了する
-	/// </summary>
-	void Exit();
-
-	/// <summary>
 	///後処理
 	/// </summary>
 	void Terminate();
+
+	///<summary>
+	///アプリケーションを終了する
+	///</summary>
+	void Exit();
 
 	const Viewport& GetViewport()const;
 
