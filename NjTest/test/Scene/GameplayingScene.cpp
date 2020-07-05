@@ -12,6 +12,8 @@
 #include"../Geometry.h"
 #include"../Game/Player.h"
 #include"../Game/Background.h"
+#include"../Game/ProjectileManager.h"
+#include<cassert>
 
 namespace {
 	constexpr uint32_t fadeout_interval = 45;
@@ -24,12 +26,13 @@ GameplayingScene::GameplayingScene(SceneController& c):
 	updater_(&GameplayingScene::FadeinUpdate),
 	drawer_(&GameplayingScene::FadeDraw){
 
-	player_ = make_unique<Player>(this);
-	player_->SetPosition(Position2(400, 480));
+	
 
 	waitTimer_ = 0;
 	bg_ = make_unique<Background>();
-
+	pm_ = make_unique<ProjectileManager>();
+	player_ = make_unique<Player>(this);
+	player_->SetPosition(Position2(400, 480));
 }
 
 GameplayingScene::~GameplayingScene() {
@@ -65,6 +68,7 @@ GameplayingScene::NormalUpdate(const Input& input) {
 	for (auto& listener : listeners_) {
 		listener->Notify(input);
 	}
+	pm_->Update();
 }
 
 void
@@ -89,6 +93,7 @@ void
 GameplayingScene::NormalDraw() {
 	bg_->Draw();
 	player_->Draw();
+	pm_->Draw();
 }
 void
 GameplayingScene::FadeDraw() {
@@ -102,4 +107,11 @@ GameplayingScene::FadeDraw() {
 void 
 GameplayingScene::AddListener(std::shared_ptr<InputListener> listener) {
 	listeners_.push_back(listener);
+}
+
+
+ProjectileManager& 
+GameplayingScene::GetProjectileManager() {
+	assert(pm_);
+	return *pm_;
 }

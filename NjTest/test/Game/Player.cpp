@@ -5,7 +5,7 @@
 #include"../Geometry.h"
 #include"../Input.h"
 #include"../Scene/GameplayingScene.h"
-
+#include"BombEquip.h"
 
 using namespace std;
 
@@ -47,18 +47,33 @@ Player::Player(GameplayingScene* gs) {
 			if (input.IsPressed("right")) {
 				player_.Move({ 5, 0 });
 			}
+			if (input.IsTriggered("shot")) {
+				player_.Attack(input);
+			}
 		}
 	};
 	gs->AddListener(make_shared< PlayerInputListener>(*this));
+	equipments_.push_back(make_shared<BombEquip>(gs->GetProjectileManager()));
 }
 Player::~Player() {
 	for (auto& run : runH_) {
 		DxLib::DeleteGraph(run);
 	}
 }
+
+void 
+Player::Attack(const Input& input) {
+	equipments_[currentEquipmentNo_]->Attack(*this,input);
+}
+
 void 
 Player::SetPosition(const Position2& p) {
 	pos_ = p;
+}
+
+const Position2& 
+Player::Position()const {
+	return pos_;
 }
 
 void

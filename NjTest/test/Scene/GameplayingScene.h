@@ -7,6 +7,7 @@ class TitleScene;
 class Player;
 class Background;
 class InputListener;
+class ProjectileManager;
 class GameplayingScene:public Scene 
 {
 	friend TitleScene;
@@ -15,7 +16,7 @@ private:
 
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Background> bg_;
-
+	std::unique_ptr<ProjectileManager> pm_;
 
 	void FadeinUpdate(const Input&);
 	void NormalUpdate(const Input&);
@@ -34,6 +35,7 @@ private:
 
 public:
 	~GameplayingScene();
+	ProjectileManager& GetProjectileManager();
 	void AddListener(std::shared_ptr<InputListener> listener);
 	void Update(const Input&)override;
 	void Draw()override;
