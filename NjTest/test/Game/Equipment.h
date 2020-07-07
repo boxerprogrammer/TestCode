@@ -4,6 +4,7 @@ class Input;
 class Equipment
 {
 public:
+	virtual ~Equipment() = default;
 	/// <summary>
 	/// ¡‚Ì•Ší‚ÅUŒ‚‚ğ‰Á‚¦‚Ü‚·
 	/// </summary>

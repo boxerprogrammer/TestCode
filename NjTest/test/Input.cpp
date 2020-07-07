@@ -65,6 +65,7 @@ Input::Input() {
 		currentTbl["left"] = false;
 		currentTbl["right"] = false;
 		currentTbl["shot"] = false;
+		currentTbl["change"] = false;
 	}
 }
 
@@ -83,6 +84,7 @@ Input::Update() {
 	CurrentInput("left") = keystate[KEY_INPUT_LEFT];
 	CurrentInput("right") = keystate[KEY_INPUT_RIGHT];
 	CurrentInput("shot") = keystate[KEY_INPUT_Z];
+	CurrentInput("change") = keystate[KEY_INPUT_C];
 }
 
 bool 

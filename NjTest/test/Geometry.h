@@ -20,6 +20,10 @@ struct Vector2D {
 		x -= v.x;
 		y -= v.y;
 	}
+	void operator*=(float scale) {
+		x *= scale;
+		y *= scale;
+	}
 };
 
 

@@ -6,6 +6,7 @@
 #include"../Input.h"
 #include"../Scene/GameplayingScene.h"
 #include"BombEquip.h"
+#include"ShurikenEquip.h"
 
 using namespace std;
 
@@ -13,6 +14,7 @@ namespace {
 	int runH_[6];
 	int frame_ = 0;
 	int idx_ = 0;
+	int changeSE_ = -1;
 }
 
 Player::Player(GameplayingScene* gs) {
@@ -26,6 +28,7 @@ Player::Player(GameplayingScene* gs) {
 	}
 	frame_ = 0;
 	idx_ = 0;
+		  
 	class PlayerInputListener : public InputListener{
 	private:
 		Player& player_;
@@ -36,34 +39,52 @@ Player::Player(GameplayingScene* gs) {
 		}
 		void Notify(const Input& input)override{
 			if (input.IsPressed("up")) {
-				player_.Move({ 0, -5 });
+				//player_.Move({ 0, -5 });
 			}
 			if (input.IsPressed("down")) {
-				player_.Move({ 0, 5 });
+				//player_.Move({ 0, 5 });
 			}
 			if (input.IsPressed("left")) {
-				player_.Move({ -5, 0 });
+				//player_.Move({ -5, 0 });
+				player_.isRight_ = false;
 			}
 			if (input.IsPressed("right")) {
-				player_.Move({ 5, 0 });
+				//player_.Move({ 5, 0 });
+				player_.isRight_ = true;
 			}
 			if (input.IsTriggered("shot")) {
 				player_.Attack(input);
+			}
+			if (input.IsTriggered("change")) {
+				player_.NextEquip();
 			}
 		}
 	};
 	gs->AddListener(make_shared< PlayerInputListener>(*this));
 	equipments_.push_back(make_shared<BombEquip>(gs->GetProjectileManager()));
+	equipments_.push_back(make_shared<ShurikenEquip>(gs->GetProjectileManager()));
+
+	if (changeSE_ == -1) {
+		changeSE_ = LoadSoundMem(L"Resource/Sound/Game/changeweapon.wav");
+	}
 }
 Player::~Player() {
 	for (auto& run : runH_) {
 		DxLib::DeleteGraph(run);
 	}
+	DeleteSoundMem(changeSE_);
+	changeSE_ = -1;
 }
 
 void 
 Player::Attack(const Input& input) {
 	equipments_[currentEquipmentNo_]->Attack(*this,input);
+}
+
+void 
+Player::NextEquip() {
+	currentEquipmentNo_ = (currentEquipmentNo_ + 1) % equipments_.size();
+	PlaySoundMem(changeSE_, DX_PLAYTYPE_BACK);
 }
 
 void 
@@ -88,7 +109,17 @@ Player::Update() {
 		idx_ = (idx_ + 1) % _countof(runH_);
 	} 
 }
+
+Player::Direction 
+Player::GetDirection()const {
+	Direction ret = Direction::left;
+	if (isRight_) {
+		ret = Direction::right;
+	}
+	return ret;
+}
+
 void 
 Player::Draw() {
-	DrawRotaGraph(pos_.x, pos_.y, 3.0f, 0.0f, runH_[idx_], true, false, false);
+	DrawRotaGraph(pos_.x, pos_.y, 3.0f, 0.0f, runH_[idx_], true,!isRight_, false);
 }

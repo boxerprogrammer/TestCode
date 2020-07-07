@@ -1,19 +1,18 @@
 #pragma once
-#include"Equipment.h"
-
+#include "Equipment.h"
 class ProjectileManager;
-class BombEquip : public Equipment
+class ShurikenEquip :
+    public Equipment
 {
 private:
 	ProjectileManager& pm_;
 public:
-	BombEquip(ProjectileManager& pm);
+	ShurikenEquip(ProjectileManager& pm);
 	/// <summary>
-	/// ”š’eUŒ‚‚ğ‰Á‚¦‚Ü‚·
+	/// è— Œ•UŒ‚‚ğ‰Á‚¦‚Ü‚·
 	/// </summary>
 	/// <param name="player">ƒvƒŒƒCƒ„[‚Ö‚ÌQÆ</param>
 	/// <param name="input">“ü—ÍQÆ</param>
-	void Attack(const Player& player, const Input& input)override;
+	void Attack(const Player& p, const Input& i) override;
 };
-
 

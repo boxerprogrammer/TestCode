@@ -18,7 +18,8 @@
 namespace {
 	constexpr uint32_t fadeout_interval = 45;
 	unsigned int waitTimer_ = 0;
-
+	int weaponUIH_[2];
+	int bgm = -1;
 }
 using namespace std;
 GameplayingScene::GameplayingScene(SceneController& c):
@@ -26,18 +27,25 @@ GameplayingScene::GameplayingScene(SceneController& c):
 	updater_(&GameplayingScene::FadeinUpdate),
 	drawer_(&GameplayingScene::FadeDraw){
 
-	
-
 	waitTimer_ = 0;
 	bg_ = make_unique<Background>();
 	pm_ = make_unique<ProjectileManager>();
+
 	player_ = make_unique<Player>(this);
 	player_->SetPosition(Position2(400, 480));
+
+	weaponUIH_[0]= LoadGraph(L"Resource/Image/UI/bomb.png");
+	weaponUIH_[1] = LoadGraph(L"Resource/Image/UI/shuriken.png");
+	bgm = LoadBGM(L"Resource/BGM/stage1_normal.mp3");
+	ChangeVolumeSoundMem(150, bgm);
 }
 
 GameplayingScene::~GameplayingScene() {
-
-
+	for (auto& h : weaponUIH_) {
+		DeleteGraph(h);
+		h = -1;
+	}
+	DeleteSoundMem(bgm);
 }
 
 void 
@@ -76,6 +84,7 @@ GameplayingScene::FadeinUpdate(const Input&) {
 	if (++waitTimer_ == fadeout_interval) {
 		updater_ = &GameplayingScene::NormalUpdate;
 		drawer_ = &GameplayingScene::NormalDraw;
+		PlaySoundMem(bgm, DX_PLAYTYPE_LOOP);
 	}
 }
 
@@ -94,6 +103,8 @@ GameplayingScene::NormalDraw() {
 	bg_->Draw();
 	player_->Draw();
 	pm_->Draw();
+	DrawGraph(10, 10, weaponUIH_[player_->CurrentEquipmentNo()], true);
+	DrawBox(10, 10, 74, 74, 0xffffff, false);
 }
 void
 GameplayingScene::FadeDraw() {

@@ -9,7 +9,14 @@ class Projectile : public Character
 {
 protected:
 	Vector2f vel_;
+	bool isActive_=false;
 public:
+	/// <summary>
+	/// €‚ñ‚¾‚©‚Ç‚¤‚©
+	/// </summary>
+	/// <returns></returns>
+	bool IsDead()const { return !isActive_; }
+	Projectile();
 	virtual ~Projectile() = default;
 	/// <summary>
 	/// Œ»İÀ•W‚É‘¬“x‚ğ‰ÁZ‚·‚é
