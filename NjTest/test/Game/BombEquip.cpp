@@ -5,8 +5,9 @@
 #include"../Input.h"
 #include<DxLib.h>
 
-int throwH = -1;
-
+namespace {
+	int throwH = -1;
+}
 
 BombEquip::BombEquip(ProjectileManager& pm):pm_(pm){
 	if (throwH == -1) {

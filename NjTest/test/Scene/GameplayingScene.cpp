@@ -18,7 +18,7 @@
 namespace {
 	constexpr uint32_t fadeout_interval = 45;
 	unsigned int waitTimer_ = 0;
-	int weaponUIH_[2];
+	int weaponUIH_[3];
 	int bgm = -1;
 }
 using namespace std;
@@ -36,6 +36,7 @@ GameplayingScene::GameplayingScene(SceneController& c):
 
 	weaponUIH_[0]= LoadGraph(L"Resource/Image/UI/bomb.png");
 	weaponUIH_[1] = LoadGraph(L"Resource/Image/UI/shuriken.png");
+	weaponUIH_[2] = LoadGraph(L"Resource/Image/UI/chain.png");
 	bgm = LoadBGM(L"Resource/BGM/stage1_normal.mp3");
 	ChangeVolumeSoundMem(150, bgm);
 }

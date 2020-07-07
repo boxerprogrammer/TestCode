@@ -11,5 +11,7 @@ public:
 	/// <param name="player">プレイヤーへの参照</param>
 	/// <param name="input">入力参照</param>
 	virtual void Attack(const Player& p, const Input& i) = 0;
+	virtual void Update() {};
+	virtual void Draw() {};
 };
 

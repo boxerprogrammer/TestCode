@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Game\ChainEquip.cpp" />
     <ClCompile Include="Game\BombEquip.cpp" />
     <ClCompile Include="Game\BombShot.cpp" />
     <ClCompile Include="Game\Equipment.cpp" />
@@ -171,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Game\ChainEquip.h" />
     <ClInclude Include="Game\BombEquip.h" />
     <ClInclude Include="Game\BombShot.h" />
     <ClInclude Include="Game\Equipment.h" />

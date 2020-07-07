@@ -7,6 +7,8 @@
 #include"../Scene/GameplayingScene.h"
 #include"BombEquip.h"
 #include"ShurikenEquip.h"
+#include"ChainEquip.h"
+
 
 using namespace std;
 
@@ -63,7 +65,7 @@ Player::Player(GameplayingScene* gs) {
 	gs->AddListener(make_shared< PlayerInputListener>(*this));
 	equipments_.push_back(make_shared<BombEquip>(gs->GetProjectileManager()));
 	equipments_.push_back(make_shared<ShurikenEquip>(gs->GetProjectileManager()));
-
+	equipments_.push_back(make_shared<ChainEquip>(*this));
 	if (changeSE_ == -1) {
 		changeSE_ = LoadSoundMem(L"Resource/Sound/Game/changeweapon.wav");
 	}
@@ -108,6 +110,7 @@ Player::Update() {
 	if (frame_ % 5 == 0) {
 		idx_ = (idx_ + 1) % _countof(runH_);
 	} 
+	equipments_[currentEquipmentNo_]->Update();
 }
 
 Player::Direction 
@@ -121,5 +124,6 @@ Player::GetDirection()const {
 
 void 
 Player::Draw() {
+	equipments_[currentEquipmentNo_]->Draw();
 	DrawRotaGraph(pos_.x, pos_.y, 3.0f, 0.0f, runH_[idx_], true,!isRight_, false);
 }
