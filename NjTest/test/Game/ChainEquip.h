@@ -1,5 +1,6 @@
 #pragma once
 #include "Equipment.h"
+#include"../Geometry.h"
 class Player;
 class ChainEquip :
     public Equipment
@@ -7,13 +8,7 @@ class ChainEquip :
 private:
 	int frame_;
 	const Player& player_;
-	enum class Direction {
-		left,
-		up,
-		right,
-		down,
-	};
-	Direction direction_;
+	Vector2f directionVector_;
 public:
 	ChainEquip(const Player& p);
 	/// <summary>

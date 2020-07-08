@@ -8,10 +8,12 @@ namespace {
 }
 
 BombShot::~BombShot() {
+#ifdef _DEBUG
 	OutputDebugStringA("\nBomb shot is deleted\n");
+#endif
 }
 
-BombShot::BombShot(const Position2& pos, const Vector2f& vel) {
+BombShot::BombShot(const Position2f& pos, const Vector2f& vel) {
 	pos_ = pos;
 	vel_ = vel;
 	if (bombH == -1) {

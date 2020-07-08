@@ -4,7 +4,7 @@ namespace {
 	int shurikenH = -1;
 	int shurikenSE = -1;
 }
-ShurikenShot::ShurikenShot(const Position2& pos, const Vector2f& vel) {
+ShurikenShot::ShurikenShot(const Position2f& pos, const Vector2f& vel) {
 	pos_ = pos;
 	vel_ = vel;
 	if (shurikenH == -1) {
@@ -15,7 +15,9 @@ ShurikenShot::ShurikenShot(const Position2& pos, const Vector2f& vel) {
 	}
 }
 ShurikenShot::~ShurikenShot() {
-
+#ifdef _DEBUG
+	OutputDebugStringA("Shuriken is deleted");
+#endif
 }
 
 void

@@ -32,7 +32,7 @@ GameplayingScene::GameplayingScene(SceneController& c):
 	pm_ = make_unique<ProjectileManager>();
 
 	player_ = make_unique<Player>(this);
-	player_->SetPosition(Position2(400, 480));
+	player_->SetPosition(Position2f(400, 480));
 
 	weaponUIH_[0]= LoadGraph(L"Resource/Image/UI/bomb.png");
 	weaponUIH_[1] = LoadGraph(L"Resource/Image/UI/shuriken.png");
@@ -104,6 +104,8 @@ GameplayingScene::NormalDraw() {
 	bg_->Draw();
 	player_->Draw();
 	pm_->Draw();
+	//•ŠíUI•\Ž¦
+	DrawBox(12, 12, 76, 76, 0x000000, false);
 	DrawGraph(10, 10, weaponUIH_[player_->CurrentEquipmentNo()], true);
 	DrawBox(10, 10, 74, 74, 0xffffff, false);
 }

@@ -15,7 +15,7 @@ public:
 	/// Ž€‚ñ‚¾‚©‚Ç‚¤‚©
 	/// </summary>
 	/// <returns></returns>
-	bool IsDead()const { return !isActive_; }
+	bool IsDead()const;
 	Projectile();
 	virtual ~Projectile() = default;
 	/// <summary>

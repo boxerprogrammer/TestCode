@@ -90,17 +90,17 @@ Player::NextEquip() {
 }
 
 void 
-Player::SetPosition(const Position2& p) {
+Player::SetPosition(const Position2f& p) {
 	pos_ = p;
 }
 
-const Position2& 
+const Position2f& 
 Player::Position()const {
 	return pos_;
 }
 
 void
-Player::Move(const Vector2& v) {
+Player::Move(const Vector2f& v) {
 	pos_ += v;
 }
 

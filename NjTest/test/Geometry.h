@@ -1,5 +1,5 @@
 #pragma once
-
+#include<cmath>
 template<typename T>
 struct Vector2D {
 	T x;
@@ -12,6 +12,13 @@ struct Vector2D {
 	Vector2D operator-(const Vector2D& rval) {
 		return Vector2D(x - rval.x, y - rval.y);
 	}
+	Vector2D operator*(float scale)const {
+		return Vector2D(x *scale, y*scale);
+	}
+	void operator*=(float scale)const {
+		x *= scale;
+		y *= scale;
+	}
 	void operator+=(const Vector2D& v) {
 		x += v.x;
 		y += v.y;
@@ -23,6 +30,18 @@ struct Vector2D {
 	void operator*=(float scale) {
 		x *= scale;
 		y *= scale;
+	}
+	float Magnitude()const {
+		return hypot(x, y);
+	}
+	void Normalize() {
+		float mag = Magnitude();
+		x/=mag;
+		y /= mag;
+	}
+	Vector2D Normalized()const {
+		float mag = Magnitude();
+		return {x/mag,y/mag};
 	}
 };
 
