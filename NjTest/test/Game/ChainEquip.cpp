@@ -65,7 +65,6 @@ ChainEquip::Draw() {
 		int f = abs((frame_ + 15) % 30 - 15);
 		float w = f * 400.0f / 15.0f;
 		Vector2f v90 = { -directionVector_.y, directionVector_.x };
-		//if (direction_ == Direction::right) {
 		
 		{
 			Position2f p1 = pos + v90 * 24.0f;
@@ -87,28 +86,4 @@ ChainEquip::Draw() {
 				p4.x, p4.y, 0xffffff, false);
 		}
 	}
-	//	else if (direction_ == Direction::left) {
-	//		DrawRectModiGraph(pos.x, pos.y,
-	//			pos.x - w, pos.y,
-	//			pos.x - w, pos.y + 48,
-	//			pos.x, pos.y + 48, 
-	//			400 - w, 0, 
-	//			w, 48, chainH, true);
-	//	}else if (direction_ == Direction::up) {
-	//		DrawRectModiGraph(pos.x-24, pos.y,
-	//			pos.x-24, pos.y-w,
-	//			pos.x+24, pos.y -w,
-	//			pos.x+24, pos.y + 48, 
-	//			400 - w, 0,
-	//			w, 48, chainH, true);
-	//	}
-	//	else if (direction_ == Direction::left) {
-	//		DrawRectModiGraph(pos.x, pos.y,
-	//			pos.x - w, pos.y,
-	//			pos.x - w, pos.y + 48,
-	//			pos.x, pos.y + 48, 
-	//			400 - w, 0, 
-	//			w, 48, chainH, true);
-	//	}
-	//}
 }
