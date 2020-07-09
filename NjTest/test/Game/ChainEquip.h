@@ -8,7 +8,8 @@ class ChainEquip :
 private:
 	int frame_;
 	const Player& player_;
-	Vector2f directionVector_;
+	
+	Vector2f direction_;
 public:
 	ChainEquip(const Player& p);
 	/// <summary>

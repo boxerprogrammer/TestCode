@@ -12,13 +12,6 @@ struct Vector2D {
 	Vector2D operator-(const Vector2D& rval) {
 		return Vector2D(x - rval.x, y - rval.y);
 	}
-	Vector2D operator*(float scale)const {
-		return Vector2D(x *scale, y*scale);
-	}
-	void operator*=(float scale)const {
-		x *= scale;
-		y *= scale;
-	}
 	void operator+=(const Vector2D& v) {
 		x += v.x;
 		y += v.y;

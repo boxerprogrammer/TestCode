@@ -169,6 +169,7 @@
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Game\ShurikenEquip.cpp" />
     <ClCompile Include="Game\ShurikenShot.cpp" />
+    <ClCompile Include="Spawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Game\ShurikenEquip.h" />
     <ClInclude Include="Game\ShurikenShot.h" />
+    <ClInclude Include="Spawner.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

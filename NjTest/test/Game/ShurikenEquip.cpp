@@ -33,15 +33,10 @@ ShurikenEquip::Attack(const Player& player, const Input& input) {
 		vel += { 0, 1 };
 	}
 	if (vel.x == 0.0f && vel.y == 0.0f) {
-		if (player.GetDirection() == Player::Direction::right) {
-			vel = { 1, 0 };
-		}
-		else{
-			vel = { -1, 0 };
-		}
+		vel += { 1, 0 };
 	}
 	vel.Normalize();
-	vel *= 15.0f;
+	vel *= 10.0f;
 	PlaySoundMem(throwH, DX_PLAYTYPE_BACK);
 	pm_.AddProjectile(new ShurikenShot(player.Position(), vel));
 }

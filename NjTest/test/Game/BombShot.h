@@ -22,7 +22,7 @@ private:
     Func_t drawer_;
 
 public:
-    BombShot(const Position2f& pos, const Vector2f& vel);
+    BombShot(const Position2& pos, const Vector2f& vel);
     ~BombShot();
     //Update‚ÍProjectile‚Ì‚à‚Ì‚ðŽg—p
     void Update()override;

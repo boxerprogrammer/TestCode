@@ -24,9 +24,9 @@ public:
 	~Player();
 	void Attack(const Input& input);
 	void NextEquip();
-	void SetPosition(const Position2f& p);
-	const Position2f& Position()const;
-	void Move(const Vector2f& v);
+	void SetPosition(const Position2& p);
+	const Position2& Position()const;
+	void Move(const Vector2& v);
 	void Update()override;
 	void Draw()override;
 

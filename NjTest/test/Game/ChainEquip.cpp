@@ -22,28 +22,28 @@ ChainEquip::ChainEquip(const Player& p):player_(p){
 void
 ChainEquip::Attack(const Player& player, const Input& input) {
 	if (frame_ >= 0)return;
-	directionVector_ = { 0, 0 };
-	if (input.IsPressed("right")) {
-		directionVector_.x = 1.0f;
-	}
+	direction_ = {0.0f,0.0f};
 	if (input.IsPressed("left")) {
-		directionVector_.x = -1.0f;
+		direction_ += {-1.0f,0.0f};
+	}
+	if (input.IsPressed("right")) {
+		direction_ += {1.0f, 0.0f};
 	}
 	if (input.IsPressed("up")) {
-		directionVector_.y = -1.0f;
+		direction_ += {0.0f, -1.0f};
 	}
 	if (input.IsPressed("down")) {
-		directionVector_.y = 1.0f;
+		direction_ += {0.0f, 1.0f };
 	}
-	if (directionVector_.x == 0.0f && directionVector_.y == 0.0f) {
+	if (direction_.x == 0.0f && direction_.y == 0.0f) {
 		if (player.GetDirection() == Player::Direction::right) {
-			directionVector_.x = 1.0f;
+			direction_.x = 1.0f;
 		}
 		if (player.GetDirection() == Player::Direction::left) {
-			directionVector_.x = -1.0f;
+			direction_.x = -1.0f;
 		}
 	}
-	directionVector_.Normalize();
+	direction_.Normalize();
 	PlaySoundMem(throwH, DX_PLAYTYPE_BACK);
 	frame_ = 0;
 }
@@ -52,7 +52,7 @@ void
 ChainEquip::Update() {
 	if (frame_ >= 0) {
 		++frame_;
-		if (frame_ > 30) {
+		if (frame_ > 20) {
 			frame_ = -1;
 		}
 	}
@@ -61,29 +61,17 @@ ChainEquip::Update() {
 void
 ChainEquip::Draw() {
 	auto pos=player_.Position();
-	if (frame_ >= 0) {
-		int f = abs((frame_ + 15) % 30 - 15);
-		float w = f * 400.0f / 15.0f;
-		Vector2f v90 = { -directionVector_.y, directionVector_.x };
+	if (frame_ >=0) {
+		auto angle = atan2f(direction_.y,direction_.x);
+		int f = abs((frame_ + 10) % 20 - 10);
+		int w = f*400/10;
+		DrawRectRotaGraph2(pos.x, pos.y,
+			400 - w, 0, 
+			w, 48,
+			0,24,
+			1.0f,
+			angle,
+			chainH, true);
 		
-		{
-			Position2f p1 = pos + v90 * 24.0f;
-			Position2f p2 = pos + directionVector_ * w + v90 * 24.0f ;
-			Position2f p3 = pos + directionVector_ * w - v90 *24.0f;
-			Position2f p4 = pos - v90 * 24.0f;
-
-			DrawRectModiGraph(
-				p1.x,p1.y,
-				p2.x,p2.y,
-				p3.x,p3.y,
-				p4.x,p4.y,
-				400 - w, 0,
-				w, 48, chainH, true);
-			DrawQuadrangle(
-				p1.x, p1.y,
-				p2.x, p2.y,
-				p3.x, p3.y,
-				p4.x, p4.y, 0xffffff, false);
-		}
 	}
 }

@@ -32,7 +32,7 @@ GameplayingScene::GameplayingScene(SceneController& c):
 	pm_ = make_unique<ProjectileManager>();
 
 	player_ = make_unique<Player>(this);
-	player_->SetPosition(Position2f(400, 480));
+	player_->SetPosition(Position2(400, 480));
 
 	weaponUIH_[0]= LoadGraph(L"Resource/Image/UI/bomb.png");
 	weaponUIH_[1] = LoadGraph(L"Resource/Image/UI/shuriken.png");
