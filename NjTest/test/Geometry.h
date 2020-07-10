@@ -45,6 +45,10 @@ using Vector2f = Vector2D<float>;
 using Position2 = Vector2;
 using Position2f = Vector2f;
 
+float Dot(const Vector2f& va,const Vector2f& vb);
+float Cross(const Vector2f& va, const Vector2f& vb);
+
+
 struct Size {
 	int w, h;
 	Size() {}

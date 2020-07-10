@@ -7,7 +7,7 @@ class Input;
 class Character
 {
 protected:
-	Position2 pos_;//キャラ中心座標
+	Position2f pos_;//キャラ中心座標
 public:
 	Character();
 	virtual ~Character() = default;

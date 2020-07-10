@@ -60,6 +60,7 @@ Player::Player(GameplayingScene* gs) {
 			if (input.IsTriggered("change")) {
 				player_.NextEquip();
 			}
+			player_.CurrentEquipment()->AdditionalInput(input);
 		}
 	};
 	gs->AddListener(make_shared< PlayerInputListener>(*this));
@@ -78,6 +79,15 @@ Player::~Player() {
 	changeSE_ = -1;
 }
 
+shared_ptr<Equipment>
+Player::CurrentEquipment() {
+	return equipments_[currentEquipmentNo_];
+}
+int 
+Player::CurrentEquipmentNo()const {
+	return currentEquipmentNo_;
+}
+
 void 
 Player::Attack(const Input& input) {
 	equipments_[currentEquipmentNo_]->Attack(*this,input);
@@ -90,17 +100,17 @@ Player::NextEquip() {
 }
 
 void 
-Player::SetPosition(const Position2& p) {
+Player::SetPosition(const Position2f& p) {
 	pos_ = p;
 }
 
-const Position2& 
+const Position2f& 
 Player::Position()const {
 	return pos_;
 }
 
 void
-Player::Move(const Vector2& v) {
+Player::Move(const Vector2f& v) {
 	pos_ += v;
 }
 
