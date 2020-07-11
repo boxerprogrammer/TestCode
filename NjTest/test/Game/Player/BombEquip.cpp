@@ -2,7 +2,7 @@
 #include"ProjectileManager.h"
 #include"BombShot.h"
 #include"Player.h"
-#include"../Input.h"
+#include"../../Input.h"
 #include<DxLib.h>
 
 namespace {

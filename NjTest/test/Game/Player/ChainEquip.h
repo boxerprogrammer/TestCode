@@ -1,6 +1,6 @@
 #pragma once
 #include "Equipment.h"
-#include"../Geometry.h"
+#include"../../Geometry.h"
 class Player;
 class ChainEquip :
     public Equipment

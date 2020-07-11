@@ -2,9 +2,9 @@
 #include<sstream>
 #include<iomanip>
 #include<DxLib.h>
-#include"../Geometry.h"
-#include"../Input.h"
-#include"../Scene/GameplayingScene.h"
+#include"../../Geometry.h"
+#include"../../Input.h"
+#include"../../Scene/GameplayingScene.h"
 #include"BombEquip.h"
 #include"ShurikenEquip.h"
 #include"ChainEquip.h"
@@ -83,7 +83,7 @@ shared_ptr<Equipment>
 Player::CurrentEquipment() {
 	return equipments_[currentEquipmentNo_];
 }
-int 
+size_t
 Player::CurrentEquipmentNo()const {
 	return currentEquipmentNo_;
 }
@@ -135,5 +135,6 @@ Player::GetDirection()const {
 void 
 Player::Draw() {
 	equipments_[currentEquipmentNo_]->Draw();
-	DrawRotaGraph(pos_.x, pos_.y, 3.0f, 0.0f, runH_[idx_], true,!isRight_, false);
+	DrawRotaGraph(static_cast<int>(pos_.x), static_cast<int>(pos_.y), 
+		3.0f, 0.0f, runH_[idx_], true,!isRight_, false);
 }

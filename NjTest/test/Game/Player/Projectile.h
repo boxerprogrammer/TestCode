@@ -1,6 +1,6 @@
 #pragma once
 
-#include"Character.h"
+#include"../Character.h"
 
 /// <summary>
 /// 速度をもって飛んでいくオブジェクト

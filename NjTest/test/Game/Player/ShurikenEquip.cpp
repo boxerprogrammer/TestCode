@@ -1,8 +1,8 @@
 #include "ShurikenEquip.h"
 #include"ProjectileManager.h"
 #include<DxLib.h>
-#include"../Geometry.h"
-#include"../Input.h"
+#include"../../Geometry.h"
+#include"../../Input.h"
 #include"ShurikenShot.h"
 #include"Player.h"
 namespace {
@@ -33,7 +33,12 @@ ShurikenEquip::Attack(const Player& player, const Input& input) {
 		vel += { 0, 1 };
 	}
 	if (vel.x == 0.0f && vel.y == 0.0f) {
-		vel += { 1, 0 };
+		if (player.GetDirection() == Player::Direction::right) {
+			vel += { 1, 0 };
+		}
+		else {
+			vel += { -1, 0 };
+		}
 	}
 	vel.Normalize();
 	vel *= 10.0f;

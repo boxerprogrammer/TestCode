@@ -32,5 +32,7 @@ ShurikenShot::Update() {
 
 void 
 ShurikenShot::Draw(){
-	DxLib::DrawRotaGraph(pos_.x, pos_.y, 1.0f, angle_, shurikenH, true);
+	DxLib::DrawRotaGraph(
+		static_cast<int>(pos_.x), 
+		static_cast<int>(pos_.y), 1.0f, angle_, shurikenH, true);
 }

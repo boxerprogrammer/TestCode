@@ -1,14 +1,15 @@
 #include "Enemy.h"
-#include"Player.h"
+#include"../Player/Player.h"
 
-Enemy::Enemy(std::shared_ptr<Player>& p) :player_(p) {
+Enemy::Enemy(const std::shared_ptr<Player>& p) :player_(p) {
 
 }
 
-
 void 
 Enemy::AimPlayer() {
-
+	velocity_ =player_->Position()-pos_;
+	velocity_.y = 0;
+	velocity_.Normalize();
 }
 
 
@@ -29,7 +30,7 @@ Enemy::GetVelocity()const {
 }
 void 
 Enemy::SetVelocity(const Vector2f& vel) {
-
+	velocity_ = vel;
 }
 
 bool 

@@ -1,5 +1,5 @@
 #pragma once
-#include"Character.h"
+#include"../Character.h"
 #include<vector>
 ///プレイヤークラス
 class GameplayingScene;
@@ -30,5 +30,5 @@ public:
 	void Update()override;
 	void Draw()override;
 	std::shared_ptr<Equipment> CurrentEquipment();
-	int CurrentEquipmentNo()const;
+	size_t CurrentEquipmentNo()const;
 };

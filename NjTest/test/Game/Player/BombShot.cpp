@@ -67,12 +67,14 @@ BombShot::KillUpdate() {
 
 void 
 BombShot::NormalDraw() {
-	DxLib::DrawRotaGraph(pos_.x, pos_.y, 0.75f, angle_, bombH, true);
+	DxLib::DrawRotaGraph(
+		static_cast<int>(pos_.x), static_cast<int>(pos_.y), 0.75f, angle_, bombH, true);
 
 }
 void 
 BombShot::ExplodeDraw() {
-	DrawRectRotaGraph(pos_.x, pos_.y, 48 * (frame_ / 4), 0, 48, 48, 3.0f, 0.0f, explodeH, true);
+	DrawRectRotaGraph(
+		static_cast<int>(pos_.x), static_cast<int>(pos_.y), 48 * (frame_ / 4), 0, 48, 48, 3.0f, 0.0f, explodeH, true);
 }
 
 void 

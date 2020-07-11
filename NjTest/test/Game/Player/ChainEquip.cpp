@@ -1,7 +1,7 @@
 #include "ChainEquip.h"
 #include"Player.h"
-#include"../Input.h"
-#include"../Geometry.h"
+#include"../../Input.h"
+#include"../../Geometry.h"
 #include<DxLib.h>
 
 namespace {
@@ -12,7 +12,7 @@ namespace {
 
 ChainEquip::ChainEquip(const Player& p):player_(p){
 	if (throwH == -1) {
-		throwH = LoadSoundMem(L"Resource/Sound/Game/shurikenthrow.wav");
+		throwH = LoadSoundMem(L"Resource/Sound/Game/chainatk.mp3");
 	}
 	if (chainH == -1) {
 		chainH = LoadGraph(L"Resource/Image/Player/chainsickle.png");
@@ -113,7 +113,7 @@ ChainEquip::Draw() {
 	if (frame_ >=0) {
 		int f = abs((frame_ + 10) % 20 - 10);
 		int w = f*400/10;
-		DrawRectRotaGraph2(pos.x, pos.y,
+		DrawRectRotaGraph2(static_cast<int>(pos.x), static_cast<int>(pos.y),
 			400 - w, 0, 
 			w, 48,
 			0,24,

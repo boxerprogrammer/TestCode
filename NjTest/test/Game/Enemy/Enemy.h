@@ -1,26 +1,25 @@
 #pragma once
-#include "Character.h"
+#include "../Character.h"
 class Player;
 class Spawner;
-class Enemy :
-	public Character
+class Enemy : public Character
 {
 	friend Spawner;
 protected:
-	std::shared_ptr<Player>& player_;
-	int life_ = 0;
-	bool isDeletable_ = false;
-	//現在の速度
-	Vector2f velocity_;
+	const std::shared_ptr<Player>& player_;
+	int life_ = 0;//敵の体力(0以下は死を意味する)
+	bool isDeletable_ = false;///リストから消していい(破棄していい)フラグ
+	Vector2f velocity_;///<敵の現在速度
 
-	///自分のクローンを返す・・・が、これは子クラスのを呼び出す
-	virtual std::shared_ptr<Enemy> MakeClone()=0;
+	///自分のクローンを返す・・・が、これは子クラスでの実装
+	///を呼び出す(純粋仮想関数)
+	virtual Enemy* MakeClone() = 0;
 	///プレイヤーを狙う
 	virtual void AimPlayer();
 
 public:
-	Enemy(std::shared_ptr<Player>& p);
-
+	Enemy(const std::shared_ptr<Player>& p);
+	virtual ~Enemy() = default;
 	/// <summary>
 	/// 攻撃を受けた
 	/// </summary>
