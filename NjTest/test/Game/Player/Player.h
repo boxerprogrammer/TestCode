@@ -6,12 +6,18 @@ class GameplayingScene;
 class Equipment;
 class Input;
 class PlayerInputListener;
+
+class CollisionManager;
+
 class Player : public Character {
 	friend PlayerInputListener;
 private:
+	float velY_=0.0f;
+	float accelY_=0.0f;
 	bool isRight_=true;
 	std::vector<std::shared_ptr<Equipment>> equipments_;
 	size_t currentEquipmentNo_=0;
+	std::shared_ptr<CollisionManager> collisionManager_;
 public:
 	enum class Direction {
 		left,
@@ -19,7 +25,7 @@ public:
 	};
 	
 	Direction GetDirection()const;
-
+	void OnHit(CollisionInfo&)override;
 	Player(GameplayingScene* gs);
 	~Player();
 	void Attack(const Input& input);

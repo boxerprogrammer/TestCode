@@ -77,11 +77,12 @@ TitleScene::Update(const Input& input) {
 void
 TitleScene::NormalDraw() {
 	Position2 pos;
-	Size isize;
-	GetGraphSize(titleH,&isize.w, &isize.h);
+	int w,h;
+	GetGraphSize(titleH,&w, &h);
+	Size isize(w, h);
 	const auto& vsize=Application::Instance().GetViewport().GetSize();
-	pos.x = (vsize.w - isize.w) / 2;
-	pos.y = (vsize.h - isize.h) / 2;
+	pos.x = static_cast<int>((vsize.w - isize.w) / 2);
+	pos.y = static_cast<int>((vsize.h - isize.h) / 2);
 	DrawExtendGraph(0,0,vsize.w,vsize.h,titleH, false);
 	//DrawRotaGraph(vsize.w / 2, vsize.h / 2, 1.0f, 0.0f, titleH, false);
 	//DrawGraph(pos.x, pos.y, titleH, false);
@@ -94,7 +95,7 @@ void
 TitleScene::FadeDraw() {
 	const auto& vpSize=Application::Instance().GetViewport().GetSize();
 	NormalDraw();
-	auto blendparam = 255 * (static_cast<float>(fadeout_interval - waitTimer_) / static_cast<float>(fadeout_interval));
+	auto blendparam = static_cast<int>(255 * (static_cast<float>(fadeout_interval - waitTimer_) / static_cast<float>(fadeout_interval)));
 	DxLib::SetDrawBlendMode(DX_BLENDMODE_MULA, blendparam);
 	DxLib::DrawBox(0, 0, vpSize.w, vpSize.h, 0x000000, true);
 	DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

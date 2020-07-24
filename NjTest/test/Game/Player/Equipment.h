@@ -1,9 +1,17 @@
 #pragma once
+
+#include<memory>
+class Camera;
 class Player;
 class Input;
+class CollisionManager;
 class Equipment
 {
+protected:
+	std::shared_ptr<CollisionManager> collisionManager_;
+	std::shared_ptr<Camera> camera_;
 public:
+	Equipment(std::shared_ptr<CollisionManager> cm , std::shared_ptr<Camera> camera);
 	virtual ~Equipment() = default;
 	/// <summary>
 	/// ¡‚Ì•Ší‚ÅUŒ‚‚ğ‰Á‚¦‚Ü‚·

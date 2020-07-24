@@ -1,13 +1,16 @@
 #pragma once
 #include"Equipment.h"
-
+#include<memory>
 class ProjectileManager;
+class CollisionManager;
+class Camera;
 class BombEquip : public Equipment
 {
 private:
 	ProjectileManager& pm_;
+	
 public:
-	BombEquip(ProjectileManager& pm);
+	BombEquip(ProjectileManager& pm,std::shared_ptr<CollisionManager> col,std::shared_ptr<Camera> c);
 	/// <summary>
 	/// ”š’eUŒ‚‚ğ‰Á‚¦‚Ü‚·
 	/// </summary>

@@ -18,8 +18,8 @@ namespace {
 	constexpr int menubase_y = 96;//メニューの一番上のY
 	constexpr int menu_y_interval = 48;//メニューの間隔
 	const wchar_t pause_title[] = L"Pause Menu";
-	int titleW_;
-	int currentSelectNo_ = 0;
+	size_t titleW_;
+	size_t currentSelectNo_ = 0;
 }
 
 using namespace std;
@@ -30,7 +30,7 @@ PauseScene::PauseScene(SceneController& c) :
 	drawer_(&PauseScene::AppearDraw){
 	frame_ = 0;
 	indicatorH_ = LoadGraph(L"Resource/Image/UI/indicator.png");
-	titleW_ = DxLib::GetDrawStringWidth(pause_title, wcslen(pause_title));
+	titleW_ = static_cast<size_t>(DxLib::GetDrawStringWidth(pause_title, static_cast<int>(wcslen(pause_title))));
 	//MenuItem(const wchar_t* str, const Position2& p,  std::function<void(void)>& f)
 	int y = menubase_y;
 	menuItems_.emplace_back(L"ゲームに戻る",
@@ -90,8 +90,8 @@ PauseScene::NormalUpdate(const Input& input) {
 	}
 	if (input.IsTriggered("up")) {
 		currentSelectNo_ = (
-			currentSelectNo_ - 1
-			+ menuItems_.size()) % menuItems_.size();
+			currentSelectNo_+menuItems_.size() - 1
+			) % menuItems_.size();
 	}
 	
 	for (auto& m : menuItems_) {

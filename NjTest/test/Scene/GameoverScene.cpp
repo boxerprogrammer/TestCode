@@ -60,7 +60,7 @@ GameoverScene::NormalDraw() {
 void
 GameoverScene::FadeDraw() {
 	NormalDraw();
-	auto blendparam = 255 * (static_cast<float>(fadeout_interval - waitTimer_) / static_cast<float>(fadeout_interval));
+	auto blendparam = static_cast<int>(255 * (static_cast<float>(fadeout_interval - waitTimer_) / static_cast<float>(fadeout_interval)));
 	DxLib::SetDrawBlendMode(DX_BLENDMODE_MULA, blendparam);
 	DxLib::DrawBox(0, 0, 800, 600, 0x000000, true);
 	DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

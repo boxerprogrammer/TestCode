@@ -2,11 +2,14 @@
 #include "Enemy.h"
 
 class EffectManager;
+class CollisionManager;
+class Camera;
 class Slasher :
     public Enemy
 {
 private:
 	std::shared_ptr<EffectManager> effectManager_;
+	std::shared_ptr<CollisionManager> collisionManager_;
 	bool wasSlashed = false;
 	int frame_ = 0;
 	int animFrame_ = 0;
@@ -21,12 +24,16 @@ private:
 	void SlashDraw();
 	Func_t drawer_;
 
-
-
-
 public:
-	Slasher(const std::shared_ptr<Player>& p);
-	Slasher(const std::shared_ptr<Player>& p,std::shared_ptr<EffectManager> efktMng);
+	Slasher(const std::shared_ptr<Player>& p,std::shared_ptr<Camera> camera);
+	Slasher(const std::shared_ptr<Player>& p,std::shared_ptr<EffectManager> efktMng,  std::shared_ptr<Camera> camera);
+	
+	/// <summary>
+	/// ‰½‚©‚ª“–‚½‚Á‚½ƒCƒxƒ“ƒg
+	/// </summary>
+	/// <param name="">‰½‚ª‚Ç‚¤“–‚½‚Á‚½‚©î•ñ</param>
+	void OnHit(CollisionInfo& col)override;
+
 	/// <summary>
 	/// UŒ‚‚ğó‚¯‚½
 	/// </summary>

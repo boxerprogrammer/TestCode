@@ -2,7 +2,12 @@
 #include"Player.h"
 #include"../../Input.h"
 #include"../../Geometry.h"
+#include"../CollisionManager.h"
+#include"../CapsuleCollider.h"
+#include"../Camera.h"
 #include<DxLib.h>
+
+using namespace std;
 
 namespace {
 	int throwH = -1;
@@ -10,7 +15,8 @@ namespace {
 	constexpr float swing_per_angle=DX_PI_F/18.0f;
 }
 
-ChainEquip::ChainEquip(const Player& p):player_(p){
+ChainEquip::ChainEquip(std::shared_ptr<Player>& p ,std::shared_ptr<CollisionManager> cm,std::shared_ptr<Camera> camera):player_(p),
+Equipment(cm,camera){
 	if (throwH == -1) {
 		throwH = LoadSoundMem(L"Resource/Sound/Game/chainatk.mp3");
 	}
@@ -18,6 +24,7 @@ ChainEquip::ChainEquip(const Player& p):player_(p){
 		chainH = LoadGraph(L"Resource/Image/Player/chainsickle.png");
 	}
 	frame_ = -1;
+
 }
 
 void
@@ -52,10 +59,17 @@ ChainEquip::Attack(const Player& player, const Input& input) {
 		currentAngle_ += 2 * DX_PI_F;
 	}
 	swingTargetAngle_ = currentAngle_;
+
+	if (capsuleCollider_ == nullptr) {
+		Capsule cap = { {{0,0},{0,0}},30 };
+		capsuleCollider_ = new CapsuleCollider(player_, cap, tag_player_attack, true);
+		collisionManager_->AddCollider(capsuleCollider_);
+	}
 }
 
 void 
 ChainEquip::AdditionalInput(const Input& input) {
+	if (frame_ > 10)return;
 	Vector2f newVec = { 0.0f,0.0f };
 	if (input.IsPressed("left")) {
 		newVec += {-1.0f, 0.0f};
@@ -83,7 +97,13 @@ ChainEquip::AdditionalInput(const Input& input) {
 
 void 
 ChainEquip::Update() {
-	if (frame_ < 0)return;
+	
+	if (frame_ < 0){
+		if (capsuleCollider_ != nullptr) {
+			capsuleCollider_->GetCapsule().seg.vec = { 0,0 };
+		}
+		return;
+	}
 	if (frame_<10 || currentAngle_ == swingTargetAngle_) {
 		++frame_;
 	}
@@ -102,18 +122,23 @@ ChainEquip::Update() {
 	if (frame_ > 20) {
 		frame_ = -1;
 	}
-	
-	
-	
+	auto& vec = capsuleCollider_->GetCapsule().seg.vec;
+	vec = direction_ * GetChainLength();
+}
+
+float 
+ChainEquip::GetChainLength()const {
+	int f = abs((frame_ + 10) % 20 - 10);
+	return f * 400 / 10;
 }
 
 void
 ChainEquip::Draw() {
-	auto pos=player_.Position();
+	auto pos=player_->Position();
 	if (frame_ >=0) {
-		int f = abs((frame_ + 10) % 20 - 10);
-		int w = f*400/10;
-		DrawRectRotaGraph2(static_cast<int>(pos.x), static_cast<int>(pos.y),
+		int w = GetChainLength();
+		const int xoffset = camera_->ViewOffset().x;
+		DrawRectRotaGraph2(static_cast<int>(pos.x+xoffset), static_cast<int>(pos.y),
 			400 - w, 0, 
 			w, 48,
 			0,24,

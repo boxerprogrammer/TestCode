@@ -2,19 +2,22 @@
 #include "Equipment.h"
 #include"../../Geometry.h"
 class Player;
-class ChainEquip :
-    public Equipment
+class CapsuleCollider;
+class Camera;
+class ChainEquip : public Equipment
 {
 private:
+	CapsuleCollider* capsuleCollider_ = nullptr;
 	int frame_;
-	const Player& player_;
+	std::shared_ptr<Player>& player_;
 	float swingTargetAngle_=0.0f;
 	float swingPerAngle_ = 0.0f;
 	float currentAngle_ = 0.0f;
 	int swingFrame_ = 0;
 	Vector2f direction_;
+	float GetChainLength()const;
 public:
-	ChainEquip(const Player& p);
+	ChainEquip(std::shared_ptr<Player>& player, std::shared_ptr<CollisionManager> cm, std::shared_ptr<Camera> camera);
 	/// <summary>
 	/// ½Š™UŒ‚‚ğ‰Á‚¦‚Ü‚·
 	/// </summary>

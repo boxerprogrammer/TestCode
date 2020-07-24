@@ -1,7 +1,7 @@
 #pragma once
 
 #include"../Character.h"
-
+class Camera;
 /// <summary>
 /// 速度をもって飛んでいくオブジェクト
 /// </summary>
@@ -16,7 +16,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool IsDead()const;
-	Projectile();
+	Projectile(std::shared_ptr<Camera> c);
 	virtual ~Projectile() = default;
 	/// <summary>
 	/// 現在座標に速度を加算する

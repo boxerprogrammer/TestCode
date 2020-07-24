@@ -1,6 +1,6 @@
 #include "Projectile.h"
 
-Projectile::Projectile() {
+Projectile::Projectile(std::shared_ptr<Camera> c):Character(c) {
 	isActive_ = true;
 }
 void 

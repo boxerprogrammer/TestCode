@@ -18,8 +18,11 @@ protected:
 	virtual void AimPlayer();
 
 public:
-	Enemy(const std::shared_ptr<Player>& p);
+	Enemy(const std::shared_ptr<Player>& p , std::shared_ptr<Camera> c);
 	virtual ~Enemy() = default;
+
+	virtual void OnHit(CollisionInfo&) = 0;
+
 	/// <summary>
 	/// 攻撃を受けた
 	/// </summary>
@@ -41,9 +44,6 @@ public:
 	/// </summary>
 	virtual void Draw() = 0;
 
-	///座標アクセス
-	virtual const Vector2f& GetPosition()const;
-	virtual void SetPosition(const Vector2f& vel);
 
 	///速度アクセス
 	virtual const Vector2f& GetVelocity()const;

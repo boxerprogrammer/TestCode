@@ -8,6 +8,12 @@ using namespace std;
 //ProjectileManager::Projectiles() {
 //	return projectiles_;
 //}
+
+std::list<std::shared_ptr<Projectile>>& 
+ProjectileManager::GetProjectiles() {
+	return projectiles_;
+}
+
 void 
 ProjectileManager::AddProjectile(Projectile* p) {
 	projectiles_.emplace_back(p);

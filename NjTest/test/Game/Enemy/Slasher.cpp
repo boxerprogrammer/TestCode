@@ -2,13 +2,24 @@
 #include "../Player/Player.h"
 #include"../Effect.h"
 #include<DxLib.h>
-
+#include"../Collider.h"
+#include"../Camera.h"
 namespace {
 	int runH = -1;
 	int slashH = -1;
 }
 
-Slasher::Slasher(const std::shared_ptr<Player>& p) :Enemy(p){
+void Slasher::OnHit(CollisionInfo& col){
+	if (col.collider->GetTag() == tag_player_attack) {
+		float sign = velocity_.x < 0 ? -1.0f : 1.0f;
+		effectManager_->EmitBlow3(pos_ + Vector2f(sign * 50, 50), sign < 0.0f);
+		isDeletable_ = true;
+	}
+}
+
+Slasher::Slasher(const std::shared_ptr<Player>& p, std::shared_ptr<Camera> camera) :
+Enemy(p,camera)
+{
 	if (runH == -1) {
 		runH = LoadGraph(L"Resource/Image/Enemy/Slasher/run.png");
 	}
@@ -19,8 +30,8 @@ Slasher::Slasher(const std::shared_ptr<Player>& p) :Enemy(p){
 	drawer_ = &Slasher::RunDraw;
 }
 
-Slasher::Slasher(const std::shared_ptr<Player>& p, std::shared_ptr<EffectManager> efktMng):
-	Slasher(p){
+Slasher::Slasher(const std::shared_ptr<Player>& p, std::shared_ptr<EffectManager> efktMng, std::shared_ptr<Camera> camera):
+	Slasher(p,camera) {
 	effectManager_ = efktMng;
 }
 
@@ -51,6 +62,11 @@ Slasher::RunUpdate() {
 		drawer_ = &Slasher::SlashDraw;
 		animFrame_ = 0;
 		frame_ = 0;
+		if (effectManager_) {
+			float sign = velocity_.x < 0 ? -1.0f : 1.0f;
+			effectManager_->EmitBlood(pos_ + Vector2f(sign * 50, 50), sign < 0.0f);
+			//effectManager_->EmitBlow3(pos_ + Vector2f(sign * 50, 50), sign < 0.0f);
+		}
 	}
 }
 
@@ -62,10 +78,7 @@ Slasher::SlashUpdate() {
 		frame_ = 1;
 		updater_ = &Slasher::RunUpdate;
 		drawer_ = &Slasher::RunDraw;
-		if (effectManager_) {
-			float sign = velocity_.x < 0 ? -1.0f : 1.0f;
-			effectManager_->EmitBlood(pos_ + Vector2f(sign * 50,50),sign<0.0f);
-		}
+		
 	}
 }
 
@@ -77,8 +90,9 @@ Slasher::Update() {
 
 void
 Slasher::RunDraw() {
+	const auto xoffset = camera_->ViewOffset().x;
 	DrawRectRotaGraph(
-		static_cast<int>(pos_.x), static_cast<int>(pos_.y),
+		static_cast<int>(pos_.x+xoffset), static_cast<int>(pos_.y),
 		(animFrame_ / 5) * 36, 0, 36, 26,
 		4.0f, 0.0f, runH, true,
 		velocity_.x < 0);
@@ -86,7 +100,8 @@ Slasher::RunDraw() {
 
 void
 Slasher::SlashDraw() {
-	DrawRectRotaGraph(static_cast<int>(pos_.x), static_cast<int>(pos_.y),
+	const auto xoffset=camera_->ViewOffset().x;
+	DrawRectRotaGraph(static_cast<int>(pos_.x+xoffset), static_cast<int>(pos_.y),
 		(animFrame_ / 5) * 42, 0, 42, 26,
 		4.0f, 0.0f, slashH, true,
 		velocity_.x < 0);

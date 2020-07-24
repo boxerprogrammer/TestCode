@@ -1,5 +1,7 @@
 #include "ShurikenEquip.h"
 #include"ProjectileManager.h"
+#include"../CollisionManager.h"
+#include"../CircleCollider.h"
 #include<DxLib.h>
 #include"../../Geometry.h"
 #include"../../Input.h"
@@ -8,8 +10,11 @@
 namespace {
 	int throwH = -1;
 }
+using namespace std;
 
-ShurikenEquip::ShurikenEquip(ProjectileManager& pm) :pm_(pm) {
+ShurikenEquip::ShurikenEquip(ProjectileManager& pm,shared_ptr<CollisionManager> cm, shared_ptr<Camera> camera) :
+	pm_(pm),
+Equipment(cm,camera){
 	if (throwH == -1) {
 		throwH = LoadSoundMem(L"Resource/Sound/Game/shurikenthrow.wav");
 	}
@@ -43,5 +48,11 @@ ShurikenEquip::Attack(const Player& player, const Input& input) {
 	vel.Normalize();
 	vel *= 10.0f;
 	PlaySoundMem(throwH, DX_PLAYTYPE_BACK);
-	pm_.AddProjectile(new ShurikenShot(player.Position(), vel));
+	pm_.AddProjectile(new ShurikenShot(player.Position(), vel,camera_));
+	collisionManager_->AddCollider(new CircleCollider(
+		pm_.GetProjectiles().back(),
+		{ {0,0,},10 },
+		tag_player_attack
+	));
+
 }

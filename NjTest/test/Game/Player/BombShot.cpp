@@ -1,4 +1,6 @@
 #include "BombShot.h"
+#include"../Collider.h"
+#include"../Camera.h"
 #include<DxLib.h>
 
 namespace {
@@ -13,7 +15,7 @@ BombShot::~BombShot() {
 #endif
 }
 
-BombShot::BombShot(const Position2f& pos, const Vector2f& vel) {
+BombShot::BombShot(const Position2f& pos, const Vector2f& vel,std::shared_ptr<Camera> c) :Projectile(c){
 	pos_ = pos;
 	vel_ = vel;
 	if (bombH == -1) {
@@ -45,12 +47,17 @@ void
 BombShot::NormalUpdate() {
 	angle_ += 0.25f;
 	Projectile::Update();//java‚Å‚¢‚¤base.Update();‚¾‚ÆŽv‚Á‚Ä‚­‚¾‚³‚¢
-	if (pos_.x >= 800 || pos_.x <= 0 || pos_.y >= 600 || pos_.y <= 0) {
-		updater_ = &BombShot::ExplodeUpdate;
-		drawer_ = &BombShot::ExplodeDraw;
-		frame_=0;
-		PlaySoundMem(explodeSH, DX_PLAYTYPE_BACK);
+	const auto& vrect = camera_->GetViewRange();
+	if (pos_.x >= vrect.Right() || pos_.x <= vrect.Left() || pos_.y >= vrect.Bottom() || pos_.y <= vrect.Top()) {
+		Explode();
 	}
+}
+void BombShot::Explode()
+{
+	updater_ = &BombShot::ExplodeUpdate;
+	drawer_ = &BombShot::ExplodeDraw;
+	frame_ = 0;
+	PlaySoundMem(explodeSH, DX_PLAYTYPE_BACK);
 }
 void 
 BombShot::ExplodeUpdate() {
@@ -67,17 +74,26 @@ BombShot::KillUpdate() {
 
 void 
 BombShot::NormalDraw() {
+	const auto xoffset = camera_->ViewOffset().x;
 	DxLib::DrawRotaGraph(
-		static_cast<int>(pos_.x), static_cast<int>(pos_.y), 0.75f, angle_, bombH, true);
+		static_cast<int>(pos_.x+xoffset), static_cast<int>(pos_.y), 0.75f, angle_, bombH, true);
 
 }
 void 
 BombShot::ExplodeDraw() {
+	const auto xoffset = camera_->ViewOffset().x;
 	DrawRectRotaGraph(
-		static_cast<int>(pos_.x), static_cast<int>(pos_.y), 48 * (frame_ / 4), 0, 48, 48, 3.0f, 0.0f, explodeH, true);
+		static_cast<int>(pos_.x+xoffset), static_cast<int>(pos_.y), 48 * (frame_ / 4), 0, 48, 48, 3.0f, 0.0f, explodeH, true);
 }
 
 void 
 BombShot::NoDraw() {
 
+}
+
+void
+BombShot::OnHit(CollisionInfo& info) {
+	if (info.collider->GetTag() != tag_player_attack) {
+		Explode();
+	}
 }

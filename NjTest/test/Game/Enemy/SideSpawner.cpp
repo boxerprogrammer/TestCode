@@ -2,9 +2,22 @@
 #include"Enemy.h"
 #include"../../Geometry.h"
 #include"EnemyManager.h"
+#include"../CollisionManager.h"
+#include"../CircleCollider.h"
+#include<random>
 
-SideSpawner::SideSpawner(const Position2f& pos, Enemy* prototype, std::shared_ptr<EnemyManager>& em):
-Spawner(pos,prototype,em){
+using namespace std;
+
+//Circle(Position2f(0,0),50),
+
+namespace {
+	mt19937 mt;
+
+}
+
+SideSpawner::SideSpawner(const Position2f& pos, Enemy* prototype, std::shared_ptr<EnemyManager>& em, std::shared_ptr<CollisionManager> cm):
+collisionManager_(cm)
+,Spawner(pos,prototype,em){
 
 }
 
@@ -13,10 +26,22 @@ Spawner(pos,prototype,em){
 /// </summary>
 void 
 SideSpawner::Update() {
-	if (++frame_ % 60 == 0) {
+	static bool fromRight = false;
+	if (++frame_ % (60+rand()%40-20) == 0) {
 		auto clone=CreateClone();
 		if (clone == nullptr)return;
-		clone->SetPosition({ -36,480 });
+		if (fromRight) {
+			clone->SetPosition({ -36,480 });
+		}
+		else {
+			clone->SetPosition({ 836,480 });
+		}
+		
+		fromRight = !fromRight;
 		enemyManager_->AddEnemy(clone);
+		collisionManager_->AddCollider(
+			new CircleCollider(enemyManager_->Enemies().back(),
+			Circle(Position2f(0, 0), 50),
+			tag_enemy_damage));
 	}
 }

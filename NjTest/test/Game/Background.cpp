@@ -40,13 +40,13 @@ void
 Background::Draw() {
 	auto rc = Application::Instance().GetViewport().GetRect();
 
-	auto wdh = 1440.0f;
-	auto hgt = 480.0f;
+	auto wdh = 1440;
+	auto hgt = 480;
 	{
 		int w, h;
 		GetGraphSize(bgH_[0], &w, &h);
-		wdh = w;
-		hgt = h;
+		wdh = w;// static_cast<float>(w);
+		hgt = h;//static_cast<float>(h);
 	}
 	const float scale = (float)rc.Width() / wdh;
 	auto w = (float)rc.Width() / scale;
@@ -54,16 +54,16 @@ Background::Draw() {
 	auto scroll = static_cast<float>(frame_) / 2.0f;
 
 	for (int i = 0; i < bgH_.size(); ++i) {
-		auto lscroll = (int)(scroll * (float)(i + 1)) % (int)wdh;
+		auto lscroll = (int)(scroll * (float)(i + 1)) % wdh;
 		DrawRectExtendGraph(
 			rc.Left(), rc.Top(), rc.Right(), rc.Bottom(),
 			lscroll,
 			0,
-			w,
+			static_cast<int>(w),
 			hgt,
 			bgH_[i], true);
 		if ((wdh - lscroll) < (float)rc.Width() / scale) {
-			auto x = -scale * ((float)lscroll - wdh);
+			int x = static_cast<int>(-scale * (lscroll - wdh));
 			DrawRectExtendGraph(
 				rc.Left() + x, rc.Top(), (int)(rc.Left() + x + wdh * scale), rc.Bottom(),
 				0,

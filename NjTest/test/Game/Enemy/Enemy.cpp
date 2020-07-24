@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include"../Player/Player.h"
 
-Enemy::Enemy(const std::shared_ptr<Player>& p) :player_(p) {
+Enemy::Enemy(const std::shared_ptr<Player>& p, std::shared_ptr<Camera> c) :Character(c),player_(p) {
 
 }
 
@@ -13,15 +13,7 @@ Enemy::AimPlayer() {
 }
 
 
-	///座標アクセス
-const Vector2f& 
-Enemy::GetPosition()const {
-	return pos_;
-}
-void 
-Enemy::SetPosition(const Vector2f& pos) {
-	pos_ = pos;
-}
+
 
 ///速度アクセス
 const Vector2f& 

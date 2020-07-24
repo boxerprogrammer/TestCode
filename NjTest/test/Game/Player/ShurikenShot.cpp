@@ -1,10 +1,12 @@
 #include "ShurikenShot.h"
+#include"../Collider.h"
+#include"../Camera.h"
 #include<DxLib.h>
 namespace {
 	int shurikenH = -1;
 	int shurikenSE = -1;
 }
-ShurikenShot::ShurikenShot(const Position2f& pos, const Vector2f& vel) {
+ShurikenShot::ShurikenShot(const Position2f& pos, const Vector2f& vel, std::shared_ptr<Camera> c):Projectile(c) {
 	pos_ = pos;
 	vel_ = vel;
 	if (shurikenH == -1) {
@@ -24,7 +26,8 @@ void
 ShurikenShot::Update() {
 	angle_ += 0.5f;
 	Projectile::Update();
-	if (pos_.x >= 800 || pos_.x <= 0 || pos_.y >= 600 || pos_.y <= 0) {
+	const auto& vrect = camera_->GetViewRange();
+	if (pos_.x >= vrect.Right() || pos_.x <= vrect.Left() || pos_.y >= vrect.Bottom() || pos_.y <= vrect.Top()) {
 		PlaySoundMem(shurikenSE, DX_PLAYTYPE_BACK);
 		isActive_ = false;
 	}
@@ -32,7 +35,15 @@ ShurikenShot::Update() {
 
 void 
 ShurikenShot::Draw(){
+	const auto xoffset = camera_->ViewOffset().x;
 	DxLib::DrawRotaGraph(
-		static_cast<int>(pos_.x), 
+		static_cast<int>(pos_.x+xoffset), 
 		static_cast<int>(pos_.y), 1.0f, angle_, shurikenH, true);
+}
+
+void 
+ShurikenShot::OnHit(CollisionInfo& info) {
+	if (info.collider->GetTag() == tag_enemy_damage) {
+		isActive_ = false;
+	}
 }

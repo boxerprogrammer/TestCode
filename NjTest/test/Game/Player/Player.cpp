@@ -8,6 +8,7 @@
 #include"BombEquip.h"
 #include"ShurikenEquip.h"
 #include"ChainEquip.h"
+#include"../Camera.h"
 
 
 using namespace std;
@@ -19,7 +20,7 @@ namespace {
 	int changeSE_ = -1;
 }
 
-Player::Player(GameplayingScene* gs) {
+Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()){
 	for (int i = 0; i < _countof(runH_); ++i) {
 		wstringstream wss;
 		wss << L"Resource/Image/Player/";
@@ -47,11 +48,11 @@ Player::Player(GameplayingScene* gs) {
 				//player_.Move({ 0, 5 });
 			}
 			if (input.IsPressed("left")) {
-				//player_.Move({ -5, 0 });
+				player_.Move({ -5, 0 });
 				player_.isRight_ = false;
 			}
 			if (input.IsPressed("right")) {
-				//player_.Move({ 5, 0 });
+				player_.Move({ 5, 0 });
 				player_.isRight_ = true;
 			}
 			if (input.IsTriggered("shot")) {
@@ -60,13 +61,20 @@ Player::Player(GameplayingScene* gs) {
 			if (input.IsTriggered("change")) {
 				player_.NextEquip();
 			}
+			if (input.IsTriggered("jump")) {
+
+			}
+			if (input.IsReleased("jump")) {
+
+			}
 			player_.CurrentEquipment()->AdditionalInput(input);
 		}
 	};
+	collisionManager_ = gs->GetCollisionManager();
 	gs->AddListener(make_shared< PlayerInputListener>(*this));
-	equipments_.push_back(make_shared<BombEquip>(gs->GetProjectileManager()));
-	equipments_.push_back(make_shared<ShurikenEquip>(gs->GetProjectileManager()));
-	equipments_.push_back(make_shared<ChainEquip>(*this));
+	equipments_.push_back(make_shared<BombEquip>(gs->GetProjectileManager(),gs->GetCollisionManager(),gs->GetCamera()));
+	equipments_.push_back(make_shared<ShurikenEquip>(gs->GetProjectileManager(),gs->GetCollisionManager(),gs->GetCamera()));
+	equipments_.push_back(make_shared<ChainEquip>(gs->GetPlayer(),gs->GetCollisionManager(),gs->GetCamera()));
 	if (changeSE_ == -1) {
 		changeSE_ = LoadSoundMem(L"Resource/Sound/Game/changeweapon.wav");
 	}
@@ -135,6 +143,13 @@ Player::GetDirection()const {
 void 
 Player::Draw() {
 	equipments_[currentEquipmentNo_]->Draw();
-	DrawRotaGraph(static_cast<int>(pos_.x), static_cast<int>(pos_.y), 
+
+	const int xoffset = camera_->ViewOffset().x;
+	DrawRotaGraph(static_cast<int>(pos_.x+xoffset), static_cast<int>(pos_.y), 
 		3.0f, 0.0f, runH_[idx_], true,!isRight_, false);
+}
+
+void 
+Player::OnHit(CollisionInfo&) {
+
 }

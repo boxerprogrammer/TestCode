@@ -105,7 +105,7 @@
       <AdditionalIncludeDirectories>$(DXLIB_DIR)</AdditionalIncludeDirectories>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <DisableSpecificWarnings>4068</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4068;4267</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -147,19 +147,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="Game\ChainEquip.cpp" />
-    <ClCompile Include="Game\BombEquip.cpp" />
-    <ClCompile Include="Game\BombShot.cpp" />
-    <ClCompile Include="Game\Equipment.cpp" />
-    <ClCompile Include="Game\Enemy.cpp" />
+    <ClCompile Include="Game\Camera.cpp" />
+    <ClCompile Include="Game\CapsuleCollider.cpp" />
+    <ClCompile Include="Game\CollisionManager.cpp" />
+    <ClCompile Include="Game\CircleCollider.cpp" />
+    <ClCompile Include="Game\Collider.cpp" />
+    <ClCompile Include="Game\Effect.cpp" />
+    <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Game\Player\ChainEquip.cpp" />
+    <ClCompile Include="Game\Player\BombEquip.cpp" />
+    <ClCompile Include="Game\Player\BombShot.cpp" />
+    <ClCompile Include="Game\Player\Equipment.cpp" />
+    <ClCompile Include="Game\Enemy\Enemy.cpp" />
     <ClCompile Include="Game\Background.cpp" />
     <ClCompile Include="Game\Character.cpp" />
-    <ClCompile Include="Game\Player.cpp" />
+    <ClCompile Include="Game\Player\Player.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="InputListener.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Game\Projectile.cpp" />
-    <ClCompile Include="Game\ProjectileManager.cpp" />
+    <ClCompile Include="Game\Player\Projectile.cpp" />
+    <ClCompile Include="Game\Player\ProjectileManager.cpp" />
     <ClCompile Include="Scene\ContinueScene.cpp" />
     <ClCompile Include="Scene\GameoverScene.cpp" />
     <ClCompile Include="Scene\GameplayingScene.cpp" />
@@ -167,24 +175,35 @@
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\SceneController.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
-    <ClCompile Include="Game\ShurikenEquip.cpp" />
-    <ClCompile Include="Game\ShurikenShot.cpp" />
-    <ClCompile Include="Game\Spawner.cpp" />
+    <ClCompile Include="Game\Player\ShurikenEquip.cpp" />
+    <ClCompile Include="Game\Player\ShurikenShot.cpp" />
+    <ClCompile Include="Game\Enemy\Spawner.cpp" />
+    <ClCompile Include="Game\Enemy\Slasher.cpp" />
+    <ClCompile Include="Game\Enemy\SideSpawner.cpp" />
+    <ClCompile Include="Game\Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
-    <ClInclude Include="Game\ChainEquip.h" />
-    <ClInclude Include="Game\BombEquip.h" />
-    <ClInclude Include="Game\BombShot.h" />
-    <ClInclude Include="Game\Equipment.h" />
-    <ClInclude Include="Game\Enemy.h" />
+    <ClInclude Include="Game\Camera.h" />
+    <ClInclude Include="Game\CapsuleCollider.h" />
+    <ClInclude Include="Game\CollisionManager.h" />
+    <ClInclude Include="Game\CircleCollider.h" />
+    <ClInclude Include="Game\Collider.h" />
+    <ClInclude Include="Game\Effect.h" />
+    <ClInclude Include="Game\Enemy\EnemyManager.h" />
+    <ClInclude Include="Game\Player\ChainEquip.h" />
+    <ClInclude Include="Game\Player\BombEquip.h" />
+    <ClInclude Include="Game\Player\BombShot.h" />
+    <ClInclude Include="Game\Player\Equipment.h" />
+    <ClInclude Include="Game\Enemy\Enemy.h" />
     <ClInclude Include="Game\Background.h" />
     <ClInclude Include="Game\Character.h" />
-    <ClInclude Include="Game\Player.h" />
+    <ClInclude Include="Game\Player\Player.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="Game\Projectile.h" />
-    <ClInclude Include="Game\ProjectileManager.h" />
+    <ClInclude Include="Game\Player\Projectile.h" />
+    <ClInclude Include="Game\Player\ProjectileManager.h" />
+    <ClInclude Include="InputListener.h" />
     <ClInclude Include="Scene\ContinueScene.h" />
     <ClInclude Include="Scene\GameoverScene.h" />
     <ClInclude Include="Scene\GameplayingScene.h" />
@@ -192,9 +211,12 @@
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneController.h" />
     <ClInclude Include="Scene\TitleScene.h" />
-    <ClInclude Include="Game\ShurikenEquip.h" />
-    <ClInclude Include="Game\ShurikenShot.h" />
-    <ClInclude Include="Game\Spawner.h" />
+    <ClInclude Include="Game\Player\ShurikenEquip.h" />
+    <ClInclude Include="Game\Player\ShurikenShot.h" />
+    <ClInclude Include="Game\Enemy\Spawner.h" />
+    <ClInclude Include="Game\Enemy\Slasher.h" />
+    <ClInclude Include="Game\Enemy\SideSpawner.h" />
+    <ClInclude Include="Game\Stage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

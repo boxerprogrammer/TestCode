@@ -35,7 +35,7 @@ Application::Initialize() {
 	DxLib::SetWindowText(L"‰æ–Ê‘JˆÚƒeƒXƒg");
 	DxLib::ChangeWindowMode(true);
 	const auto& wsize = viewport_.GetSize();
-	DxLib::SetGraphMode(wsize.w, wsize.h, 32);
+	DxLib::SetGraphMode(static_cast<int>(wsize.w), static_cast<int>(wsize.h), 32);
 	if (DxLib_Init()) {
 		return false;
 	}
