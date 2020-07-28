@@ -14,27 +14,58 @@
 using namespace std;
 
 namespace {
-	int runH_[6];
+	int runH_[6] = { -1,-1,-1,-1, -1, -1 };
+	int jumpH_[4] = { -1, -1, -1, -1 };
+	int fallH_[2] = { -1, -1 };
+	int maskH = -1;
 	int frame_ = 0;
 	int idx_ = 0;
 	int changeSE_ = -1;
+	constexpr int ground_line = 480;
 }
 
 Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()){
+	//走りロード
 	for (int i = 0; i < _countof(runH_); ++i) {
 		wstringstream wss;
 		wss << L"Resource/Image/Player/";
 		wss << L"adventurer-run-";
 		wss << setfill(L'0') << setw(2);
 		wss << i << L".png";
-		runH_[i] = LoadGraph(wss.str().c_str());
+		if (runH_[i] == -1) {
+			runH_[i] = LoadGraph(wss.str().c_str());
+		}
 	}
+	//ジャンプロード
+	for (int i = 0; i < _countof(jumpH_); ++i) {
+		wstringstream wss;
+		wss << L"Resource/Image/Player/";
+		wss << L"adventurer-jump-";
+		wss << setfill(L'0') << setw(2);
+		wss << i << L".png";
+		if (jumpH_[i] == -1) {
+			jumpH_[i] = LoadGraph(wss.str().c_str());
+		}
+	}
+	//下降ロード
+	for (int i = 0; i < _countof(fallH_); ++i) {
+		wstringstream wss;
+		wss << L"Resource/Image/Player/";
+		wss << L"adventurer-fall-";
+		wss << setfill(L'0') << setw(2);
+		wss << i << L".png";
+		if (fallH_[i] == -1) {
+			fallH_[i] = LoadGraph(wss.str().c_str());
+		}
+	}
+	maskH = LoadMask(L"Resource/Image/Player/shadow_mask.bmp");
 	frame_ = 0;
 	idx_ = 0;
 		  
 	class PlayerInputListener : public InputListener{
 	private:
 		Player& player_;
+		bool decidedGravity_=false;
 	public:
 		PlayerInputListener(Player& p):player_(p){}
 		~PlayerInputListener() {
@@ -62,10 +93,16 @@ Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()){
 				player_.NextEquip();
 			}
 			if (input.IsTriggered("jump")) {
-
+				if (player_.updater_ == &Player::NormalUpdate) {
+					player_.Jump();
+					decidedGravity_ = false;
+				}
 			}
 			if (input.IsReleased("jump")) {
-
+				if (player_.updater_ == &Player::RiseUpdate && !decidedGravity_) {
+					player_.accelY_ = -player_.velY_ / 10.0f;
+					decidedGravity_ = true;
+				}
 			}
 			player_.CurrentEquipment()->AdditionalInput(input);
 		}
@@ -77,6 +114,11 @@ Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()){
 	equipments_.push_back(make_shared<ChainEquip>(gs->GetPlayer(),gs->GetCollisionManager(),gs->GetCamera()));
 	if (changeSE_ == -1) {
 		changeSE_ = LoadSoundMem(L"Resource/Sound/Game/changeweapon.wav");
+	}
+	updater_ = &Player::NormalUpdate;
+	drawer_ = &Player::NormalDraw;
+	for (auto& spos : shadowPositions_) {
+		spos = pos_;
 	}
 }
 Player::~Player() {
@@ -110,6 +152,9 @@ Player::NextEquip() {
 void 
 Player::SetPosition(const Position2f& p) {
 	pos_ = p;
+	for (auto& spos : shadowPositions_) {
+		spos = pos_;
+	}
 }
 
 const Position2f& 
@@ -120,15 +165,80 @@ Player::Position()const {
 void
 Player::Move(const Vector2f& v) {
 	pos_ += v;
+	
+
+}
+
+void
+Player::Jump() {
+	accelY_ = 1.0f;
+	velY_ = -25.0f;
+	updater_ = &Player::RiseUpdate;
+	drawer_ = &Player::RiseDraw;
+	frame_ = 0;
+	idx_ = 0;
+}
+
+void
+Player::NormalUpdate() {
+	if (frame_ % 5 == 0) {
+		idx_ = (idx_ + 1) % _countof(runH_);
+	}
+}
+
+void
+Player::RiseUpdate() {
+	if (frame_ % 5 == 0) {
+		idx_ = (idx_ + 1) % _countof(jumpH_);
+	}
+	velY_ += accelY_;
+	pos_.y += velY_;
+	if (velY_ >= 0.0f) {
+		updater_ = &Player::FallUpdate;
+		drawer_ = &Player::FallDraw;
+		frame_ = 0;
+		idx_ = 0;
+	}
+}
+
+void
+Player::FallUpdate() {
+	if (frame_ % 5 == 0) {
+		idx_ = (idx_ + 1) % _countof(fallH_);
+	}
+	velY_ += accelY_;
+	pos_.y += velY_;
+	if (ground_line < pos_.y) {
+		velY_ = 0.0f;
+		pos_.y = ground_line;
+		updater_ = &Player::NormalUpdate;
+		drawer_ = &Player::NormalDraw;
+		frame_ = 0;
+		idx_ = 0;
+	}
 }
 
 void 
 Player::Update() {
+	//共通部分
 	++frame_;
-	if (frame_ % 5 == 0) {
-		idx_ = (idx_ + 1) % _countof(runH_);
-	} 
 	equipments_[currentEquipmentNo_]->Update();
+
+	auto wpos = pos_;
+	for (auto& spos : shadowPositions_) {
+		auto v = spos - wpos;
+		auto d = v.Magnitude();
+		if (d == 0.0f)continue;
+		spos = wpos + v.Normalized() * min(d, 100.0f);
+		wpos = spos;
+	}
+
+
+	//個別部分
+	(this->*updater_)();
+
+
+
 }
 
 Player::Direction 
@@ -140,13 +250,42 @@ Player::GetDirection()const {
 	return ret;
 }
 
+void
+Player::NormalDraw() {
+	const int xoffset = camera_->ViewOffset().x;
+	DrawRotaGraph(static_cast<int>(pos_.x + xoffset), static_cast<int>(pos_.y),
+		3.0f, 0.0f, runH_[idx_], true, !isRight_, false);
+}
+void
+Player::RiseDraw() {
+	const int xoffset = camera_->ViewOffset().x;
+	DrawRotaGraph(static_cast<int>(pos_.x + xoffset), static_cast<int>(pos_.y),
+		3.0f, 0.0f, jumpH_[idx_], true, !isRight_, false);
+}
+void
+Player::FallDraw() {
+	const int xoffset = camera_->ViewOffset().x;
+	DrawRotaGraph(static_cast<int>(pos_.x + xoffset), static_cast<int>(pos_.y),
+		3.0f, 0.0f, fallH_[idx_], true, !isRight_, false);
+}
+
+
 void 
 Player::Draw() {
 	equipments_[currentEquipmentNo_]->Draw();
 
+	(this->*drawer_)();
+
+	CreateMaskScreen();
 	const int xoffset = camera_->ViewOffset().x;
-	DrawRotaGraph(static_cast<int>(pos_.x+xoffset), static_cast<int>(pos_.y), 
-		3.0f, 0.0f, runH_[idx_], true,!isRight_, false);
+	for (auto& spos : shadowPositions_) {
+		//DrawBox(spos.x - 128 + xoffset, spos.y - 128, spos.x + 128 + xoffset, spos.y + 128, 0xaaffaa,false);
+		DrawFillMask(spos.x - 64 + xoffset, spos.y - 64, spos.x + 64 + xoffset, spos.y + 64,
+			maskH);
+		DrawRotaGraph(static_cast<int>(spos.x + xoffset), static_cast<int>(spos.y),
+			3.0f, 0.0f, runH_[idx_], true, !isRight_, false);
+	}
+	DeleteMaskScreen();
 }
 
 void 

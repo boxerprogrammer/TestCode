@@ -4,6 +4,7 @@
 #include"../../Geometry.h"
 class Enemy;
 class EnemyManager;
+class Camera;
 /// <summary>
 /// 敵発生器基底クラス
 /// </summary>
@@ -13,9 +14,10 @@ protected:
 	Position2f pos_;//画面内にスポーナーがあるかどうかの判定が必要なため座標がいる
 	std::unique_ptr<Enemy> prototype_;//プロトタイプ
 	std::shared_ptr<EnemyManager>& enemyManager_;
+	std::shared_ptr<Camera> camera_;
 	virtual Enemy* CreateClone()final;
 public:
-	Spawner(const Position2f& pos, Enemy* prototype, std::shared_ptr<EnemyManager>& em);
+	Spawner(const Position2f& pos, Enemy* prototype, std::shared_ptr<EnemyManager>& em,std::shared_ptr<Camera> c);
 	virtual ~Spawner()=default;
 	
 	/// <summary>

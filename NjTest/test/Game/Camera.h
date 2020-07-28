@@ -19,6 +19,10 @@ public:
 	Camera();
 	~Camera();
 
+	/// <summary>
+	/// 監視用プレイヤーをセット
+	/// </summary>
+	/// <param name="player">プレイヤーオブジェクト</param>
 	void SetPlayer(std::shared_ptr<Player> player);
 
 	/// <summary>
@@ -44,7 +48,10 @@ public:
 	/// <returns>撮影範囲矩形</returns>
 	const Rect GetViewRange()const;
 
-
+	/// <summary>
+	/// 描画をどれくらいずらせばいいかオフセットベクトルを返す
+	/// </summary>
+	/// <returns>オフセット</returns>
 	const Vector2f ViewOffset()const;
 
 };

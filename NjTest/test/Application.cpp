@@ -4,6 +4,7 @@
 #include"Scene/Scene.h"
 #include"Input.h"
 #include"Geometry.h"
+#include"Debugger.h"
 
 using namespace std;
 
@@ -47,11 +48,14 @@ Application::Initialize() {
 void
 Application::Run() {
 	Input input;
+	auto& dinstance = Debugger::Instance();
 	while (DxLib::ProcessMessage() == 0) {
 		ClearDrawScreen();
+		dinstance.Update();
 		input.Update();
 		sceneController_->Update(input);
 		sceneController_->Draw();
+		dinstance.DisplayPerformance();
 		ScreenFlip();
 		if (isExit_)break;
 	}

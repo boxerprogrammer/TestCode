@@ -48,7 +48,8 @@ BombShot::NormalUpdate() {
 	angle_ += 0.25f;
 	Projectile::Update();//java‚Å‚¢‚¤base.Update();‚¾‚ÆŽv‚Á‚Ä‚­‚¾‚³‚¢
 	const auto& vrect = camera_->GetViewRange();
-	if (pos_.x >= vrect.Right() || pos_.x <= vrect.Left() || pos_.y >= vrect.Bottom() || pos_.y <= vrect.Top()) {
+	if (pos_.x <= vrect.Left() ||  vrect.Right()<= pos_.x ||
+		pos_.y <= vrect.Top()|| vrect.Bottom()<= pos_.y) {
 		Explode();
 	}
 }

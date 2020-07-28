@@ -22,19 +22,19 @@ Stage::Load(const TCHAR* path) {
 	DxLib::FileRead_read(&header_, sizeof(header_), h);
 	
 	stagedata_.resize(header_.layerCount);
-	vector<StageLayerData_t> localStageData(header_.layerCount);
+	vector<StageLayerData_t> rawStageData(header_.layerCount);
 	auto layerSize = header_.mapW * header_.mapH;
 	for (int i = 0; i < header_.layerCount; ++i) {
 		stagedata_[i].resize(layerSize);
-		localStageData[i].resize(layerSize);
-		DxLib::FileRead_read(localStageData[i].data(), layerSize, h);
+		rawStageData[i].resize(layerSize);
+		DxLib::FileRead_read(rawStageData[i].data(), layerSize, h);
 	}
 	DxLib::FileRead_close(h);
-	//•ÏŠ·ì‹Æ
+	//c‰¡•ÏŠ·ì‹Æ
 	for (int d = 0; d < header_.layerCount; ++d) {
 		for (size_t y = 0; y < header_.mapH; ++y) {
 			for (size_t x = 0; x < header_.mapW; ++x) {
-				stagedata_[d][y + x * header_.mapH] = localStageData[d][x + y * header_.mapW];
+				stagedata_[d][y + x * header_.mapH] = rawStageData[d][x + y * header_.mapW];
 			}
 		}
 	}
@@ -55,9 +55,15 @@ void Stage::DrawChips(size_t layerNo)
 {
 	
 	const int yoffset = ground_line - ((int)header_.chipH * draw_scale * header_.mapH);
-	const int xoffset = camera_->ViewOffset().x;
+	const int xoffset =  camera_->ViewOffset().x;
+	auto rc = camera_->GetViewRange();
 	//Œã‚Å‘‚«Š·‚¦‚é‚ª‚Ü‚¸‚Í•ª‚©‚è‚â‚·‚­‚»‚Ì‚Ü‚Ü•À‚×‚é(’A‚µŠg‘å‚Í‚·‚é)
 	for (size_t x = 0; x < header_.mapW; ++x) {
+		int xpos = x * header_.chipW * draw_scale;
+		int xmargin = header_.chipW * draw_scale;
+		if (xpos < rc.Left()- xmargin ||  rc.Right()+ xmargin<xpos) {
+			continue;
+		}
 		for (size_t y = 0; y < header_.mapH; ++y) {
 			auto chip = stagedata_[layerNo][y + x * header_.mapH];//ƒ`ƒbƒv”Ô†æ“¾
 			DrawRectRotaGraph2(

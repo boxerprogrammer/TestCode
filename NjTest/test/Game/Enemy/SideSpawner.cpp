@@ -4,6 +4,7 @@
 #include"EnemyManager.h"
 #include"../CollisionManager.h"
 #include"../CircleCollider.h"
+#include"../Camera.h"
 #include<random>
 
 using namespace std;
@@ -15,9 +16,9 @@ namespace {
 
 }
 
-SideSpawner::SideSpawner(const Position2f& pos, Enemy* prototype, std::shared_ptr<EnemyManager>& em, std::shared_ptr<CollisionManager> cm):
+SideSpawner::SideSpawner(const Position2f& pos, Enemy* prototype, std::shared_ptr<EnemyManager>& em, std::shared_ptr<CollisionManager> cm,shared_ptr<Camera> c):
 collisionManager_(cm)
-,Spawner(pos,prototype,em){
+,Spawner(pos,prototype,em,c){
 
 }
 
@@ -28,13 +29,14 @@ void
 SideSpawner::Update() {
 	static bool fromRight = false;
 	if (++frame_ % (60+rand()%40-20) == 0) {
+		auto rc=camera_->GetViewRange();
 		auto clone=CreateClone();
 		if (clone == nullptr)return;
 		if (fromRight) {
-			clone->SetPosition({ -36,480 });
+			clone->SetPosition({ rc.Left() -36.0f,480.0f });
 		}
 		else {
-			clone->SetPosition({ 836,480 });
+			clone->SetPosition({ rc.Right()+36.0f,480.0f });
 		}
 		
 		fromRight = !fromRight;

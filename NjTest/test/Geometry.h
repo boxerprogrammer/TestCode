@@ -30,6 +30,12 @@ struct Vector2D {
 	float Magnitude()const {
 		return hypot(x, y);
 	}
+	bool operator==(const Vector2D<T>& v) {
+		return x == v.x && y == v.y;
+	}
+	bool operator!=(const Vector2D<T>& v) {
+		return !(x == v.x && y == v.y);
+	}
 	/// <summary>
 	/// ƒxƒNƒgƒ‹‚Ì’·‚³‚Ì2æ‚ğ•Ô‚·
 	/// </summary>

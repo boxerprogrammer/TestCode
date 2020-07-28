@@ -4,11 +4,13 @@
 
 
 class Camera;
+class Collider;
 class Input;
 struct CollisionInfo;
 ///キャラクター基底クラス
 class Character
 {
+	friend Collider;
 protected:
 	Position2f pos_;//キャラ中心座標
 	std::shared_ptr<Camera> camera_;

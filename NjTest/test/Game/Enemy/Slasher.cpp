@@ -90,6 +90,13 @@ Slasher::Update() {
 
 void
 Slasher::RunDraw() {
+	auto rc = camera_->GetViewRange();
+	auto xpos=pos_.x;
+	int xmargin = 36*4;//‚¿‚å‚Á‚Æ‚±‚±‚Å‚Í“K“–‚É
+	if (xpos < rc.Left() - xmargin || rc.Right() + xmargin < xpos) {
+		return;
+	}
+
 	const auto xoffset = camera_->ViewOffset().x;
 	DrawRectRotaGraph(
 		static_cast<int>(pos_.x+xoffset), static_cast<int>(pos_.y),

@@ -1,6 +1,18 @@
 #include "Collider.h"
+#include"Camera.h"
+#include"Character.h"
 
 using namespace std;
+
+Vector2f 
+Collider::GetCameraOffset(){
+	if (owner_.expired()) {
+		return { 0,0 };
+	}
+	else {
+		return owner_.lock()->camera_->ViewOffset();
+	}
+}
 
 bool 
 Collider::IsDeletable()const {

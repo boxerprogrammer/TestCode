@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Debugger.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
     <ClCompile Include="Game\CapsuleCollider.cpp" />
     <ClCompile Include="Game\CollisionManager.cpp" />
@@ -184,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Debugger.h" />
     <ClInclude Include="Game\Camera.h" />
     <ClInclude Include="Game\CapsuleCollider.h" />
     <ClInclude Include="Game\CollisionManager.h" />

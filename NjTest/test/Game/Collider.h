@@ -2,11 +2,13 @@
 
 #include<memory>
 #include<string>
+#include"../Geometry.h"
 
 constexpr char tag_player_attack[] = "patk";
 constexpr char tag_enemy_damage[] = "edmg";
 
 class Character;
+class Camera;
 /// <summary>
 /// 当たり判定能力を持つ基底クラス
 /// </summary>
@@ -18,6 +20,7 @@ private:
 protected:
 	bool isDeletable_ = false;//死んでもいいフラグ
 	bool isImmortal_ = false;//不滅フラグ
+	Vector2f GetCameraOffset();
 public:
 	Collider(std::shared_ptr<Character> owner,const char* tag="",bool immortal=false);
 	virtual ~Collider() = default;

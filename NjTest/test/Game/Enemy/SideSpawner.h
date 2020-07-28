@@ -7,7 +7,7 @@ private:
 	int frame_=0;
 	std::shared_ptr<CollisionManager> collisionManager_;
 public:
-	SideSpawner(const Position2f& pos, Enemy* prototype, std::shared_ptr<EnemyManager>& em,std::shared_ptr<CollisionManager> cm);
+	SideSpawner(const Position2f& pos, Enemy* prototype, std::shared_ptr<EnemyManager>& em,std::shared_ptr<CollisionManager> cm, std::shared_ptr<Camera> c);
 
 	/// <summary>
 	/// 時間ごとの発生などが必要なため毎フレーム更新を行う

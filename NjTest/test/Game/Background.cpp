@@ -4,10 +4,11 @@
 #include<iomanip>
 #include"../Application.h"
 #include"../Geometry.h"
+#include"Camera.h"
 
 using namespace std;
 
-Background::Background() {
+Background::Background(std::shared_ptr<Camera> c):camera_(c){ 
 	bgH_.resize(11);
 	int skipno[2] = { 4,7 };
 	int no = 9;
@@ -39,7 +40,7 @@ Background::Update() {
 void 
 Background::Draw() {
 	auto rc = Application::Instance().GetViewport().GetRect();
-
+	auto xoffset = camera_->ViewOffset().x;
 	auto wdh = 1440;
 	auto hgt = 480;
 	{
@@ -51,7 +52,7 @@ Background::Draw() {
 	const float scale = (float)rc.Width() / wdh;
 	auto w = (float)rc.Width() / scale;
 
-	auto scroll = static_cast<float>(frame_) / 2.0f;
+	auto scroll = -xoffset/10.0f;
 
 	for (int i = 0; i < bgH_.size(); ++i) {
 		auto lscroll = (int)(scroll * (float)(i + 1)) % wdh;

@@ -3,11 +3,10 @@
 #include"Character.h"
 #include<algorithm>
 #include<DxLib.h>
+#include"../Debugger.h"
 
 using namespace std;
 namespace {
-	bool keyF1Pressed_ = false;
-	bool debugDisp_ = false;
 	pair<string, string> hit_combination_table[] = { 
 		{tag_enemy_damage,tag_player_attack} 
 	};
@@ -18,15 +17,7 @@ namespace {
 void 
 CollisionManager::Update() {
 
-	if (CheckHitKey(KEY_INPUT_F1)) {
-		if (!keyF1Pressed_) {
-			debugDisp_ = !debugDisp_;
-		}
-		keyF1Pressed_ = true;
-	}
-	else {
-		keyF1Pressed_ = false;
-	}
+
 
 	auto it=remove_if(colliders_.begin(), colliders_.end(),
 		[](shared_ptr<Collider>& col) {
@@ -65,12 +56,13 @@ CollisionManager::AddCollider(Collider* collider) {
 
 void 
 CollisionManager::DebugDraw() {
-	if (!debugDisp_)return;
+#ifdef _DEBUG
+	if (!Debugger::Instance().IsDebugMode())return;
 	for (auto& c : colliders_) {
 		c->Draw();
 	}
 
 	//当たり判定情報を出力
 	DrawFormatString(300, 30, 0xffffff, L"コライダー数=%d", colliders_.size());
-
+#endif
 }

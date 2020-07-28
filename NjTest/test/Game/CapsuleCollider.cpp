@@ -49,7 +49,9 @@ CapsuleCollider::Draw(){
 	Capsule capsule = { AcutualPosition(),capsule_.seg.vec, capsule_.radius };
 	auto& spos = capsule.seg.start;
 	auto epos = capsule.seg.start+capsule.seg.vec;
-	DrawCircle(spos.x, spos.y, capsule_.radius, color, false,2);
+
+	auto offset = GetCameraOffset();
+	DrawCircle(spos.x+ offset.x, spos.y, capsule_.radius, color, false,2);
 	
 	auto v90=capsule.seg.vec;//元のベクトルのコピー
 	v90 = { -v90.y, v90.x };//90°回転
@@ -60,13 +62,13 @@ CapsuleCollider::Draw(){
 	auto p3 = epos - v90;//右下
 	auto p4 = spos - v90;//左下
 
-	DrawQuadrangleAA(p1.x, p1.y,
-		p2.x, p2.y,
-		p3.x, p3.y,
-		p4.x, p4.y,
+	DrawQuadrangleAA(p1.x + offset.x, p1.y,
+		p2.x + offset.x, p2.y,
+		p3.x + offset.x, p3.y,
+		p4.x + offset.x, p4.y,
 		color, false,2);
 
-	DrawCircle(epos.x, epos.y,capsule_.radius, color, false,2);
+	DrawCircle(epos.x+ offset.x, epos.y,capsule_.radius, color, false,2);
 }
 
 const Vector2f

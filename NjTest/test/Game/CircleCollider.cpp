@@ -44,8 +44,8 @@ CircleCollider::Draw() {
 	if (GetTag() == tag_player_attack) {
 		col = 0xffaaaa;
 	}
-
-	DrawCircle(pos.x,pos.y,circle_.radius,col,0,2);
+	auto offset = GetCameraOffset();
+	DrawCircle(pos.x+ offset.x,pos.y,circle_.radius,col,0,2);
 #endif
 }
 

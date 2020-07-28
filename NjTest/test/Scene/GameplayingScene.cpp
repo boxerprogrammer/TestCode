@@ -40,7 +40,7 @@ GameplayingScene::GameplayingScene(SceneController& c):
 	camera_=make_shared<Camera>();
 
 	waitTimer_ = 0;
-	bg_ = make_unique<Background>();
+	bg_ = make_unique<Background>(camera_);
 	projectileManager_ = make_unique<ProjectileManager>();
 
 	player_ = make_shared<Player>(this);
@@ -54,7 +54,8 @@ GameplayingScene::GameplayingScene(SceneController& c):
 		Position2f(0,0),
 		new Slasher(player_,effectManager_,camera_),
 		enemyManager_,
-		collisionManager_));
+		collisionManager_,
+		camera_));
 
 	
 
