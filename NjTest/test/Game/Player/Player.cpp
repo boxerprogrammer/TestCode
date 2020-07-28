@@ -9,6 +9,7 @@
 #include"ShurikenEquip.h"
 #include"ChainEquip.h"
 #include"../Camera.h"
+#include<cassert>
 
 
 using namespace std;
@@ -24,7 +25,7 @@ namespace {
 	constexpr int ground_line = 480;
 }
 
-Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()){
+Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()) {
 	//ëñÇËÉçÅ[Éh
 	for (int i = 0; i < _countof(runH_); ++i) {
 		wstringstream wss;
@@ -61,17 +62,17 @@ Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()){
 	maskH = LoadMask(L"Resource/Image/Player/shadow_mask.bmp");
 	frame_ = 0;
 	idx_ = 0;
-		  
-	class PlayerInputListener : public InputListener{
+
+	class PlayerInputListener : public InputListener {
 	private:
 		Player& player_;
-		bool decidedGravity_=false;
+		bool decidedGravity_ = false;
 	public:
-		PlayerInputListener(Player& p):player_(p){}
+		PlayerInputListener(Player& p) :player_(p) {}
 		~PlayerInputListener() {
 			OutputDebugStringA("\n Listener is deleted \n");
 		}
-		void Notify(const Input& input)override{
+		void Notify(const Input& input)override {
 			if (input.IsPressed("up")) {
 				//player_.Move({ 0, -5 });
 			}
@@ -109,17 +110,19 @@ Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()){
 	};
 	collisionManager_ = gs->GetCollisionManager();
 	gs->AddListener(make_shared< PlayerInputListener>(*this));
-	equipments_.push_back(make_shared<BombEquip>(gs->GetProjectileManager(),gs->GetCollisionManager(),gs->GetCamera()));
-	equipments_.push_back(make_shared<ShurikenEquip>(gs->GetProjectileManager(),gs->GetCollisionManager(),gs->GetCamera()));
-	equipments_.push_back(make_shared<ChainEquip>(gs->GetPlayer(),gs->GetCollisionManager(),gs->GetCamera()));
+	equipments_.push_back(make_shared<BombEquip>(gs->GetProjectileManager(), gs->GetCollisionManager(), gs->GetCamera()));
+	equipments_.push_back(make_shared<ShurikenEquip>(gs->GetProjectileManager(), gs->GetCollisionManager(), gs->GetCamera()));
+	equipments_.push_back(make_shared<ChainEquip>(gs->GetPlayer(), gs->GetCollisionManager(), gs->GetCamera()));
 	if (changeSE_ == -1) {
 		changeSE_ = LoadSoundMem(L"Resource/Sound/Game/changeweapon.wav");
 	}
 	updater_ = &Player::NormalUpdate;
 	drawer_ = &Player::NormalDraw;
-	for (auto& spos : shadowPositions_) {
-		spos = pos_;
-	}
+	//for (auto& spos : shadowPositions_) {
+	//	spos = pos_;
+	//}
+	fill(moveHistory_.begin(), moveHistory_.end(), pos_);
+	lastPos_ = pos_;
 }
 Player::~Player() {
 	for (auto& run : runH_) {
@@ -138,26 +141,25 @@ Player::CurrentEquipmentNo()const {
 	return currentEquipmentNo_;
 }
 
-void 
+void
 Player::Attack(const Input& input) {
-	equipments_[currentEquipmentNo_]->Attack(*this,input);
+	equipments_[currentEquipmentNo_]->Attack(*this, input);
 }
 
-void 
+void
 Player::NextEquip() {
 	currentEquipmentNo_ = (currentEquipmentNo_ + 1) % equipments_.size();
 	PlaySoundMem(changeSE_, DX_PLAYTYPE_BACK);
 }
 
-void 
+void
 Player::SetPosition(const Position2f& p) {
 	pos_ = p;
-	for (auto& spos : shadowPositions_) {
-		spos = pos_;
-	}
+	fill(moveHistory_.begin(), moveHistory_.end(), pos_);
+	lastPos_ = pos_;
 }
 
-const Position2f& 
+const Position2f&
 Player::Position()const {
 	return pos_;
 }
@@ -165,8 +167,6 @@ Player::Position()const {
 void
 Player::Move(const Vector2f& v) {
 	pos_ += v;
-	
-
 }
 
 void
@@ -218,21 +218,31 @@ Player::FallUpdate() {
 	}
 }
 
-void 
+
+void
+Player::SetCurrentPosition(Position2f& pos) {
+	moveHistory_[currentMoveIndex_] = pos;
+	currentMoveIndex_ = (currentMoveIndex_ + 1) % moveHistory_.size();
+}
+const Position2f&
+Player::GetBackTimePosition(size_t backFrame)const {
+	assert(backFrame < moveHistory_.size());
+	auto idx = (currentMoveIndex_ + moveHistory_.size() - backFrame) % moveHistory_.size();
+	return moveHistory_[idx];
+}
+
+
+void
 Player::Update() {
 	//ã§í ïîï™
 	++frame_;
 	equipments_[currentEquipmentNo_]->Update();
 
-	auto wpos = pos_;
-	for (auto& spos : shadowPositions_) {
-		auto v = spos - wpos;
-		auto d = v.Magnitude();
-		if (d == 0.0f)continue;
-		spos = wpos + v.Normalized() * min(d, 100.0f);
-		wpos = spos;
-	}
 
+	if (pos_ != lastPos_) {
+		SetCurrentPosition(pos_);
+	}
+	lastPos_ = pos_;
 
 	//å¬ï ïîï™
 	(this->*updater_)();
@@ -241,7 +251,7 @@ Player::Update() {
 
 }
 
-Player::Direction 
+Player::Direction
 Player::GetDirection()const {
 	Direction ret = Direction::left;
 	if (isRight_) {
@@ -270,7 +280,7 @@ Player::FallDraw() {
 }
 
 
-void 
+void
 Player::Draw() {
 	equipments_[currentEquipmentNo_]->Draw();
 
@@ -278,17 +288,27 @@ Player::Draw() {
 
 	CreateMaskScreen();
 	const int xoffset = camera_->ViewOffset().x;
-	for (auto& spos : shadowPositions_) {
+	//for (auto& spos : shadowPositions_) {
 		//DrawBox(spos.x - 128 + xoffset, spos.y - 128, spos.x + 128 + xoffset, spos.y + 128, 0xaaffaa,false);
+	{
+		const auto& spos = GetBackTimePosition(16);
 		DrawFillMask(spos.x - 64 + xoffset, spos.y - 64, spos.x + 64 + xoffset, spos.y + 64,
 			maskH);
 		DrawRotaGraph(static_cast<int>(spos.x + xoffset), static_cast<int>(spos.y),
 			3.0f, 0.0f, runH_[idx_], true, !isRight_, false);
 	}
+	{
+		const auto& spos = GetBackTimePosition(32);
+		DrawFillMask(spos.x - 64 + xoffset, spos.y - 64, spos.x + 64 + xoffset, spos.y + 64,
+			maskH);
+		DrawRotaGraph(static_cast<int>(spos.x + xoffset), static_cast<int>(spos.y),
+			3.0f, 0.0f, runH_[idx_], true, !isRight_, false);
+	}
+	//}
 	DeleteMaskScreen();
 }
 
-void 
+void
 Player::OnHit(CollisionInfo&) {
 
 }

@@ -2,6 +2,7 @@
 #include"../Character.h"
 #include<vector>
 #include<array>
+#include<list>
 ///プレイヤークラス
 class GameplayingScene;
 class Equipment;
@@ -13,14 +14,20 @@ class CollisionManager;
 class Player : public Character {
 	friend PlayerInputListener;
 private:
-	std::array<Position2f, 2> shadowPositions_;
+	//std::array<Position2f, 2> shadowPositions_;
+	std::array<Position2f, 60> moveHistory_;
+	size_t currentMoveIndex_ = 0;
 
+	void SetCurrentPosition(Position2f& pos);
+	const Position2f& GetBackTimePosition(size_t backFrame)const;
+
+	Position2f lastPos_;
 	/*uint32_t frameForShadow_=0;*/
-	float velY_=0.0f;
-	float accelY_=0.0f;
-	bool isRight_=true;
+	float velY_ = 0.0f;
+	float accelY_ = 0.0f;
+	bool isRight_ = true;
 	std::vector<std::shared_ptr<Equipment>> equipments_;
-	size_t currentEquipmentNo_=0;
+	size_t currentEquipmentNo_ = 0;
 	std::shared_ptr<CollisionManager> collisionManager_;
 
 	//通常状態
@@ -47,7 +54,7 @@ public:
 		left,
 		right
 	};
-	
+
 	Direction GetDirection()const;
 	void OnHit(CollisionInfo&)override;
 	Player(GameplayingScene* gs);
