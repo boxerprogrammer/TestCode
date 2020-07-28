@@ -17,7 +17,6 @@ private:
 	//std::array<Position2f, 2> shadowPositions_;
 	std::array<Position2f, 60> moveHistory_;
 	size_t currentMoveIndex_ = 0;
-
 	void SetCurrentPosition(Position2f& pos);
 	const Position2f& GetBackTimePosition(size_t backFrame)const;
 

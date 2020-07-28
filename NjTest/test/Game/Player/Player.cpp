@@ -23,6 +23,9 @@ namespace {
 	int idx_ = 0;
 	int changeSE_ = -1;
 	constexpr int ground_line = 480;
+	constexpr float max_gravity = 0.75f;
+	constexpr float gravity_rate = 0.125f;
+	constexpr float jump_velocity_y = -25.0f;
 }
 
 Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()) {
@@ -101,7 +104,7 @@ Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()) {
 			}
 			if (input.IsReleased("jump")) {
 				if (player_.updater_ == &Player::RiseUpdate && !decidedGravity_) {
-					player_.accelY_ = -player_.velY_ / 10.0f;
+					player_.accelY_ = max(-player_.velY_ *gravity_rate,max_gravity);
 					decidedGravity_ = true;
 				}
 			}
@@ -171,8 +174,8 @@ Player::Move(const Vector2f& v) {
 
 void
 Player::Jump() {
-	accelY_ = 1.0f;
-	velY_ = -25.0f;
+	accelY_ = max_gravity;
+	velY_ = jump_velocity_y;
 	updater_ = &Player::RiseUpdate;
 	drawer_ = &Player::RiseDraw;
 	frame_ = 0;
@@ -288,8 +291,6 @@ Player::Draw() {
 
 	CreateMaskScreen();
 	const int xoffset = camera_->ViewOffset().x;
-	//for (auto& spos : shadowPositions_) {
-		//DrawBox(spos.x - 128 + xoffset, spos.y - 128, spos.x + 128 + xoffset, spos.y + 128, 0xaaffaa,false);
 	{
 		const auto& spos = GetBackTimePosition(16);
 		DrawFillMask(spos.x - 64 + xoffset, spos.y - 64, spos.x + 64 + xoffset, spos.y + 64,
@@ -304,7 +305,7 @@ Player::Draw() {
 		DrawRotaGraph(static_cast<int>(spos.x + xoffset), static_cast<int>(spos.y),
 			3.0f, 0.0f, runH_[idx_], true, !isRight_, false);
 	}
-	//}
+
 	DeleteMaskScreen();
 }
 
