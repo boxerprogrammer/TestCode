@@ -70,6 +70,11 @@ GameplayingScene::GameplayingScene(SceneController& c):
 	
 }
 
+std::shared_ptr<Stage>&
+GameplayingScene::GetStage() {
+	return stage_;
+}
+
 std::shared_ptr<Player>& 
 GameplayingScene::GetPlayer() {
 	return player_;
@@ -156,7 +161,7 @@ GameplayingScene::NormalDraw() {
 	effectManager_->Draw();
 	stage_->FrontDraw();
 	collisionManager_->DebugDraw();
-	
+	stage_->DebugDraw();
 	//•ŠíUI•\Ž¦
 	DrawBox(12, 12, 76, 76, 0x000000, false);
 	DrawGraph(10, 10, weaponUIH_[player_->CurrentEquipmentNo()], true);

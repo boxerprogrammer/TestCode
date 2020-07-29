@@ -47,7 +47,7 @@ private:
 
 	Updater_t updater_;
 	Drawer_t drawer_;
-
+	GameplayingScene* gs_;
 public:
 	enum class Direction {
 		left,

@@ -206,6 +206,7 @@
     <ClInclude Include="Game\Player\Projectile.h" />
     <ClInclude Include="Game\Player\ProjectileManager.h" />
     <ClInclude Include="InputListener.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\ContinueScene.h" />
     <ClInclude Include="Scene\GameoverScene.h" />
     <ClInclude Include="Scene\GameplayingScene.h" />
@@ -219,6 +220,12 @@
     <ClInclude Include="Game\Enemy\Slasher.h" />
     <ClInclude Include="Game\Enemy\SideSpawner.h" />
     <ClInclude Include="Game\Stage.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NjTest.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

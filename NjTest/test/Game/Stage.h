@@ -23,15 +23,20 @@ class Stage
 private:
 	using StageLayerData_t = std::vector<unsigned char>;
 	std::vector<StageLayerData_t> stagedata_;
+	std::vector<Segment> terrainSegment_;
 	StageHeader header_;
 	std::shared_ptr<Camera> camera_;
+	void CreateSegment(Position2f& lastPos, const Position2f& pos);
 public:
 	Stage(std::shared_ptr<Camera> c);
 	void Load(const TCHAR* path);
+	
 	void Update();
 	void BackDraw();
 	void DrawChips(size_t layerNo);
 	void FrontDraw();
+	void DebugDraw();
 	Size GetStageSize()const;
+	float GetGroundY(const Position2f& pos)const;
 };
 

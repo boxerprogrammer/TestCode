@@ -30,7 +30,7 @@ CapsuleCollider::IsHit(std::shared_ptr<Collider> col) {
 	if (capsule_.seg.vec.SQMagnitude() == 0)return false;
 	auto ccol = dynamic_pointer_cast<CircleCollider>(col);
 	if (ccol != nullptr) {
-		Capsule capsule= { AcutualPosition() ,capsule_.seg.vec, capsule_.radius};
+		Capsule capsule= { Segment(AcutualPosition() ,capsule_.seg.vec), capsule_.radius};
 		Circle circle = { ccol->AcutualPosition() ,ccol->GetCircle().radius };
 		Vector2f vp = circle.center - capsule.seg.start;
 		float SQDist = (vp - capsule.seg.vec * Clamp(Dot(vp, capsule.seg.vec) /
@@ -46,7 +46,7 @@ CapsuleCollider::Draw(){
 	if (capsule_.seg.vec.SQMagnitude() == 0)return ;
 	uint32_t color = 0xffaaaa;
 
-	Capsule capsule = { AcutualPosition(),capsule_.seg.vec, capsule_.radius };
+	Capsule capsule = { Segment(AcutualPosition(),capsule_.seg.vec), capsule_.radius };
 	auto& spos = capsule.seg.start;
 	auto epos = capsule.seg.start+capsule.seg.vec;
 

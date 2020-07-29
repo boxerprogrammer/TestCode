@@ -9,6 +9,7 @@
 #include"ShurikenEquip.h"
 #include"ChainEquip.h"
 #include"../Camera.h"
+#include"../Stage.h"
 #include<cassert>
 
 
@@ -22,10 +23,12 @@ namespace {
 	int frame_ = 0;
 	int idx_ = 0;
 	int changeSE_ = -1;
-	constexpr int ground_line = 480;
+	//constexpr int ground_line = 480;
 	constexpr float max_gravity = 0.75f;
 	constexpr float gravity_rate = 0.125f;
 	constexpr float jump_velocity_y = -25.0f;
+	constexpr float draw_scale = 3.0f;
+	constexpr float radY = 18.0f * 3.0f;
 }
 
 Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()) {
@@ -126,6 +129,8 @@ Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()) {
 	//}
 	fill(moveHistory_.begin(), moveHistory_.end(), pos_);
 	lastPos_ = pos_;
+	gs_ = gs;
+	accelY_ = max_gravity;
 }
 Player::~Player() {
 	for (auto& run : runH_) {
@@ -187,6 +192,15 @@ Player::NormalUpdate() {
 	if (frame_ % 5 == 0) {
 		idx_ = (idx_ + 1) % _countof(runH_);
 	}
+	auto groundy = gs_->GetStage()->GetGroundY(pos_);
+	if (groundy-radY < pos_.y) {
+		pos_.y = groundy-radY;
+	}
+	if (groundy - radY -0.1f > pos_.y) {
+		updater_ = &Player::FallUpdate;
+	}
+
+
 }
 
 void
@@ -211,9 +225,10 @@ Player::FallUpdate() {
 	}
 	velY_ += accelY_;
 	pos_.y += velY_;
-	if (ground_line < pos_.y) {
+	auto groundy=gs_->GetStage()->GetGroundY(pos_);
+	if (groundy - radY < pos_.y) {
 		velY_ = 0.0f;
-		pos_.y = ground_line;
+		pos_.y = groundy - radY;
 		updater_ = &Player::NormalUpdate;
 		drawer_ = &Player::NormalDraw;
 		frame_ = 0;
@@ -267,19 +282,19 @@ void
 Player::NormalDraw() {
 	const int xoffset = camera_->ViewOffset().x;
 	DrawRotaGraph(static_cast<int>(pos_.x + xoffset), static_cast<int>(pos_.y),
-		3.0f, 0.0f, runH_[idx_], true, !isRight_, false);
+		draw_scale, 0.0f, runH_[idx_], true, !isRight_, false);
 }
 void
 Player::RiseDraw() {
 	const int xoffset = camera_->ViewOffset().x;
 	DrawRotaGraph(static_cast<int>(pos_.x + xoffset), static_cast<int>(pos_.y),
-		3.0f, 0.0f, jumpH_[idx_], true, !isRight_, false);
+		draw_scale, 0.0f, jumpH_[idx_], true, !isRight_, false);
 }
 void
 Player::FallDraw() {
 	const int xoffset = camera_->ViewOffset().x;
 	DrawRotaGraph(static_cast<int>(pos_.x + xoffset), static_cast<int>(pos_.y),
-		3.0f, 0.0f, fallH_[idx_], true, !isRight_, false);
+		draw_scale, 0.0f, fallH_[idx_], true, !isRight_, false);
 }
 
 
@@ -296,16 +311,16 @@ Player::Draw() {
 		DrawFillMask(spos.x - 64 + xoffset, spos.y - 64, spos.x + 64 + xoffset, spos.y + 64,
 			maskH);
 		DrawRotaGraph(static_cast<int>(spos.x + xoffset), static_cast<int>(spos.y),
-			3.0f, 0.0f, runH_[idx_], true, !isRight_, false);
+			draw_scale, 0.0f, runH_[idx_], true, !isRight_, false);
 	}
 	{
 		const auto& spos = GetBackTimePosition(32);
 		DrawFillMask(spos.x - 64 + xoffset, spos.y - 64, spos.x + 64 + xoffset, spos.y + 64,
 			maskH);
 		DrawRotaGraph(static_cast<int>(spos.x + xoffset), static_cast<int>(spos.y),
-			3.0f, 0.0f, runH_[idx_], true, !isRight_, false);
+			draw_scale, 0.0f, runH_[idx_], true, !isRight_, false);
 	}
-
+	
 	DeleteMaskScreen();
 }
 

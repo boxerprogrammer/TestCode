@@ -5,6 +5,7 @@
 #include"Input.h"
 #include"Geometry.h"
 #include"Debugger.h"
+#include"resource.h"
 
 using namespace std;
 
@@ -32,8 +33,8 @@ Application::Instance() {
 bool 
 Application::Initialize() {
 
-	//sceneController_ = make_unique<SceneController>();
 	DxLib::SetWindowText(L"‰æ–Ê‘JˆÚƒeƒXƒg");
+	DxLib::SetWindowIconID(IDI_ICON1);
 	DxLib::ChangeWindowMode(true);
 	const auto& wsize = viewport_.GetSize();
 	DxLib::SetGraphMode(static_cast<int>(wsize.w), static_cast<int>(wsize.h), 32);

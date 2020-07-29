@@ -52,6 +52,8 @@ struct Vector2D {
 		float mag = Magnitude();
 		return {x/mag,y/mag};
 	}
+	static const Vector2D<float> ZERO;
+	
 };
 
 
@@ -63,7 +65,6 @@ using Position2f = Vector2f;
 
 float Dot(const Vector2f& va,const Vector2f& vb);
 float Cross(const Vector2f& va, const Vector2f& vb);
-
 
 struct Size {
 	size_t w=0, h=0;
@@ -113,6 +114,9 @@ struct Circle {
 struct Segment {
 	Position2f start;//起点
 	Vector2f vec;//起点からもう１端点までのベクトル
+	Segment() {}
+	Segment(const Position2f& s, const Position2f& v) :start(s), vec(v) {}
+	Segment(float x, float y, float vx, float vy) :start(x, y), vec(vx, vy) {}
 };
 /// <summary>
 /// カプセル型構造体
