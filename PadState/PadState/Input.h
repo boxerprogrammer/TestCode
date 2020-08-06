@@ -58,5 +58,12 @@ public:
 
 	///現在の押下状況を返す
 	const std::vector<std::unordered_map<std::string, bool>>& CurrentState()const { return _currentInputState; }
+
+	/// <summary>
+	/// 兎に角現在の押下状況を指定の座標に表示する
+	/// </summary>
+	/// <param name="x">x座標</param>
+	/// <param name="y">y座標</param>
+	void DebugDraw(int x, int y);
 };
 
