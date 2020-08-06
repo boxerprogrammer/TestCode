@@ -1,0 +1,18 @@
+#include "typedef.h"
+#maxloop -1
+//ヘッダ部
+$BYTE id[4];//"FMF_"
+$DWORD size;//ヘッダを除いたデータサイズ
+$DWORD mapW;//マップ幅
+$DWORD mapH;//マップ高さ
+$BYTE chipW;//チップ幅
+$BYTE chipH;//チップ高さ
+$BYTE layers;//レイヤー数
+$BYTE bitcnt;//ビットカウント
+//データ部
+DWORD layerSize=mapW*mapH*(bitcnt/8);
+if(bitcnt==8){
+	for(int i=0;i<layers;++i){
+		$BYTE mapdata[layerSize];
+	}
+}
