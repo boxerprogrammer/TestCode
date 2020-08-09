@@ -84,6 +84,15 @@ Input::IsPressed(unsigned short playerNo, const char* command){
 	return _currentInputState[playerNo][command];
 }
 
+void 
+Input::DebugDraw(int x, int y) {
+	auto padcount = GetConnectedPadCount();
+	for (int i = 1; i <= padcount; ++i) {
+		auto input = GetJoypadInputState(i);
+		DrawFormatString(x, y, 0xffaaaa, "padno %d=%x", i, input);
+	}
+	
+}
 
 bool operator==(const PeripheralInfo & lval, const PeripheralInfo & rval) {
 	return (lval.code == rval.code) && (lval.padno == rval.padno);

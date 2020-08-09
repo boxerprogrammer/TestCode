@@ -50,6 +50,7 @@ int main() {
 		//	DrawFormatString(50, 250 + i * 50, 0xffffff, "PAD=%d , analogueX=%d , analogueY=%d", i, x,y);
 		//	DrawFormatString(50, 400 + i * 50, 0xffffff, "PAD=%d , ltrigger=%d , rtrigger=%d", i, xstate.LeftTrigger, xstate.RightTrigger);
 		//}
+		input.DebugDraw(300, 300);
 		ScreenFlip();
 	}
 	DxLib_End();
