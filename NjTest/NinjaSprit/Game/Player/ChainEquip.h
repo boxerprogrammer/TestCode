@@ -11,6 +11,8 @@ class Camera;
 class ChainEquip : public Equipment
 {
 private:
+	int throwSE_ = -1;
+	int chainH_ = -1;
 	CapsuleCollider* capsuleCollider_ = nullptr;
 	int frame_;
 	std::shared_ptr<Player>& player_;
@@ -22,15 +24,33 @@ private:
 	float GetCurrentChainLength()const;
 	bool CanBeAdditionalInput()const;
 public:
-	ChainEquip(std::shared_ptr<Player>& player, std::shared_ptr<CollisionManager> cm, std::shared_ptr<Camera> camera);
+	/// <summary>
+	/// 鎖鎌装備
+	/// </summary>
+	/// <param name="player">プレイヤー</param>
+	/// <param name="collisionMgr">当たり判定マネージャ</param>
+	/// <param name="camera">カメラ</param>
+	ChainEquip(std::shared_ptr<Player>& player, 
+		std::shared_ptr<CollisionManager> collisionMgr, 
+		std::shared_ptr<Camera> camera);
 	/// <summary>
 	/// 鎖鎌攻撃を加えます
 	/// </summary>
 	/// <param name="player">プレイヤーへの参照</param>
 	/// <param name="input">入力参照</param>
-		void Attack(const Player& player, const Input& input)override;
-		void AdditionalInput(const Input& input);
-		void Update()override;
-		void Draw()override;
+	void Attack(const Player& player, const Input& input)override;
+	/// <summary>
+	/// 追加入力(振り回しのためだけのメソッド)
+	/// </summary>
+	/// <param name="input">入力情報</param>
+	void AdditionalInput(const Input& input);
+	/// <summary>
+	/// 毎フレーム更新用
+	/// </summary>
+	void Update()override;
+	/// <summary>
+	/// 描画用
+	/// </summary>
+	void Draw()override;
 };
 

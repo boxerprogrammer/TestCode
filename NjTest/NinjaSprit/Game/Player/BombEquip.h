@@ -8,9 +8,17 @@ class BombEquip : public Equipment
 {
 private:
 	ProjectileManager& pm_;
-	
+	int throwH = -1;
 public:
-	BombEquip(ProjectileManager& pm,std::shared_ptr<CollisionManager> col,std::shared_ptr<Camera> c);
+	/// <summary>
+	/// 爆弾装備
+	/// </summary>
+	/// <param name="projectileManager">飛び道具マネージャへの参照</param>
+	/// <param name="collisionManager">当たり判定マネージャへの参照</param>
+	/// <param name="camera">カメラオブジェクトへの参照</param>
+	BombEquip(ProjectileManager& projectileManager,
+		std::shared_ptr<CollisionManager> collisionManager,
+		std::shared_ptr<Camera> camera);
 	/// <summary>
 	/// 爆弾攻撃を加えます
 	/// </summary>

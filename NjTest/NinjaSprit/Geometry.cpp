@@ -12,6 +12,12 @@ const Segment Segment::NIL(Vector2f::NIL, Vector2f::NIL);
 
 using namespace std;
 
+Vector2f Vector2ToVector2F(const Vector2& v) {
+	return { static_cast<float>(v.x),static_cast<float>(v.y) };
+}
+Vector2 Vector2FToVector2(const Vector2f& v) {
+	return { static_cast<int>(v.x),static_cast<int>(v.y) };
+}
 
 
 float Dot(const Vector2f& va, const Vector2f& vb) {
@@ -28,7 +34,7 @@ Segment::End() {
 
 bool 
 Segment::IsNil() {
-	return isnan(vec.x)||isnan(vec.y);
+	return vec.IsNil();
 }
 
 Vector2f

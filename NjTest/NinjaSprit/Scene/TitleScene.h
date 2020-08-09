@@ -9,7 +9,9 @@ class TitleScene:public Scene
 	friend PauseScene;
 private:
 	TitleScene(SceneController& c);//ファクトリにしか作らせたくない
-
+	int titleH_=-1;
+	int startH_=-1;
+	int startSE_ = -1;
 	void FadeinUpdate(const Input&);
 	void WaitUpdate(const Input&);
 	void BlinkUpdate(const Input&);
@@ -24,7 +26,14 @@ private:
 
 public:
 	~TitleScene();
-	void Update(const Input&)override;
+	/// <summary>
+	/// タイトルシーン更新
+	/// </summary>
+	/// <param name="input">入力情報</param>
+	void Update(const Input& input)override;
+	/// <summary>
+	/// タイトルシーン描画
+	/// </summary>
 	void Draw()override;
 };
 

@@ -20,7 +20,15 @@ protected:
 	Scene() = default;
 	Scene(SceneController& );
 public:
-	virtual void Update(const Input&) = 0;
+	/// <summary>
+	/// シーン更新
+	/// </summary>
+	/// <param name="input">入力情報</param>
+	virtual void Update(const Input& input) = 0;
+
+	/// <summary>
+	/// シーン描画
+	/// </summary>
 	virtual void Draw() = 0;
 	virtual ~Scene() = default;
 };

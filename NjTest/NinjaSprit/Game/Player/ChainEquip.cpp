@@ -6,13 +6,14 @@
 #include"../Collision/CapsuleCollider.h"
 #include"../Camera.h"
 #include"../../Arithmetic.h"
+#include"../../System/File.h"
+#include"../../System/FileManager.h"
 #include<DxLib.h>
 
 using namespace std;
 
 namespace {
-	int throwH = -1;
-	int chainH = -1;
+	
 	constexpr float swing_per_angle=DX_PI_F/18.0f;
 	constexpr float equip_offset_y = -48.0f;
 	constexpr int expansion_frames = 10;
@@ -26,11 +27,12 @@ ChainEquip::CanBeAdditionalInput()const {
 
 ChainEquip::ChainEquip(std::shared_ptr<Player>& p ,std::shared_ptr<CollisionManager> cm,std::shared_ptr<Camera> camera):player_(p),
 Equipment(cm,camera){
-	if (throwH == -1) {
-		throwH = LoadSoundMem(L"Resource/Sound/Game/chainatk.mp3");
+	auto& fileMgr=FileManager::Instance();
+	if (throwSE_ == -1) {
+		throwSE_ = fileMgr.Load(L"Resource/Sound/Game/chainatk.mp3")->Handle();
 	}
-	if (chainH == -1) {
-		chainH = LoadGraph(L"Resource/Image/Player/chainsickle.png");
+	if (chainH_ == -1) {
+		chainH_ = fileMgr.Load(L"Resource/Image/Player/chainsickle.png")->Handle();
 	}
 	frame_ = -1;
 
@@ -61,7 +63,7 @@ ChainEquip::Attack(const Player& player, const Input& input) {
 		}
 	}
 	direction_.Normalize();
-	PlaySoundMem(throwH, DX_PLAYTYPE_BACK);
+	PlaySoundMem(throwSE_, DX_PLAYTYPE_BACK);
 	frame_ = 0;
 	currentAngle_ = atan2f(direction_.y, direction_.x);
 	if (currentAngle_ < 0.0f) {
@@ -140,21 +142,21 @@ float
 ChainEquip::GetCurrentChainLength()const {
 	//s‚Á‚Ä–ß‚é’·‚³‚ð•\Œ»‚µ‚Ä‚¢‚é
 	int f = abs((frame_ + 10) % 20 - 10);
-	return f * 400 / 10;
+	return static_cast<float>(f) * 400.0f / 10.0f;
 }
 
 void
 ChainEquip::Draw() {
 	auto pos=player_->Position();
 	if (frame_ >=0) {
-		int w = GetCurrentChainLength();
-		const int xoffset = camera_->ViewOffset().x;
+		int w = static_cast<int>(GetCurrentChainLength());
+		const auto xoffset = camera_->ViewOffset().x;
 		DrawRectRotaGraph2(static_cast<int>(pos.x+xoffset), static_cast<int>(pos.y+ equip_offset_y),
 			400 - w, 0, 
 			w, 48,
 			0,24,
 			1.0f,
 			currentAngle_,
-			chainH, true);
+			chainH_, true);
 	}
 }

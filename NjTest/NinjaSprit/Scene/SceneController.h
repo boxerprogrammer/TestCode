@@ -17,6 +17,9 @@ private:
 	std::deque<std::shared_ptr<Scene>> scene_;
 	std::function<void(void)> postDrawExecuter_;
 public:
+
+	void ClearScene();
+
 	///シーンをシーンスタックの頭に入れる
 	void PushScene(Scene*);
 	///シーンスタックの先頭を削除する

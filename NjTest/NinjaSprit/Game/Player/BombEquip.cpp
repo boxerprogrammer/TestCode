@@ -5,11 +5,13 @@
 #include"../../Input/Input.h"
 #include"../Collision/CollisionManager.h"
 #include"../Collision/CircleCollider.h"
+#include"../../System/File.h"
+#include"../../System/FileManager.h"
 #include<DxLib.h>
 
 
 namespace {
-	int throwH = -1;
+	
 	constexpr float equip_offset_y = -48.0f;
 	constexpr float bomb_shot_speed = 10.0f;
 	constexpr float bomb_radius = 20.0f;
@@ -18,8 +20,9 @@ using namespace std;
 BombEquip::BombEquip(ProjectileManager& pm,std::shared_ptr<CollisionManager> col,shared_ptr<Camera> camera):
 	pm_(pm),
 Equipment(col,camera){
+	auto& fileMgr=FileManager::Instance();
 	if (throwH == -1) {
-		throwH=LoadSoundMem(L"Resource/Sound/Game/bombthrow.wav");
+		throwH=fileMgr.Load(L"Resource/Sound/Game/bombthrow.wav")->Handle();
 	}
 }
 

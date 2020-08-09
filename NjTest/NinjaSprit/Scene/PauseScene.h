@@ -18,6 +18,12 @@ private:
 		MenuItem(const wchar_t* str, const Position2& p,  std::function<void(void)> f):
 			menuText(str),func(f),pos(p){}
 	};
+	int indicatorH_ = -1;
+	int openSE_ = -1;
+	int closeSE_ = -1;
+	int moveSE_ = -1;
+	int decideSE_ = -1;
+	int cancelSE_ = -1;
 	std::vector<MenuItem> menuItems_;
 
 	PauseScene(SceneController& c);
@@ -37,7 +43,14 @@ private:
 	using DrawFunction_t = void (PauseScene::*)();
 	DrawFunction_t drawer_;
 public:
-	void Update(const Input&)override;
+	/// <summary>
+	/// ポーズシーン更新
+	/// </summary>
+	/// <param name="input">入力情報</param>
+	void Update(const Input& input)override;
+	/// <summary>
+	/// ポーズシーン描画
+	/// </summary>
 	void Draw()override;
 };
 

@@ -6,11 +6,11 @@
 #include"../Camera.h"
 #include"../Stage.h"
 #include"../../Arithmetic.h"
+#include"../../System/FileManager.h"
+#include"../../System/File.h"
 #include<random>
 #include<cassert>
 namespace {
-	int runH = -1;
-	int slashH = -1;
 	constexpr float naraku_y = FLT_MAX;//奈落の座標
 	constexpr float effect_offset_scale = 50.0f;//エフェクトのオフセットスケール
 	constexpr float move_speed = 5.0f;//動くスピード
@@ -46,11 +46,12 @@ Slasher::Slasher(const std::shared_ptr<Player>& p, std::shared_ptr<Camera> camer
 Enemy(p,camera),
 stage_(stg)
 {
+	auto& fileMgr = FileManager::Instance();
 	if (runH == -1) {
-		runH = LoadGraph(L"Resource/Image/Enemy/Slasher/run.png");
+		runH = fileMgr.Load(L"Resource/Image/Enemy/Slasher/run.png")->Handle();
 	}
 	if (slashH == -1) {
-		slashH = LoadGraph(L"Resource/Image/Enemy/Slasher/slash.png");
+		slashH = fileMgr.Load(L"Resource/Image/Enemy/Slasher/slash.png")->Handle();
 	}
 	updater_ = &Slasher::RunUpdate;
 	drawer_ = &Slasher::RunDraw;
@@ -76,7 +77,8 @@ Slasher::OnDead() {
 
 void
 Slasher::RunUpdate() {
-	if (IsDivisible(frame_ , turn_interval_range(mt_)) == 0) {
+	auto rc=camera_->GetViewRange();
+	if (IsDivisible(frame_ , turn_interval_range(mt_))||!InRange(pos_.x,rc.LeftF(),rc.RightF()) ){
 		AimPlayer();
 		wasSlashed = false;
 		velocity_ *= move_speed;
@@ -135,7 +137,7 @@ void
 Slasher::JumpUpdate() {
 	velocity_.y += gravity;
 	pos_ += velocity_;
-	if (is_falling(velocity_)) {
+	if (IsFalling(velocity_)) {
 		updater_ = &Slasher::FallUpdate;
 		frame_ = 0;
 	}
@@ -150,6 +152,11 @@ Slasher::FallUpdate() {
 		pos_.y = groundy;
 		updater_ = &Slasher::RunUpdate;
 		frame_ = 0;
+	}
+	auto rc = camera_->GetViewRange();
+
+	if (!InRange(pos_.x, rc.LeftF(), rc.RightF())) {
+		AimPlayer();
 	}
 }
 

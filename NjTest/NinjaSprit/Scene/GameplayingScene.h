@@ -18,6 +18,9 @@ class GameplayingScene:public Scene
 {
 	friend TitleScene;
 private:
+
+	int weaponUIH_[3];
+
 	GameplayingScene(SceneController&);
 
 	std::shared_ptr<Player> player_;
@@ -47,13 +50,45 @@ private:
 
 public:
 	~GameplayingScene();
+	/// <summary>
+	/// シーンが持ってるプレイヤーを返す
+	/// </summary>
+	/// <returns>プレイヤーポインタ</returns>
 	std::shared_ptr<Player>& GetPlayer();
+	/// <summary>
+	/// シーンが持ってるカメラを返す
+	/// </summary>
+	/// <returns>カメラポインタ</returns>
 	std::shared_ptr<Camera>& GetCamera();
+	/// <summary>
+	/// シーンが持ってるステージ情報を返す
+	/// </summary>
+	/// <returns>ステージポインタ</returns>
 	std::shared_ptr<Stage>& GetStage();
-	ProjectileManager& GetProjectileManager();
+
+	/// <summary>
+	/// シーンが持っている当たり判定マネージャを返す
+	/// </summary>
+	/// <returns>当たり判定マネージャ</returns>
 	std::shared_ptr<CollisionManager> GetCollisionManager();
+
+	/// <summary>
+	/// シーンが持っている飛び道具管理オブジェクトへの参照を返す
+	/// </summary>
+	/// <returns>飛び道具管理オブジェクトの参照</returns>
+	ProjectileManager& GetProjectileManager();
+
+
 	void AddListener(std::shared_ptr<InputListener> listener);
+	/// <summary>
+	/// ゲーム本編シーン更新
+	/// </summary>
+	/// <param name="input">入力情報</param>
 	void Update(const Input&)override;
+
+	/// <summary>
+	/// ゲーム本編描画
+	/// </summary>
 	void Draw()override;
 };
 

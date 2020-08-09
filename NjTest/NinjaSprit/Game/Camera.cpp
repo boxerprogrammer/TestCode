@@ -65,8 +65,8 @@ Camera::GetViewRange()const {
 	auto& viewport = app.GetViewport();
 	const auto& cameraSize = viewport.GetSize();
 	return Rect(
-		static_cast<int>(pos_.x)- cameraSize.w/2,
-		static_cast<int>(pos_.y)- cameraSize.h/2,
+		static_cast<int>(pos_.x- cameraSize.w/2),
+		static_cast<int>(pos_.y- cameraSize.h/2),
 		cameraSize.w,
 		cameraSize.h);
 }

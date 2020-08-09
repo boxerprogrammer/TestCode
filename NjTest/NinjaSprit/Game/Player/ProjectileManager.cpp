@@ -4,10 +4,6 @@
 
 using namespace std;
 
-//std::vector<std::shared_ptr<Projectile>>& 
-//ProjectileManager::Projectiles() {
-//	return projectiles_;
-//}
 
 std::list<std::shared_ptr<Projectile>>& 
 ProjectileManager::GetProjectiles() {

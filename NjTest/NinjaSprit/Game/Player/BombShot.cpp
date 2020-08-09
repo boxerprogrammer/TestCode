@@ -1,31 +1,29 @@
 #include "BombShot.h"
 #include"../Collision/Collider.h"
 #include"../Camera.h"
+#include"../../System/File.h"
+#include"../../System/FileManager.h"
 #include<DxLib.h>
 
 namespace {
-	int bombH = -1;
-	int explodeSH = -1;
-	int explodeH = -1;
+
 }
 
 BombShot::~BombShot() {
-#ifdef _DEBUG
-	OutputDebugStringA("\nBomb shot is deleted\n");
-#endif
 }
 
 BombShot::BombShot(const Position2f& pos, const Vector2f& vel,std::shared_ptr<Camera> c) :Projectile(c),frame_(0){
 	pos_ = pos;
 	vel_ = vel;
+	auto& fileMgr=FileManager::Instance();
 	if (bombH == -1) {
-		bombH = LoadGraph(L"Resource/Image/Player/bombshot.png");
+		bombH = fileMgr.Load(L"Resource/Image/Player/bombshot.png")->Handle();
 	}
 	if (explodeH == -1) {
-		explodeH = LoadGraph(L"Resource/Image/Effect/bomb_prj_exp.png");
+		explodeH = fileMgr.Load(L"Resource/Image/Effect/bomb_prj_exp.png")->Handle();
 	}
 	if (explodeSH == -1) {
-		explodeSH = LoadSoundMem(L"Resource/Sound/Game/bombexp.wav");
+		explodeSH = fileMgr.Load(L"Resource/Sound/Game/bombexp.wav")->Handle();
 	}
 	angle_ = 0.0f;
 	isActive_ = true;

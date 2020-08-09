@@ -56,6 +56,11 @@ public:
 
 };
 
+/// <summary>
+/// 当たったときに渡す情報
+/// 今のところは相手コライダーオブジェクトのみだが
+/// 拡張性の為にこうしている。
+/// </summary>
 struct CollisionInfo {
 	std::shared_ptr<Collider> collider;
 };

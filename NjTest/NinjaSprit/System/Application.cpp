@@ -43,6 +43,7 @@ Application::Initialize() {
 	}
 	sceneController_.reset(new SceneController());
 	DxLib::SetDrawScreen(DX_SCREEN_BACK);
+	DxLib::SetWindowUserCloseEnableFlag(false);
 	return true;
 }
 
@@ -58,8 +59,11 @@ Application::Run() {
 		sceneController_->Draw();
 		dinstance.DisplayPerformance();
 		ScreenFlip();
+		if (GetWindowUserCloseFlag())break;
 		if (isExit_)break;
 	}
+	sceneController_->ClearScene();
+
 }
 
 void

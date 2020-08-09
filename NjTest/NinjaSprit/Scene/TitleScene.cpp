@@ -5,6 +5,8 @@
 #include<DxLib.h>
 #include"../Input/Input.h"
 #include"../Geometry.h"
+#include"../System/File.h"
+#include"../System/FileManager.h"
 
 using namespace std;
 
@@ -15,8 +17,7 @@ namespace {
 	unsigned int waitTimer_ = 0;
 	unsigned int blinkInterval_ = blink_interval_normal;
 	unsigned int blinkTimer_ = 0;
-	int titleH;
-	int startH;
+
 }
 
 TitleScene::TitleScene(SceneController& c) :
@@ -24,8 +25,10 @@ TitleScene::TitleScene(SceneController& c) :
 	updater_(&TitleScene::FadeinUpdate),
 	drawer_(&TitleScene::FadeDraw){
 	blinkInterval_ =blink_interval_normal;
-	titleH=DxLib::LoadGraph(L"Resource/Image/Title/title.png");
-	startH=DxLib::LoadGraph(L"Resource/Image/Title/pressstart.png");
+	auto& fileMgr = FileManager::Instance();
+	titleH_=fileMgr.Load(L"Resource/Image/Title/title.png")->Handle();
+	startH_=fileMgr.Load(L"Resource/Image/Title/pressstart.png")->Handle();
+	startSE_ = fileMgr.Load(L"Resource/Sound/System/start.wav")->Handle();
 }
 
 //‘Ò‚¿
@@ -34,7 +37,7 @@ TitleScene::WaitUpdate(const Input& input) {
 	if (input.IsTriggered("OK")) {
 		updater_ = &TitleScene::BlinkUpdate;
 		blinkInterval_ = blink_interval_fast;
-		auto ret=PlaySoundFile(L"Resource/Sound/System/start.wav", DX_PLAYTYPE_BACK);
+		auto ret=PlaySoundMem(startSE_, DX_PLAYTYPE_BACK);
 		waitTimer_ = 30;
 	}
 }
@@ -66,8 +69,8 @@ TitleScene::FadeoutUpdate(const Input&) {
 }
 
 TitleScene::~TitleScene() {
-	DeleteGraph(titleH);
-	DeleteGraph(startH);
+	DeleteGraph(titleH_);
+	DeleteGraph(startH_);
 }
 void 
 TitleScene::Update(const Input& input) {
@@ -78,26 +81,27 @@ void
 TitleScene::NormalDraw() {
 	Position2 pos;
 	int w,h;
-	GetGraphSize(titleH,&w, &h);
+	GetGraphSize(titleH_,&w, &h);
 	Size isize(w, h);
 	const auto& vsize=Application::Instance().GetViewport().GetSize();
 	pos.x = static_cast<int>((vsize.w - isize.w) / 2);
 	pos.y = static_cast<int>((vsize.h - isize.h) / 2);
-	DrawExtendGraph(0,0,vsize.w,vsize.h,titleH, false);
-	//DrawRotaGraph(vsize.w / 2, vsize.h / 2, 1.0f, 0.0f, titleH, false);
-	//DrawGraph(pos.x, pos.y, titleH, false);
+	DrawExtendGraph(0,0,
+		static_cast<int>(vsize.w),
+		static_cast<int>(vsize.h),
+		titleH_, false);
 	
 	if ((blinkTimer_ / blinkInterval_) % 2 == 1) {
-		DrawRotaGraph(vsize.w / 2,400,1.0f,0.0f,startH,true);
+		DrawRotaGraph(static_cast<int>(vsize.w / 2),400,1.0f,0.0f,startH_,true);
 	}
 }
 void
 TitleScene::FadeDraw() {
-	const auto& vpSize=Application::Instance().GetViewport().GetSize();
+	const auto& vpSize=Application::Instance().GetViewport().GetSize().ToIntVector();
 	NormalDraw();
 	auto blendparam = static_cast<int>(255 * (static_cast<float>(fadeout_interval - waitTimer_) / static_cast<float>(fadeout_interval)));
 	DxLib::SetDrawBlendMode(DX_BLENDMODE_MULA, blendparam);
-	DxLib::DrawBox(0, 0, vpSize.w, vpSize.h, 0x000000, true);
+	DxLib::DrawBox(0, 0, vpSize.x, vpSize.y, 0x000000, true);
 	DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 

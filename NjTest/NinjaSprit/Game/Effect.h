@@ -6,7 +6,7 @@
 #include<memory>
 class Camera;
 /// <summary>
-/// エフェクトクラス
+/// エフェクト基底クラス
 /// アニメーションを表示し、表示し終わったら消える
 /// </summary>
 class Effect
@@ -17,23 +17,63 @@ protected:
 	bool isDeletable_ = false;
 	std::shared_ptr<Camera> camera_;
 public:
-	Effect(const Position2f& p, std::shared_ptr<Camera> camera):pos_(p),camera_(camera) {};
+	/// <param name="pos">表示座標</param>
+	/// <param name="camera">カメラへの参照</param>
+	Effect(const Position2f& pos, std::shared_ptr<Camera> camera):pos_(pos),camera_(camera) {};
+
+	/// <summary>
+	/// このエフェクトは削除可能か？
+	/// </summary>
+	/// <returns>true:削除可能 false:削除不可</returns>
 	bool IsDeletable()const {
 		return isDeletable_;
 	}
+	/// <summary>
+	/// エフェクトフレーム更新
+	/// </summary>
 	virtual void Update() = 0;
+	/// <summary>
+	/// エフェクト表示
+	/// </summary>
 	virtual void Draw() = 0;
 };
 
+/// <summary>
+/// エフェクト管理クラス
+/// </summary>
 class EffectManager {
 private:
+	int bloodH_ = -1;
+	int bloodSE_ = -1;
+	int blowH_ = -1;
+	int hitSE_ = -1;
 	std::list<std::shared_ptr<Effect>> effects_;
 	std::shared_ptr<Camera> camera_;
 public:
-	EffectManager(std::shared_ptr<Camera> c);
-	void EmitBlood(const Position2f& p,bool isTurn=false);
-	void EmitBlow3(const Position2f& p, bool isTurn = false);
+	/// <param name="camera">カメラへの参照</param>
+	EffectManager(std::shared_ptr<Camera> camera);
+	/// <summary>
+	/// 血しぶきエフェクト発生
+	/// </summary>
+	/// <param name="pos">表示座標</param>
+	/// <param name="isTurn">反転フラグ</param>
+	void EmitBlood(const Position2f& pos,bool isTurn=false);
+
+	/// <summary>
+	/// 小爆発３つエフェクト発生
+	/// </summary>
+	/// <param name="pos">表示座標</param>
+	/// <param name="isTurn">反転フラグ</param>
+	void EmitBlow3(const Position2f& pos, bool isTurn = false);
+
+	/// <summary>
+	/// エフェクトすべてUpdate
+	/// </summary>
 	void Update();
+
+	/// <summary>
+	/// エフェクトすべて描画
+	/// </summary>
 	void Draw();
 
 };

@@ -70,7 +70,7 @@ CapsuleCollider::Draw(){
 		p4.x + offset.x, p4.y,
 		color, false,2);
 
-	DrawCircle(epos.x+ offset.x, epos.y,capsule_.radius, color, false,2);
+	DrawCircleAA(epos.x+ offset.x, epos.y,capsule_.radius, color, false,2);
 #endif
 }
 

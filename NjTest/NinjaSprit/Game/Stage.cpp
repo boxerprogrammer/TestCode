@@ -7,11 +7,13 @@
 #include"../System/Debugger.h"
 #include<limits>
 #include<array>
+#include"../System/File.h"
+#include"../System/FileManager.h"
 
 using namespace std;
 
 namespace {
-	int stageAtlasH_ = -1;
+	
 	constexpr float block_scale = 2.0f;
 	constexpr int ground_line = 600;
 	constexpr float naraku_y = FLT_MAX;
@@ -22,24 +24,26 @@ namespace {
 	constexpr uint8_t layer_no_enemy = 4;//敵配置(255はボス)
 }
 Stage::Stage(std::shared_ptr<Camera> c) : camera_(c) {
-	stageAtlasH_ = LoadGraph(L"Resource/Image/Background/Level/level1_atlas.png");
+	auto& fileMgr = FileManager::Instance();
+	stageAtlasH_ = fileMgr.Load(L"Resource/Image/Background/Level/level1_atlas.png")->Handle();
 	assert(stageAtlasH_ >= 0);
 }
 void 
 Stage::Load(const TCHAR* path) {
-	auto h=DxLib::FileRead_open(path);
-	assert(h > 0);
-	DxLib::FileRead_read(&header_, sizeof(header_), h);
-	
+	auto& fileMgr=FileManager::Instance();
+	auto file=fileMgr.Load(path);
+	file->CopyRead(header_);
+
 	stagedata_.resize(header_.layerCount);
 	vector<StageLayerData_t> rawStageData(header_.layerCount);
 	auto layerSize = header_.mapW * header_.mapH;
 	for (int i = 0; i < header_.layerCount; ++i) {
 		stagedata_[i].resize(layerSize);
 		rawStageData[i].resize(layerSize);
-		DxLib::FileRead_read(rawStageData[i].data(), layerSize, h);
+		file->CopyRead(rawStageData[i].data(), layerSize);
 	}
-	DxLib::FileRead_close(h);
+	fileMgr.Delete(file);
+
 	//縦横変換作業
 	for (int d = 0; d < header_.layerCount; ++d) {
 		for (size_t y = 0; y < header_.mapH; ++y) {

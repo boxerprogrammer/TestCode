@@ -15,6 +15,10 @@ protected:
 	Position2f pos_;//キャラ中心座標
 	std::shared_ptr<Camera> camera_;
 public:
+	/// <summary>
+	/// キャラクタ基底クラスコンストラクタ
+	/// </summary>
+	/// <param name="camera">カメラへの参照(表示に使用)</param>
 	Character(std::shared_ptr<Camera> camera);
 
 	///座標アクセス
@@ -26,9 +30,18 @@ public:
 	virtual void Update() = 0;
 	///<summary>キャラクターの表示を行う</summary>
 	virtual void Draw() = 0;
-	virtual void OnHit(CollisionInfo& ) = 0;
-};
+	/// <summary>
+	/// 衝突判定イベント
+	/// </summary>
+	/// <param name="colInfo">衝突情報</param>
+	virtual void OnHit(CollisionInfo& colInfo) = 0;
 
-inline bool is_falling(const Vector2f& velocity) {
+};
+/// <summary>
+/// キャラクターが今落ちているかどうか
+/// </summary>
+/// <param name="velocity">速度ベクトル</param>
+/// <returns>true 落下中</returns>
+inline bool IsFalling(const Vector2f& velocity) {
 	return velocity.y >= 0;
 }

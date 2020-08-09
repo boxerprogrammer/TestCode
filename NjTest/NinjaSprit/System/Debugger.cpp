@@ -82,9 +82,9 @@ Debugger::Draw(const Capsule& cap, unsigned int color, float xoffset , float yof
 
 		auto offset = Vector2f(xoffset,yoffset);
 		DrawCircleAA(
-			static_cast<int>(spos.x + offset.x),
-			static_cast<int>(spos.y),
-			static_cast<int>(cap.radius),
+			spos.x + offset.x,
+			spos.y,
+			cap.radius,
 			32,
 			color, false, 2);
 

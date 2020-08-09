@@ -10,6 +10,9 @@
 #include"ChainEquip.h"
 #include"../Camera.h"
 #include"../Stage.h"
+#include"../../Geometry.h"
+#include"../../System/FileManager.h"
+#include"../../System/File.h"
 #include<cassert>
 #include<cmath>
 
@@ -17,13 +20,11 @@
 using namespace std;
 
 namespace {
-	int runH_[6] = { -1,-1,-1,-1, -1, -1 };
-	int jumpH_[4] = { -1, -1, -1, -1 };
-	int fallH_[2] = { -1, -1 };
-	int maskH = -1;
+
+	
 	int frame_ = 0;
 	size_t idx_ = 0;
-	int changeSE_ = -1;
+	
 	constexpr float collision_radius = 24.0f;
 	constexpr float run_speed = 5.0f;
 	constexpr float max_gravity = 0.75f;
@@ -34,6 +35,7 @@ namespace {
 	constexpr float epsilon = 0.01f;
 }
 Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()) {
+	auto& fileMgr = FileManager::Instance();
 	//走りロード
 	for (int i = 0; i < _countof(runH_); ++i) {
 		wstringstream wss;
@@ -42,7 +44,7 @@ Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()) {
 		wss << setfill(L'0') << setw(2);
 		wss << i << L".png";
 		if (runH_[i] == -1) {
-			runH_[i] = LoadGraph(wss.str().c_str());
+			runH_[i] = fileMgr.Load(wss.str().c_str())->Handle();
 		}
 	}
 	//ジャンプロード
@@ -53,7 +55,7 @@ Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()) {
 		wss << setfill(L'0') << setw(2);
 		wss << i << L".png";
 		if (jumpH_[i] == -1) {
-			jumpH_[i] = LoadGraph(wss.str().c_str());
+			jumpH_[i] = fileMgr.Load(wss.str().c_str())->Handle();
 		}
 	}
 	//下降ロード
@@ -64,10 +66,10 @@ Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()) {
 		wss << setfill(L'0') << setw(2);
 		wss << i << L".png";
 		if (fallH_[i] == -1) {
-			fallH_[i] = LoadGraph(wss.str().c_str());
+			fallH_[i] = fileMgr.Load(wss.str().c_str())->Handle();
 		}
 	}
-	maskH = LoadMask(L"Resource/Image/Player/shadow_mask.bmp");
+	maskH_ = fileMgr.Load(L"Resource/Image/Player/shadow_mask.bmp")->Handle();
 	frame_ = 0;
 	idx_ = 0;
 
@@ -78,7 +80,6 @@ Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()) {
 	public:
 		PlayerInputListener(Player& p) :player_(p) {}
 		~PlayerInputListener() {
-			OutputDebugStringA("\n Listener is deleted \n");
 		}
 		void Notify(const Input& input)override {
 			if (input.IsPressed("up")) {
@@ -122,22 +123,17 @@ Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()) {
 	equipments_.push_back(make_shared<ShurikenEquip>(gs->GetProjectileManager(), gs->GetCollisionManager(), gs->GetCamera()));
 	equipments_.push_back(make_shared<ChainEquip>(gs->GetPlayer(), gs->GetCollisionManager(), gs->GetCamera()));
 	if (changeSE_ == -1) {
-		changeSE_ = LoadSoundMem(L"Resource/Sound/Game/changeweapon.wav");
+		changeSE_ = fileMgr.Load(L"Resource/Sound/Game/changeweapon.wav")->Handle();
 	}
 	updater_ = &Player::NormalUpdate;
 	drawer_ = &Player::NormalDraw;
 
 	fill(moveHistory_.begin(), moveHistory_.end(), pos_);
 	lastPos_ = pos_;
-	gs_ = gs;
+	gameScene_ = gs;
 	accelY_ = max_gravity;
 }
 Player::~Player() {
-	for (auto& run : runH_) {
-		DxLib::DeleteGraph(run);
-	}
-	DeleteSoundMem(changeSE_);
-	changeSE_ = -1;
 }
 
 shared_ptr<Equipment>
@@ -175,7 +171,7 @@ Player::Position()const {
 void
 Player::Move(const Vector2f& v) {
 	auto rc = camera_->GetViewRange();
-	pos_ = Clamp(pos_+v, Vector2f( rc.Left(),rc.Top() ), Vector2f( rc.Right(),rc.Bottom() ));
+	pos_ = Clamp(pos_+v, Vector2f( rc.LeftF(),rc.TopF() ), Vector2f( rc.RightF(),rc.BottomF() ));
 
 }
 
@@ -194,7 +190,7 @@ Player::NormalUpdate() {
 	if (frame_ % 5 == 0) {
 		idx_ = (idx_ + 1) % _countof(runH_);
 	}
-	auto groundy = gs_->GetStage()->ComputeGroundY(pos_);
+	auto groundy = gameScene_->GetStage()->ComputeGroundY(pos_);
 	if (groundy< pos_.y) {
 		pos_.y = groundy;
 	}
@@ -228,7 +224,7 @@ Player::FallUpdate() {
 	}
 	velY_ += accelY_;
 	pos_.y += velY_;
-	auto groundy=gs_->GetStage()->ComputeGroundY(pos_);
+	auto groundy=gameScene_->GetStage()->ComputeGroundY(pos_);
 	if (groundy < pos_.y) {
 		velY_ = 0.0f;
 		pos_.y = groundy;
@@ -259,7 +255,7 @@ Player::Update() {
 	++frame_;
 	equipments_[currentEquipmentNo_]->Update();
 
-	auto vec = gs_->GetStage()->ComputeOverlapWall(pos_, collision_radius);
+	auto vec = gameScene_->GetStage()->ComputeOverlapWall(pos_, collision_radius);
 	pos_ += vec;
 
 	if (pos_ != lastPos_) {
@@ -285,7 +281,7 @@ Player::GetDirection()const {
 
 void
 Player::NormalDraw() {
-	const int xoffset = camera_->ViewOffset().x;
+	const auto xoffset = camera_->ViewOffset().x;
 	auto gH = runH_[idx_];
 	int w, h;
 	GetGraphSize(gH, &w, &h);
@@ -297,7 +293,7 @@ Player::NormalDraw() {
 }
 void
 Player::RiseDraw() {
-	const int xoffset = camera_->ViewOffset().x;
+	const auto xoffset = camera_->ViewOffset().x;
 	auto gH = jumpH_[idx_];
 	int w, h;
 	GetGraphSize(gH, &w, &h);
@@ -312,7 +308,7 @@ Player::FallDraw() {
 	auto gH = fallH_[idx_];
 	int w, h;
 	GetGraphSize(gH, &w, &h);
-	const int xoffset = camera_->ViewOffset().x;
+	const auto xoffset = camera_->ViewOffset().x;
 	DrawRotaGraph2(static_cast<int>(pos_.x + xoffset),
 		static_cast<int>(pos_.y),
 		w / 2,
@@ -328,14 +324,19 @@ Player::Draw() {
 	(this->*drawer_)();
 
 	CreateMaskScreen();
-	const int xoffset = camera_->ViewOffset().x;
+	const auto xoffset = static_cast<int>(camera_->ViewOffset().x);
 	auto gH = runH_[idx_];
 	int w, h;
 	GetGraphSize(gH, &w, &h);
+	Rect maskRc(- 64 + xoffset,  - 128, 128, 129);
 	{
 		const auto& spos = GetBackTimePosition(16);
-		DrawFillMask(spos.x - 64 + xoffset, spos.y - 128, spos.x + 64 + xoffset, spos.y+1,
-			maskH);
+		Position2 p = Vector2FToVector2(spos);
+		Rect mrc = maskRc;
+		mrc.pos += p;
+		
+		DrawFillMask(mrc.Left(), mrc.Top(), 
+			mrc.Right(),mrc.Bottom(),	maskH_);
 		DrawRotaGraph2(static_cast<int>(spos.x + xoffset),
 			static_cast<int>(spos.y),
 			w / 2,
@@ -344,8 +345,13 @@ Player::Draw() {
 	}
 	{
 		const auto& spos = GetBackTimePosition(32);
-		DrawFillMask(spos.x - 64 + xoffset, spos.y - 128, spos.x + 64 + xoffset, spos.y + 1,
-			maskH);
+		Position2 p = Vector2FToVector2(spos);
+		Rect mrc = maskRc;
+		mrc.pos += p;
+
+		DrawFillMask(mrc.Left(), mrc.Top(),
+			mrc.Right(), mrc.Bottom(), maskH_);
+
 		DrawRotaGraph2(static_cast<int>(spos.x + xoffset),
 			static_cast<int>(spos.y),
 			w / 2,

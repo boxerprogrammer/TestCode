@@ -38,8 +38,32 @@ public:
 	/// </summary>
 	void DisplayPerformance();
 
+	/// <summary>
+	/// 円描画
+	/// </summary>
+	/// <param name="circle">円</param>
+	/// <param name="color">色</param>
+	/// <param name="xoffset">X方向オフセット</param>
+	/// <param name="yoffset">Y方向オフセット</param>
+	/// <param name="thickness">線の太さ</param>
 	void Draw(const Circle& circle,unsigned int color,float xoffset=0.0f, float yoffset = 0.0f,float thickness=1.0f);
+	/// <summary>
+	/// 線分描画
+	/// </summary>
+	/// <param name="seg">線分</param>
+	/// <param name="color">色</param>
+	/// <param name="xoffset">X方向オフセット</param>
+	/// <param name="yoffset">Y方向オフセット</param>
+	/// <param name="thickness">線の太さ</param>
 	void Draw(const Segment& seg, unsigned int color, float xoffset = 0.0f, float yoffset = 0.0f, float thickness = 1.0f);
+	/// <summary>
+	/// カプセル描画
+	/// </summary>
+	/// <param name="capsule">カプセル</param>
+	/// <param name="color">色</param>
+	/// <param name="xoffset">X方向オフセット</param>
+	/// <param name="yoffset">Y方向オフセット</param>
+	/// <param name="thickness">線の太さ</param>
 	void Draw(const Capsule& capsule, unsigned int color,  float xoffset = 0.0f, float yoffset = 0.0f, float thickness = 1.0f);
 
 };

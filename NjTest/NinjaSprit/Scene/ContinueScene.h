@@ -18,7 +18,14 @@ private:
 	void (ContinueScene::* drawer_)();
 public:
 	~ContinueScene() = default;
-	void Update(const Input&)override;
+	/// <summary>
+	/// コンティニューシーン更新
+	/// </summary>
+	/// <param name="input">入力情報</param>
+	void Update(const Input& input)override;
+	/// <summary>
+	/// シーン描画
+	/// </summary>
 	void Draw()override;
 };
 

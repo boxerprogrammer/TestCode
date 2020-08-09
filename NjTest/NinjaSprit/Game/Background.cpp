@@ -5,6 +5,8 @@
 #include"../System/Application.h"
 #include"../Geometry.h"
 #include"Camera.h"
+#include"../System/File.h"
+#include"../System/FileManager.h"
 
 namespace {
 	constexpr float scroll_rate = 0.1f;
@@ -14,6 +16,7 @@ using namespace std;
 
 
 Background::Background(std::shared_ptr<Camera> c):camera_(c){ 
+	auto& fileMgr = FileManager::Instance();
 	bgH_.resize(11);
 	int skipno[2] = { 4,7 };
 	int no = 9;
@@ -29,18 +32,14 @@ Background::Background(std::shared_ptr<Camera> c):camera_(c){
 			--no;
 		}
 		wss << ".png";
-		bgH_[bgH_.size() - 1 - i] = LoadGraph(wss.str().c_str());
+		bgH_[bgH_.size() - 1 - i] = fileMgr.Load(wss.str().c_str())->Handle();
 	}
 }
 Background::~Background() {
-	for (auto& bg : bgH_) {
-		DxLib::DeleteGraph(bg);
-	}
 }
 
 void 
 Background::Update() {
-	++frame_;
 }
 void 
 Background::Draw() {

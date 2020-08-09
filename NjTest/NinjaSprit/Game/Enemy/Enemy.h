@@ -6,13 +6,13 @@ class Enemy : public Character
 {
 	friend Spawner;
 protected:
-	const std::shared_ptr<Player>& player_;
+	const std::shared_ptr<Player>& player_;//プレイヤーの情報を知るため
 	int life_ = 0;//敵の体力(0以下は死を意味する)
 	bool isDeletable_ = false;///リストから消していい(破棄していい)フラグ
 	Vector2f velocity_;///<敵の現在速度
 
-	///自分のクローンを返す・・・が、これは子クラスでの実装
-	///を呼び出す(純粋仮想関数)
+	///自分のクローンを返す…が、これは子クラスでの実装
+	///を呼び出すだけ(純粋仮想関数)
 	virtual Enemy* MakeClone() = 0;
 	///プレイヤーを狙う
 	virtual void AimPlayer();

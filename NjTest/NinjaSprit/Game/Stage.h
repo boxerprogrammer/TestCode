@@ -21,6 +21,7 @@ class Camera;
 class Stage
 {
 private:
+	int stageAtlasH_ = -1;
 	using StageLayerData_t = std::vector<unsigned char>;
 	std::vector<StageLayerData_t> stagedata_;
 	std::vector<Segment> terrainSegment_;
@@ -28,15 +29,48 @@ private:
 	std::shared_ptr<Camera> camera_;
 	void CreateSegment(Position2f& lastPos, const Position2f& pos);
 public:
-	Stage(std::shared_ptr<Camera> c);
+	/// <param name="camera">カメラポインタ</param>
+	Stage(std::shared_ptr<Camera> camera);
+
+	/// <summary>
+	/// ステージのロード
+	/// </summary>
+	/// <param name="path">レベル(fmf)ファイルパス</param>
 	void Load(const TCHAR* path);
 	
+	/// <summary>
+	/// ステージ更新
+	/// </summary>
 	void Update();
+
+	/// <summary>
+	/// 背景表示
+	/// </summary>
 	void BackDraw();
-	void DrawChips(size_t layerNo);
+
+	/// <summary>
+	/// 前景表示
+	/// </summary>
 	void FrontDraw();
+
+	/// <summary>
+	/// 当たり判定などのデバッグ表示
+	/// </summary>
 	void DebugDraw();
+
+
+	/// <summary>
+	/// 指定レイヤー番号の画面範囲内のマップチップをすべて表示
+	/// </summary>
+	/// <param name="layerNo">レイヤー番号</param>
+	void DrawChips(size_t layerNo);
+
+	/// <summary>
+	/// 現在のステージの幅と高さを返す
+	/// </summary>
+	/// <returns>現在のステージサイズ</returns>
 	Size GetStageSize()const;
+
 	/// <summary>
 	/// 現在の座標に対応する地面のY座標を返す
 	/// </summary>
@@ -47,7 +81,13 @@ public:
 	//「壁」へのめりこみベクトルを返す
 	Vector2f ComputeOverlapWall(const Position2f& pos,float r)const;
 
+	/// <summary>
+	/// 現在の座標に対応する線分と前後の線分を返す
+	/// </summary>
+	/// <param name="pos">探すための対象座標</param>
+	/// <returns></returns>
 	std::array<Segment,3> GetThreeSegment(const Position2f& pos)const;
+	
 	/// <summary>
 	/// ボスモードか否か(スクロールが禁止される)
 	/// </summary>

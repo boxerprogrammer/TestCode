@@ -20,13 +20,15 @@
 #include"../Game/Collision/CollisionManager.h"
 #include"../Game/Stage.h"
 #include"../Game/Camera.h"
+#include"../System/FileManager.h"
+#include"../System/File.h"
 #include<cassert>
 
 namespace {
 	
 	constexpr uint32_t fadeout_interval = 45;
 	unsigned int waitTimer_ = 0;
-	int weaponUIH_[3];
+	
 	int bgm = -1;
 }
 using namespace std;
@@ -34,6 +36,8 @@ GameplayingScene::GameplayingScene(SceneController& c):
 	Scene(c),
 	updater_(&GameplayingScene::FadeinUpdate),
 	drawer_(&GameplayingScene::FadeDraw){
+
+	auto& fileMgr = FileManager::Instance();
 
 	collisionManager_ = make_shared<CollisionManager>();
 
@@ -64,9 +68,9 @@ GameplayingScene::GameplayingScene(SceneController& c):
 
 	
 
-	weaponUIH_[0]= LoadGraph(L"Resource/Image/UI/bomb.png");
-	weaponUIH_[1] = LoadGraph(L"Resource/Image/UI/shuriken.png");
-	weaponUIH_[2] = LoadGraph(L"Resource/Image/UI/chain.png");
+	weaponUIH_[0]= fileMgr.Load(L"Resource/Image/UI/bomb.png")->Handle();
+	weaponUIH_[1] = fileMgr.Load(L"Resource/Image/UI/shuriken.png")->Handle();
+	weaponUIH_[2] = fileMgr.Load(L"Resource/Image/UI/chain.png")->Handle();
 	bgm = LoadBGM(L"Resource/BGM/stage1_normal.mp3");
 
 	
@@ -83,11 +87,8 @@ GameplayingScene::GetPlayer() {
 }
 
 GameplayingScene::~GameplayingScene() {
-	for (auto& h : weaponUIH_) {
-		DeleteGraph(h);
-		h = -1;
-	}
-	DeleteSoundMem(bgm);
+	DxLib::DeleteSoundMem(bgm);
+	FileManager::Instance().DeleteAllResources();
 }
 
 void 
@@ -112,6 +113,9 @@ GameplayingScene::GetCollisionManager() {
 //‘Ò‚¿
 void
 GameplayingScene::NormalUpdate(const Input& input) {
+	if (!CheckStreamSoundMem(bgm)) {
+		PlayStreamSoundMem(bgm, DX_PLAYTYPE_LOOP, false);
+	}
 	if (input.IsTriggered("OK")) {
 		updater_ = &GameplayingScene::FadeoutUpdate;
 		drawer_ = &GameplayingScene::FadeDraw;
@@ -119,6 +123,8 @@ GameplayingScene::NormalUpdate(const Input& input) {
 	}
 	if (input.IsTriggered("pause")) {
 		controller_.PushScene(new PauseScene(controller_));
+		StopStreamSoundMem(bgm);
+		return;
 	}
 	collisionManager_->Update();
 	camera_->Update();
@@ -147,7 +153,7 @@ GameplayingScene::FadeinUpdate(const Input&) {
 	if (++waitTimer_ == fadeout_interval) {
 		updater_ = &GameplayingScene::NormalUpdate;
 		drawer_ = &GameplayingScene::NormalDraw;
-		PlaySoundMem(bgm, DX_PLAYTYPE_LOOP);
+		PlayStreamSoundMem(bgm, DX_PLAYTYPE_LOOP,true);
 	}
 }
 

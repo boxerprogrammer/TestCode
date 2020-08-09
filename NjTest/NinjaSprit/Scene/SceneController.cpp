@@ -26,6 +26,10 @@ SceneController::SceneController() {
 	//scene_.reset(new TitleScene(*this));//OK
 }
 
+void SceneController::ClearScene() {
+	scene_.clear();
+}
+
 void 
 SceneController::CleanChangeScene(Scene* scene) {
 	postDrawExecuter_ = [this, scene]() {

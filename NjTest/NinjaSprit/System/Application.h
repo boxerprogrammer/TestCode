@@ -11,10 +11,13 @@ struct Rect;
 //表示すべき画面の情報を持つ
 class Viewport {
 public:
-	Size GetSize()const;
-	Rect GetRect()const;
+	Size GetSize()const;//ゲーム画面(ビューポート)のサイズを返す
+	Rect GetRect()const;//ゲーム画面のビューポート矩形を返す
 };
 
+/// <summary>
+/// アプリケーション全体をコントロール
+/// </summary>
 class Application
 {
 private:
@@ -50,6 +53,10 @@ public:
 	///</summary>
 	void Exit();
 
+	/// <summary>
+	/// ゲーム画面のビューポート情報を返す
+	/// </summary>
+	/// <returns></returns>
 	const Viewport& GetViewport()const;
 
 };

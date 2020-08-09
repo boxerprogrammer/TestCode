@@ -105,7 +105,8 @@
       <AdditionalIncludeDirectories>$(DXLIB_DIR)</AdditionalIncludeDirectories>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <DisableSpecificWarnings>4267</DisableSpecificWarnings>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -147,6 +148,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Arithmetic.cpp" />
+    <ClCompile Include="Scene\KeyconfigScene.cpp" />
+    <ClCompile Include="System\File.cpp" />
+    <ClCompile Include="System\FileManager.cpp" />
     <ClCompile Include="System\Application.cpp" />
     <ClCompile Include="System\Debugger.cpp" />
     <ClCompile Include="Game\Camera.cpp" />
@@ -186,6 +190,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arithmetic.h" />
+    <ClInclude Include="Scene\KeyconfigScene.h" />
+    <ClInclude Include="System\File.h" />
+    <ClInclude Include="System\FileManager.h" />
     <ClInclude Include="System\Application.h" />
     <ClInclude Include="System\Debugger.h" />
     <ClInclude Include="Game\Camera.h" />
