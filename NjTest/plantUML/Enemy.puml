@@ -1,0 +1,25 @@
+@startuml
+Enemy<|-- Slasher
+Enemy<|-- KunaiThrower
+Enemy<|-- Monk
+Enemy<|-- Samurai
+Enemy<|-- Boss
+Boss<|-- Asura
+
+
+Enemy : Update()
+Enemy : Draw()
+
+Boss : IsEntering()
+Boss : IsDead()
+Boss : IsDying()
+
+
+GameplayingScene : BossBattleUpdate()
+GameplayingScene : BossDyingUpdate()
+GameplayingScene : OnBossEnter()
+GameplayingScene : OnBossDie()
+
+GameplayingScene<..Boss
+
+@enduml

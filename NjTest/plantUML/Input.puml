@@ -1,0 +1,13 @@
+@startuml
+Input--> "1" Keyboard
+Input--> "1" Gamepad
+Scene..>Input
+SceneManager-->Scene
+TitleScene..|>Scene
+GameplayScene..|>Scene
+GameoverScene..|>Scene
+ContinueScene..|>Scene
+Scene : Update(Input&)
+SceneManager : Update(Input&)
+Input : Update()
+@enduml

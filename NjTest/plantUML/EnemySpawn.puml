@@ -1,0 +1,25 @@
+@startuml
+Spawner<|-- NormalSpawner
+Spawner<|-- SideEdgeSpawner
+Spawner<|-- PortalSpawner
+Spawner<|-- RandomSpawner
+
+Enemy<|-- Slasher
+Enemy<|-- KunaiThrower
+Enemy<|-- Monk
+Enemy<|-- Samurai
+
+GameplayingScene-->"many" Spawner
+GameplayingScene-->EnemyManager
+EnemyManager-->"many" Enemy
+Spawner-->"Create" Enemy 
+Spawner-->"Add" EnemyManager
+
+Enemy : Update()
+Enemy : Draw()
+
+Spawner : Update()
+EnemyManager : Update()
+EnemyManager : Draw()
+
+@enduml

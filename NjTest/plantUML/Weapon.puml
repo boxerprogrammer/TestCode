@@ -1,0 +1,25 @@
+@startuml
+Player--> "1" Equipment
+SwordEquip..|>Equipment
+ShurikenEquip..|>Equipment
+BombEquip..|>Equipment
+ChainEquip..|>Equipment
+
+ShurikenEquip..>ProjectileManager
+BombEquip..>ProjectileManager
+
+
+Projectile--|>Character
+ShurikenShot--|>Projectile
+BombShot--|>Projectile
+
+ProjectileManager "1" --> "many" Projectile
+
+Equipment : Attack(const Player& p,const Input& i)
+Character : Update()
+Character : Draw()
+
+GameScene-->Player
+GameScene-->ProjectileManager
+
+@enduml

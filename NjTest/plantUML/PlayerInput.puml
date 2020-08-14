@@ -1,0 +1,10 @@
+@startuml
+Player--|>Character
+PlayerInputListener..>Player
+PlayerInputListener--|>InputListener
+GameScene--> "many" InputListener
+GameScene..>Input
+InputListener..>Input
+GameScene : Update(const Input& input)
+InputListener : Notify(const Input& input)
+@enduml
