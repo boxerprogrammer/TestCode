@@ -19,6 +19,7 @@ private:
 	int moveSE_ = -1;
 	int decideSE_ = -1;
 	int cancelSE_ = -1;
+	int changeSE_ = -1;
 	size_t currentSelectNo_ = 0;
 	std::vector<std::string> menuItems_;
 	PeripheralReferenceTable_t peripheralReferenceTable_;

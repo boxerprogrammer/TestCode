@@ -5,7 +5,7 @@
 using namespace std;
 
 
-Spawner::Spawner(const Position2f& pos, Enemy* prototype, shared_ptr<EnemyManager>& em,shared_ptr<Camera> c)
+Spawner::Spawner(const Position2f& pos, Enemy* prototype, shared_ptr<EnemyManager> em,shared_ptr<Camera> c)
 :
 pos_(pos),
 prototype_(prototype),

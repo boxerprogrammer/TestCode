@@ -60,5 +60,7 @@ public:
 	/// •`‰æ
 	/// </summary>
 	void Draw() override;
+
+	const std::vector<Circle>& GetCircles()const override;
 };
 

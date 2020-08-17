@@ -9,6 +9,9 @@
 #include<array>
 #include"../System/File.h"
 #include"../System/FileManager.h"
+#include"../Scene/GameplayingScene.h"
+#include"Enemy/Asura.h"
+#include"Enemy/BossSpawner.h"
 
 using namespace std;
 
@@ -23,9 +26,12 @@ namespace {
 	constexpr uint8_t layer_no_collision = 3;//地形コリジョン
 	constexpr uint8_t layer_no_enemy = 4;//敵配置(255はボス)
 }
-Stage::Stage(std::shared_ptr<Camera> c) : camera_(c) {
+Stage::Stage(std::shared_ptr<Camera> camera, GameplayingScene* gs) :
+camera_(camera),
+gameScene_(gs){
 	auto& fileMgr = FileManager::Instance();
 	stageAtlasH_ = fileMgr.Load(L"Resource/Image/Background/Level/level1_atlas.png")->Handle();
+	updater_ = &Stage::NormalUpdate;
 	assert(stageAtlasH_ >= 0);
 }
 void 
@@ -113,8 +119,24 @@ void Stage::CreateSegment(Position2f& startPos,const  Position2f& endPos)
 }
 
 void 
-Stage::Update() {
+Stage::NormalUpdate() {
+	CheckBossMode();
+	if (isBossMode_) {
+		gameScene_->AddSpawner(new BossSpawner(Position2f(0, 0),
+			new Asura(gameScene_),
+			gameScene_->GetEnemyManager(),
+			gameScene_->GetCollisionManager(),
+			camera_));
+		updater_ = &Stage::BossUpdate;
+	}
+}
+void 
+Stage::BossUpdate(){
+}
 
+void 
+Stage::Update() {
+	(this->*updater_)();
 }
 void 
 Stage::BackDraw() {
@@ -241,16 +263,21 @@ Stage::GetThreeSegment(const Position2f& pos)const {
 	return ret;
 }
 
-bool 
-Stage::IsBossMode()const {
+void 
+Stage::CheckBossMode() {
 	constexpr uint8_t boss_no = 255;
 	auto rc = camera_->GetViewRange();
 	size_t xleft = static_cast<size_t>(static_cast<float>(rc.Left()) / (header_.chipW * block_scale));
 	size_t xright = static_cast<size_t>(static_cast<float>(rc.Right()) / (header_.chipW * block_scale));
 	auto itBegin = stagedata_[layer_no_enemy].begin();
 
-	return count(
+	isBossMode_= count(
 		next(itBegin, xleft * header_.mapH),//first
 		next(itBegin, xright * header_.mapH),//last
 		boss_no) > 0;
+}
+
+bool 
+Stage::IsBossMode()const {
+	return isBossMode_;
 }

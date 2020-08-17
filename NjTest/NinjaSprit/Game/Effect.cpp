@@ -11,6 +11,9 @@ using namespace std;
 
 namespace {
 
+	/// <summary>
+	/// ååÇµÇ‘Ç´
+	/// </summary>
 	class Blood : public Effect{
 	private:
 		bool isTurn_ = false;
@@ -41,6 +44,10 @@ namespace {
 			++frame_;
 		}
 	};
+
+	/// <summary>
+	/// è¨îöî≠
+	/// </summary>
 	class Blow : public Effect {
 	private:
 		int h_ = -1;
@@ -93,6 +100,49 @@ namespace {
 			
 		}
 	};
+	/// <summary>
+	/// ínñ îöî≠
+	/// </summary>
+	class GroundExplosion : public Effect {
+	private:
+		int h_ = -1;
+		bool isTurn_ = false;
+
+
+		using Updater_t = void(GroundExplosion::*)();
+		Updater_t updater_;
+		void NormalUpdate() {
+			if (frame_ >= 20) {
+				isDeletable_ = true;
+			}
+			++frame_;
+		}
+	public:
+		GroundExplosion(const Position2f& p, int h, shared_ptr<Camera> c, bool isTurn) :
+			Effect(p, c),
+			isTurn_(isTurn),
+			h_(h) {
+
+			isDeletable_ = false;
+			frame_ = 0;
+			updater_ = &GroundExplosion::NormalUpdate;
+		}
+		void Update()override {
+			(this->*updater_)();
+		}
+		void Draw()override {
+			const auto xoffset = camera_->ViewOffset().x;
+			int idx = frame_ / 2;
+			DrawRectRotaGraph2(
+				static_cast<int>(pos_.x + xoffset), static_cast<int>(pos_.y),
+				128 * idx, 0,
+				128, 80,
+				64, 80,
+				2.0f, 0.0f,
+				h_, true, isTurn_);
+
+		}
+	};
 }
 mt19937 mt_;
 EffectManager::EffectManager(shared_ptr<Camera> c):camera_(c) {
@@ -109,7 +159,26 @@ EffectManager::EffectManager(shared_ptr<Camera> c):camera_(c) {
 	if (blowH_ == -1) {
 		blowH_ = fileMgr.Load(L"Resource/Image/Effect/dron.png")->Handle();
 	}
+
+	if (groundExpH_ == -1) {
+		groundExpH_ = fileMgr.Load(L"Resource/Image/Effect/ground_exp.png")->Handle();
+	}
+	if (smokeExpH_ == -1) {
+		smokeExpH_ = fileMgr.Load(L"Resource/Image/Effect/smoke_exp.png")->Handle();
+	}
+
 }
+
+void 
+EffectManager::EmitGroundExplosion(const Position2f& pos, bool isTurn) {
+	effects_.emplace_back(new GroundExplosion(pos, groundExpH_, camera_, isTurn));
+}
+
+void
+EffectManager::EmitSmokeExplosion(const Position2f& pos, bool isTurn) {
+
+}
+
 void 
 EffectManager::EmitBlood(const Position2f& p, bool isTurn) {
 	PlaySoundMem(bloodSE_, DX_PLAYTYPE_BACK);

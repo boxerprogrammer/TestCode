@@ -13,7 +13,7 @@ class Spawner
 protected:
 	Position2f pos_;//画面内にスポーナーがあるかどうかの判定が必要なため座標がいる
 	std::unique_ptr<Enemy> prototype_;//プロトタイプ
-	std::shared_ptr<EnemyManager>& enemyManager_;//敵マネージャへの参照
+	std::shared_ptr<EnemyManager> enemyManager_;//敵マネージャへの参照
 	std::shared_ptr<Camera> camera_;//カメラへの参照
 	//持っているプロトタイプのクローンをつくる
 	//内部でプロトタイプじしんにコピーを作らせている
@@ -27,7 +27,7 @@ public:
 	/// <param name="enemyManager">敵マネージャ</param>
 	/// <param name="camera">カメラへの参照</param>
 	/// <returns></returns>
-	Spawner(const Position2f& pos, Enemy* prototype, std::shared_ptr<EnemyManager>& em,std::shared_ptr<Camera> c);
+	Spawner(const Position2f& pos, Enemy* prototype, std::shared_ptr<EnemyManager> em,std::shared_ptr<Camera> c);
 	virtual ~Spawner()=default;
 	
 	/// <summary>

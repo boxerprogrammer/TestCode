@@ -34,6 +34,7 @@ private:
 	size_t currentEquipmentNo_ = 0;
 	std::shared_ptr<CollisionManager> collisionManager_;
 
+	void ExitUpdate();
 	//’Êíó‘Ô
 	void NormalUpdate();
 	//‰º~ó‘Ô
@@ -43,6 +44,7 @@ private:
 	using Updater_t = void (Player::*)();
 	using Drawer_t = void (Player::*)();
 
+	void ExitDraw();
 	//’Êí•`‰æ
 	void NormalDraw();
 	//‰º~•`‰æ

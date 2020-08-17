@@ -7,6 +7,7 @@
 #include<sstream>
 #include<iomanip>
 #include<cmath>
+#include"../System/Application.h"
 #include"../Input/Input.h"
 #include"../System/Application.h"
 #include"../Geometry.h"
@@ -22,58 +23,23 @@
 #include"../Game/Camera.h"
 #include"../System/FileManager.h"
 #include"../System/File.h"
+#include"../Arithmetic.h"
 #include<cassert>
 
 namespace {
 	
 	constexpr uint32_t fadeout_interval = 45;
 	unsigned int waitTimer_ = 0;
+	Position2 ashuraPos_(400, 1000);
 	
-	int bgm = -1;
 }
 using namespace std;
 GameplayingScene::GameplayingScene(SceneController& c):
 	Scene(c),
-	updater_(&GameplayingScene::FadeinUpdate),
-	drawer_(&GameplayingScene::FadeDraw){
-
-	auto& fileMgr = FileManager::Instance();
-
-	collisionManager_ = make_shared<CollisionManager>();
-
-	camera_=make_shared<Camera>();
-
-	waitTimer_ = 0;
-	bg_ = make_unique<Background>(camera_);
-	projectileManager_ = make_unique<ProjectileManager>();
-
-	player_ = make_shared<Player>(this);
-	player_->SetPosition(Position2f(400, 480));
-	camera_->SetPlayer(player_);
-
-	effectManager_ = make_shared<EffectManager>(camera_);
-
-	ChangeVolumeSoundMem(150, bgm);
-	stage_ = make_shared<Stage>(camera_);
-	stage_->Load(L"resource/level/level1.fmf");
-	camera_->SetStageSize(stage_->GetStageSize());
-
-	enemyManager_ = make_shared<EnemyManager>();
-	spawners_.emplace_back(new SideSpawner(
-		Position2f(0,0),
-		new Slasher(player_,effectManager_,camera_,stage_),
-		enemyManager_,
-		collisionManager_,
-		camera_));
-
-	
-
-	weaponUIH_[0]= fileMgr.Load(L"Resource/Image/UI/bomb.png")->Handle();
-	weaponUIH_[1] = fileMgr.Load(L"Resource/Image/UI/shuriken.png")->Handle();
-	weaponUIH_[2] = fileMgr.Load(L"Resource/Image/UI/chain.png")->Handle();
-	bgm = LoadBGM(L"Resource/BGM/stage1_normal.mp3");
-
-	
+	updater_(&GameplayingScene::InitializeUpdate),
+	drawer_(&GameplayingScene::FadeDraw),
+	weaponUIH_()
+{
 }
 
 std::shared_ptr<Stage>&
@@ -87,18 +53,14 @@ GameplayingScene::GetPlayer() {
 }
 
 GameplayingScene::~GameplayingScene() {
-	DxLib::DeleteSoundMem(bgm);
+	DxLib::DeleteSoundMem(bgm_);
+	DxLib::DeleteSoundMem(bossBgm_);
 	FileManager::Instance().DeleteAllResources();
 }
 
 void 
 GameplayingScene::Update(const Input& input) {
-	
 	(this->*updater_)(input);
-
-
-	
-
 }
 
 void
@@ -110,26 +72,84 @@ GameplayingScene::GetCollisionManager() {
 	return collisionManager_;
 }
 
+std::shared_ptr<EnemyManager> 
+GameplayingScene::GetEnemyManager() {
+	return enemyManager_;
+}
+
+std::shared_ptr<EffectManager> 
+GameplayingScene::GetEffectManager() {
+	return effectManager_;
+}
+
+//初期化用アップデータ
+void 
+GameplayingScene::InitializeUpdate(const Input&) {
+
+	auto& fileMgr = FileManager::Instance();
+
+	collisionManager_ = make_shared<CollisionManager>();
+
+	camera_ = make_shared<Camera>();
+
+	waitTimer_ = 0;
+	bg_ = make_unique<Background>(camera_);
+	projectileManager_ = make_unique<ProjectileManager>();
+
+	player_ = make_shared<Player>(this);
+	player_->SetPosition(Position2f(400, 480));
+	camera_->SetPlayer(player_);
+
+	effectManager_ = make_shared<EffectManager>(camera_);
+
+
+	//stage_ = make_shared<Stage>(camera_,this);
+	stage_.reset(new Stage(camera_, this));
+	stage_->Load(L"resource/level/level1.fmf");
+	camera_->SetStageSize(stage_->GetStageSize());
+
+	enemyManager_ = make_shared<EnemyManager>();
+	AddSpawner(new SideSpawner(Position2f(0, 0),
+			new Slasher(player_, effectManager_, camera_, stage_),
+			enemyManager_,
+			collisionManager_,
+			camera_));
+	//spawners_.emplace_back(new SideSpawner(
+	//	Position2f(0, 0),
+	//	new Slasher(player_, effectManager_, camera_, stage_),
+	//	enemyManager_,
+	//	collisionManager_,
+	//	camera_));
+
+
+
+	weaponUIH_[0] = fileMgr.Load(L"Resource/Image/UI/bomb.png")->Handle();
+	weaponUIH_[1] = fileMgr.Load(L"Resource/Image/UI/shuriken.png")->Handle();
+	weaponUIH_[2] = fileMgr.Load(L"Resource/Image/UI/chain.png")->Handle();
+	bgm_ = LoadBGM(L"Resource/BGM/stage1_normal.mp3");
+	ChangeVolumeSoundMem(bgmVolume_, bgm_);
+	ashuraH_ = fileMgr.Load(L"Resource/Image/Enemy/ashura.png")->Handle();
+	bossBgm_ = LoadBGM(L"Resource/BGM/boss.mp3");
+	updater_ = &GameplayingScene::FadeinUpdate;
+}
+
+//敵発生器登録
+void 
+GameplayingScene::AddSpawner(Spawner* spawner) {
+	spawners_.emplace_back(spawner);
+}
+
 //待ち
 void
 GameplayingScene::NormalUpdate(const Input& input) {
-	if (!CheckStreamSoundMem(bgm)) {
-		PlayStreamSoundMem(bgm, DX_PLAYTYPE_LOOP, false);
-	}
-	if (input.IsTriggered("OK")) {
-		updater_ = &GameplayingScene::FadeoutUpdate;
-		drawer_ = &GameplayingScene::FadeDraw;
-		waitTimer_ = fadeout_interval;
-	}
-	if (input.IsTriggered("pause")) {
-		controller_.PushScene(new PauseScene(controller_));
-		StopStreamSoundMem(bgm);
-		return;
+	if (!CheckStreamSoundMem(bgm_)) {
+		PlayStreamSoundMem(bgm_, DX_PLAYTYPE_LOOP, false);
 	}
 	collisionManager_->Update();
 	camera_->Update();
 	player_->Update();
 	bg_->Update();
+	stage_->Update();
 	for (auto& listener : listeners_) {
 		listener->Notify(input);
 	}
@@ -139,10 +159,58 @@ GameplayingScene::NormalUpdate(const Input& input) {
 		spw->Update();
 	}
 	effectManager_->Update();
-	if (stage_->IsBossMode()) {
+	if (stage_->IsBossMode()&&updater_==&GameplayingScene::NormalUpdate) {
 		camera_->Lock();
+		updater_=&GameplayingScene::BossEnterUpdate;
+		drawer_ = &GameplayingScene::BossDraw;
 	}
+	if (input.IsTriggered("OK")) {
+		Fadeout();
+	}
+	if (input.IsTriggered("pause")) {
+		controller_.PushScene(new PauseScene(controller_));
+		StopStreamSoundMem(bgm_);
+	}
+}
+
+void GameplayingScene::Fadeout()
+{
+	updater_ = &GameplayingScene::FadeoutUpdate;
+	drawer_ = &GameplayingScene::FadeDraw;
+	waitTimer_ = fadeout_interval;
+}
+
+void
+GameplayingScene::OnBossEnter() {
+
+}
+void
+GameplayingScene::OnBossDie() {
+	Fadeout();
+}
+
+void 
+GameplayingScene::BossEnterUpdate(const Input&) {
+	if (bgmVolume_ < 10) {
+		StopSoundMem(bgm_);
+		ChangeVolumeSoundMem(150, bossBgm_);
+		PlaySoundMem(bossBgm_, DX_PLAYTYPE_LOOP);
+		updater_ = &GameplayingScene::BossBattleUpdate;
+	}
+	else {
+		bgmVolume_ -= 3;
+		ChangeVolumeSoundMem(bgmVolume_, bgm_);
+	}
+}
+
+void 
+GameplayingScene::BossBattleUpdate(const Input& input) {
 	
+	NormalUpdate(input);
+}
+void 
+GameplayingScene::BossDyingUpdate(const Input& input) {
+	NormalUpdate(input);
 }
 
 void
@@ -153,7 +221,7 @@ GameplayingScene::FadeinUpdate(const Input&) {
 	if (++waitTimer_ == fadeout_interval) {
 		updater_ = &GameplayingScene::NormalUpdate;
 		drawer_ = &GameplayingScene::NormalDraw;
-		PlayStreamSoundMem(bgm, DX_PLAYTYPE_LOOP,true);
+		PlayStreamSoundMem(bgm_, DX_PLAYTYPE_LOOP,true);
 	}
 }
 
@@ -166,14 +234,38 @@ GameplayingScene::FadeoutUpdate(const Input&) {
 	}
 }
 
+void 
+GameplayingScene::BossDraw() {
+	bg_->Draw();
+	stage_->BackDraw();
+	DxLib::SetDrawBlendMode(DX_BLENDMODE_MULA, 64);
+	const auto& rc=Application::Instance().GetViewport().GetRect();
+	DrawBox(rc.Left(), rc.Top(), rc.Right(), rc.Bottom(), 0x000000,true);
+	DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	//ashuraPos_.y = SaturateSubtract(ashuraPos_.y, 3, 600 - 16);
+	//DrawRotaGraph2(ashuraPos_.x, ashuraPos_.y, 
+	//	175,400,1.2f,0.0f,
+	//	ashuraH_, true);
+	enemyManager_->Draw();
+	projectileManager_->Draw();
+	player_->Draw();
+	effectManager_->Draw();
+	stage_->FrontDraw();
+	collisionManager_->DebugDraw();
+	stage_->DebugDraw();
+	//武器UI表示
+	DrawBox(12, 12, 76, 76, 0x000000, false);
+	DrawGraph(10, 10, weaponUIH_[player_->CurrentEquipmentNo()], true);
+	DrawBox(10, 10, 74, 74, 0xffffff, false);
+}
 
 void
 GameplayingScene::NormalDraw() {
 	bg_->Draw();
 	stage_->BackDraw();
+	enemyManager_->Draw();
 	player_->Draw();
 	projectileManager_->Draw();
-	enemyManager_->Draw();
 	effectManager_->Draw();
 	stage_->FrontDraw();
 	collisionManager_->DebugDraw();

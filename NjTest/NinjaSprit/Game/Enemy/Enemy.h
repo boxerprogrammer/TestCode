@@ -1,5 +1,6 @@
 #pragma once
 #include "../Character.h"
+#include<vector>
 class Player;
 class Spawner;
 class Enemy : public Character
@@ -60,5 +61,7 @@ public:
 	/// </summary>
 	/// <returns>OK:true,NG:false</returns>
 	virtual bool IsDeletable()const;
+
+	virtual const std::vector<Circle>& GetCircles()const = 0;
 };
 

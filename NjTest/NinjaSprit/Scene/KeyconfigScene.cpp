@@ -52,6 +52,7 @@ KeyconfigScene::KeyconfigScene(SceneController& c, const Vector2& offset) :
 	moveSE_ = fileMgr.Load(L"Resource/Sound/System/cursor.wav")->Handle();
 	decideSE_ = fileMgr.Load(L"Resource/Sound/System/decide.wav")->Handle();
 	cancelSE_ = fileMgr.Load(L"Resource/Sound/System/cancel.wav")->Handle();
+	changeSE_ = fileMgr.Load(L"Resource/Sound/System/change.wav")->Handle();
 }
 
 void 
@@ -116,14 +117,20 @@ KeyconfigScene::EditUpdate(const Input& input) {
 			if (p.type == PeripheralType::keyboard) {
 				for (int i = 0; i < input.rawkeystate_.size(); ++i) {
 					if (input.rawkeystate_[i]) {
-						p.inputIdx = i;
+						if (i != p.inputIdx) {
+							PlaySoundMem(changeSE_, DX_PLAYTYPE_BACK);
+							p.inputIdx = i;
+						}
 						break;
 					}
 				}
 			}
 			else if(p.type==PeripheralType::gamepad){
 				if (input.rawpadstate_ != 0) {
-					p.inputIdx = input.rawpadstate_;
+					if (p.inputIdx != input.rawpadstate_) {
+						PlaySoundMem(changeSE_, DX_PLAYTYPE_BACK);
+						p.inputIdx = input.rawpadstate_;
+					}
 				}
 			}
 		}

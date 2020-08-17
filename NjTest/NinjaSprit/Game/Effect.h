@@ -47,6 +47,8 @@ private:
 	int bloodSE_ = -1;
 	int blowH_ = -1;
 	int hitSE_ = -1;
+	int groundExpH_ = -1;
+	int smokeExpH_ = -1;
 	std::list<std::shared_ptr<Effect>> effects_;
 	std::shared_ptr<Camera> camera_;
 public:
@@ -58,6 +60,20 @@ public:
 	/// <param name="pos">表示座標</param>
 	/// <param name="isTurn">反転フラグ</param>
 	void EmitBlood(const Position2f& pos,bool isTurn=false);
+
+	/// <summary>
+	/// 地面爆発エフェクト発生
+	/// </summary>
+	/// <param name="pos">表示座標</param>
+	/// <param name="isTurn">反転フラグ</param>
+	void EmitGroundExplosion(const Position2f& pos, bool isTurn = false);
+
+	/// <summary>
+	/// 煙幕爆発エフェクト発生
+	/// </summary>
+	/// <param name="pos">表示座標</param>
+	/// <param name="isTurn">反転フラグ</param>
+	void EmitSmokeExplosion(const Position2f& pos, bool isTurn = false);
 
 	/// <summary>
 	/// 小爆発３つエフェクト発生

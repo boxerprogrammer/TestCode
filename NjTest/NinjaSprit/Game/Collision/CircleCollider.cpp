@@ -45,7 +45,7 @@ CircleCollider::Draw() {
 		col = 0xffaaaa;
 	}
 	auto offset = GetCameraOffset();
-	DrawCircleAA(pos.x+ offset.x,pos.y,circle_.radius,col,0,2);
+	DrawCircleAA(pos.x+ offset.x,pos.y,circle_.radius,24,col,0,2);
 #endif
 }
 

@@ -25,10 +25,20 @@ class Input
 {
 	friend KeyconfigScene;
 private:
-	mutable std::vector<char> rawkeystate_;
-	mutable int rawpadstate_;
-	mutable bool isRawMode_ = false;
+	mutable std::vector<char> rawkeystate_;//生キーボードステート
+	mutable int rawpadstate_;//生パッドステート(1コンのみ)
+	mutable bool isRawMode_ = false;//生モード
+	/// <summary>
+	/// 生モードをアンロックする
+	/// このアンロックによって通常はローカルにのみ存在する
+	/// 生キーボード、生パッド情報が保持され参照できるようになる
+	/// </summary>
 	void UnlockRawMode()const;
+
+	/// <summary>
+	/// 生モードをロックする
+	/// このモードで生データにアクセスしようとすればアサーションを起こす
+	/// </summary>
 	void LockRawMode()const;
 	/// <summary>
 	/// 生キーボード情報を持ってくる
@@ -44,9 +54,12 @@ private:
 	/// <returns>生パッド情報</returns>
 	const int GetRawPadState()const;
 	
-	mutable PeripheralReferenceTable_t peripheralReferenceTable_;
-
-	void SetPeripheraReferenceTable(const PeripheralReferenceTable_t& p)const;
+	mutable PeripheralReferenceTable_t peripheralReferenceTable_;///外側からいじれる用
+	/// <summary>
+	/// 外側から入力テーブルをいじれる用の関数
+	/// </summary>
+	/// <param name="prt">変更が行われた入力テーブル(一部)</param>
+	void SetPeripheraReferenceTable(const PeripheralReferenceTable_t& prt)const;
 
 	int currentInputIndex_ = 0;///<summary>現在の入力バッファを指すインデックス</summary>
 	using InputStateTable_t = std::unordered_map<std::string, bool>;

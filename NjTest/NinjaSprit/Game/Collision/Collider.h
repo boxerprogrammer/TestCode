@@ -20,13 +20,37 @@ private:
 protected:
 	bool isDeletable_ = false;//死んでもいいフラグ
 	bool isImmortal_ = false;//不滅フラグ
+	bool isActive_ = true;
 	Vector2f GetCameraOffset();
 public:
 	Collider(std::shared_ptr<Character> owner,const char* tag="",bool immortal=false);
 	virtual ~Collider() = default;
 
+	/// <summary>
+	/// 削除しても大丈夫？
+	/// </summary>
+	/// <returns></returns>
 	bool IsDeletable()const;
+	/// <summary>
+	/// 自殺
+	/// </summary>
 	void Suicide();
+	
+	/// <summary>
+	/// 一時的に機能しなくする
+	/// </summary>
+	void Sleep();
+	/// <summary>
+	/// 機能するようにする
+	/// </summary>
+	void Awake();
+	/// <summary>
+	/// 当たり判定は機能しているか？
+	/// </summary>
+	/// <returns>true:機能する false:機能しない</returns>
+	bool IsActive()const;
+
+	
 	const std::string& GetTag()const;
 
 	/// <summary>

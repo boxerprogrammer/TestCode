@@ -41,6 +41,7 @@ Camera::Update() {
 	auto& viewport=app.GetViewport();
 	const auto& cameraSize=viewport.GetSize();
 	pos_ = player_->GetPosition();
+	pos_.y = cameraSize.h / 2.0f;
 	//X‚Ì”ÍˆÍ§ŒÀ
 	pos_.x = Clamp(pos_.x,cameraSize.w/2.0f,stageSize_.w-cameraSize.w/2.0f);
 	

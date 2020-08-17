@@ -1,5 +1,6 @@
 #pragma once
 #include<type_traits>
+#include<algorithm>
 /// <summary>
 /// Š„‚èØ‚ê‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·
 /// </summary>
@@ -45,6 +46,16 @@ inline T ModuloDecrement(const T& value, const T& modulo) {
 template<typename T>
 inline bool InRange(const T& value, const T& minValue, const T& maxValue) {
 	return minValue <= value && value <= maxValue;
+}
+
+template<typename T>
+inline T SaturateAdd(const T& value, const T& addVal,const T& maxVal) {
+	return std::min(value + addVal, maxVal);
+}
+
+template<typename T>
+inline T SaturateSubtract(const T& value, const T& subVal, const T& minVal) {
+	return std::max(value - subVal, minVal);
 }
 
 ///<summary>

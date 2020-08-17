@@ -26,6 +26,7 @@ CollisionManager::Update() {
 	colliders_.erase(it,colliders_.end());
 	for (auto& colA : colliders_) {
 		if (colA->IsDeletable() || colA->OwnerIsDead())continue;
+		if (!colA->IsActive())continue;
 		for (auto& colB : colliders_) {
 			if (colB->IsDeletable() || colB->OwnerIsDead())continue;
 			if (colA == colB) {
@@ -41,12 +42,24 @@ CollisionManager::Update() {
 			if (colA->IsHit(colB) || colB->IsHit(colA)) {
 				CollisionInfo colInfoB = { colB };
 				colA->GetOwner()->OnHit(colInfoB);
-				colA->Suicide();
+				if (colA->GetOwner()->IsActive()) {
+					colA->Sleep();
+				}else {
+					colA->Suicide();
+				}
 				CollisionInfo colInfoA = { colA };
 				colB->GetOwner()->OnHit(colInfoA);
-				colB->Suicide();
+				if (colB->GetOwner()->IsActive()) {
+					colB->Sleep();
+				}
+				else {
+					colB->Suicide();
+				}
 			}
 		}
+	}
+	for (auto& col : colliders_) {
+		col->Awake();
 	}
 }
 void 

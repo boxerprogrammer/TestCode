@@ -4,6 +4,24 @@
 
 using namespace std;
 
+
+// 一時的に機能しなくする
+void 
+Collider::Sleep() {
+	isActive_ = true;
+}
+// 機能するようにする
+void 
+Collider::Awake() {
+	isActive_ = true;
+}
+// 当たり判定は機能しているか？
+bool 
+Collider::IsActive()const {
+	return isActive_;
+}
+
+
 Vector2f 
 Collider::GetCameraOffset(){
 	if (owner_.expired()) {

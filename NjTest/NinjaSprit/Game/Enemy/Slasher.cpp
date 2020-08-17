@@ -42,10 +42,11 @@ void Slasher::OnHit(CollisionInfo& col){
 	}
 }
 
-Slasher::Slasher(const std::shared_ptr<Player>& p, std::shared_ptr<Camera> camera,std::shared_ptr<Stage> stg) :
-Enemy(p,camera),
-stage_(stg)
+Slasher::Slasher(const std::shared_ptr<Player>& p, std::shared_ptr<Camera> camera, std::shared_ptr<Stage> stg) :
+	Enemy(p, camera),
+	stage_(stg)
 {
+	life_ = 1;
 	auto& fileMgr = FileManager::Instance();
 	if (runH == -1) {
 		runH = fileMgr.Load(L"Resource/Image/Enemy/Slasher/run.png")->Handle();
@@ -61,6 +62,11 @@ stage_(stg)
 Slasher::Slasher(const std::shared_ptr<Player>& p, std::shared_ptr<EffectManager> efktMng, std::shared_ptr<Camera> camera, std::shared_ptr<Stage> stg):
 	Slasher(p,camera,stg) {
 	effectManager_ = efktMng;
+}
+
+const std::vector<Circle>&
+Slasher::GetCircles()const{
+	return std::vector<Circle>();
 }
 
 Enemy* 

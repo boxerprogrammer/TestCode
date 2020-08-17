@@ -14,7 +14,10 @@ class Character
 protected:
 	Position2f pos_;//キャラ中心座標
 	std::shared_ptr<Camera> camera_;
+	bool isActive_ = true;
 public:
+	bool IsActive()const { return isActive_; }
+
 	/// <summary>
 	/// キャラクタ基底クラスコンストラクタ
 	/// </summary>

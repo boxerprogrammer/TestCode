@@ -93,6 +93,8 @@ BombShot::NoDraw() {
 void
 BombShot::OnHit(CollisionInfo& info) {
 	if (info.collider->GetTag() != tag_player_attack) {
-		Explode();
+		if (updater_ == &BombShot::NormalUpdate) {
+			Explode();
+		}
 	}
 }

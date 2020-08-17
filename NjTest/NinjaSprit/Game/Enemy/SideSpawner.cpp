@@ -13,7 +13,7 @@ namespace {
 	mt19937 mt;
 }
 
-SideSpawner::SideSpawner(const Position2f& pos, Enemy* prototype, std::shared_ptr<EnemyManager>& em, std::shared_ptr<CollisionManager> cm,shared_ptr<Camera> c):
+SideSpawner::SideSpawner(const Position2f& pos, Enemy* prototype, std::shared_ptr<EnemyManager> em, std::shared_ptr<CollisionManager> cm,shared_ptr<Camera> c):
 collisionManager_(cm)
 ,Spawner(pos,prototype,em,c){
 

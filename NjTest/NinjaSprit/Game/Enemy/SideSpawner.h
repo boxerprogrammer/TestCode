@@ -20,7 +20,7 @@ public:
 	/// <param name="camera">敵発生器の発動タイミングのためのカメラへの参照</param>
 	/// <returns></returns>
 	SideSpawner(const Position2f& pos, Enemy* prototype, 
-		std::shared_ptr<EnemyManager>& enemyManager,
+		std::shared_ptr<EnemyManager> enemyManager,
 		std::shared_ptr<CollisionManager> collisionManager, 
 		std::shared_ptr<Camera> camera);
 

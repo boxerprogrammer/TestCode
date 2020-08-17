@@ -9,7 +9,7 @@ class Projectile : public Character
 {
 protected:
 	Vector2f vel_;
-	bool isActive_=false;//有効フラグ
+//	bool isActive_=false;//有効フラグ
 public:
 	/// <summary>
 	/// 死んだかどうか

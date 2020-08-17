@@ -12,6 +12,7 @@ class EnemyManager;
 class EffectManager;
 class CollisionManager;
 class Spawner;
+class Enemy;
 class Stage;
 class Camera;
 class GameplayingScene:public Scene 
@@ -20,6 +21,11 @@ class GameplayingScene:public Scene
 private:
 
 	int weaponUIH_[3];
+
+	int bgm_ = -1;
+	int bgmVolume_ = 150;
+	int bossBgm_ = -1;
+	int ashuraH_ = -1;
 
 	GameplayingScene(SceneController&);
 
@@ -33,8 +39,13 @@ private:
 	std::shared_ptr<Stage> stage_;
 	std::shared_ptr<Camera> camera_;
 
+	void InitializeUpdate(const Input&);
 	void FadeinUpdate(const Input&);
 	void NormalUpdate(const Input&);
+	void Fadeout();
+	void BossBattleUpdate(const Input&);
+	void BossEnterUpdate(const Input&);
+	void BossDyingUpdate(const Input&);
 	void FadeoutUpdate(const Input&);
 
 	using UpdateFunction_t = void (GameplayingScene::*)(const Input&);
@@ -43,6 +54,7 @@ private:
 
 
 	void NormalDraw();
+	void BossDraw();
 	void FadeDraw();
 	void (GameplayingScene::* drawer_)();
 
@@ -50,6 +62,16 @@ private:
 
 public:
 	~GameplayingScene();
+
+	/// <summary>
+	/// ボス戦に突入
+	/// </summary>
+	void OnBossEnter();
+	/// <summary>
+	/// ボス死亡
+	/// </summary>
+	void OnBossDie();
+
 	/// <summary>
 	/// シーンが持ってるプレイヤーを返す
 	/// </summary>
@@ -73,12 +95,33 @@ public:
 	std::shared_ptr<CollisionManager> GetCollisionManager();
 
 	/// <summary>
+	/// シーンが持っているエフェクトマネージャを返す
+	/// </summary>
+	/// <returns>エフェクトマネージャ</returns>
+	std::shared_ptr<EffectManager> GetEffectManager();
+
+	/// <summary>
+	/// シーンが持っている敵マネージャを返す
+	/// </summary>
+	/// <returns>敵マネージャ</returns>
+	std::shared_ptr<EnemyManager> GetEnemyManager();
+
+	/// <summary>
 	/// シーンが持っている飛び道具管理オブジェクトへの参照を返す
 	/// </summary>
 	/// <returns>飛び道具管理オブジェクトの参照</returns>
 	ProjectileManager& GetProjectileManager();
 
+	/// <summary>
+	/// 敵発生器を登録する
+	/// </summary>
+	/// <param name="spawner">敵発生器</param>
+	void AddSpawner(Spawner* spawner);
 
+	/// <summary>
+	/// 入力リスナーを登録する
+	/// </summary>
+	/// <param name="listener">入力リスナオブジェクト</param>
 	void AddListener(std::shared_ptr<InputListener> listener);
 	/// <summary>
 	/// ゲーム本編シーン更新

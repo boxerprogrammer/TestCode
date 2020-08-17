@@ -14,6 +14,7 @@ struct StageHeader {
 	unsigned char bitCount;//8固定
 };
 class Camera;
+class GameplayingScene;
 /// <summary>
 /// ステージデータ読み込み
 /// およびデータの管理を行う
@@ -27,10 +28,19 @@ private:
 	std::vector<Segment> terrainSegment_;
 	StageHeader header_;
 	std::shared_ptr<Camera> camera_;
+	GameplayingScene* gameScene_;
 	void CreateSegment(Position2f& lastPos, const Position2f& pos);
+
+	using Updater_t = void (Stage::*)();
+	Updater_t updater_;
+	void NormalUpdate();
+	void BossUpdate();
+	bool isBossMode_=false;
+	void CheckBossMode();
+
 public:
 	/// <param name="camera">カメラポインタ</param>
-	Stage(std::shared_ptr<Camera> camera);
+	Stage(std::shared_ptr<Camera> camera, GameplayingScene* gs);
 
 	/// <summary>
 	/// ステージのロード
