@@ -1,6 +1,6 @@
 #pragma once
 #include "Boss.h"
-
+#include<array>
 
 class EffectManager;
 /// <summary>
@@ -10,6 +10,11 @@ class Asura :
     public Boss
 {
 private:
+    std::array<Vector2f, 4> energyPositions_ = { Vector2f(-128.0f,-420.0f ),
+                                Vector2f(128.0f,-420.0f),
+                                Vector2f(-100.0f,-300.0f),
+                                Vector2f(100.0f,-300.0f)};
+    std::array<int, 4> energyTimes_;
     std::shared_ptr<EffectManager> effectManager_;
     int ashuraH_ = -1;
     int frame_ = 0;

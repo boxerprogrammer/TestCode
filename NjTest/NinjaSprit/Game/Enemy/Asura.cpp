@@ -7,12 +7,17 @@
 #include"../../Scene/GameplayingScene.h"
 #include"../Effect.h"
 #include<DxLib.h>
+#include<random>
+
+using namespace std;
 
 namespace {
 	float ground_line = 0.0f;
 	float entering_speed = 3.0f;
 	constexpr float draw_scale = 1.2f;
-	constexpr float chichu_y = 1100.f;
+	constexpr float chichu_y = 1100.f;//ちょうど全身隠れる深さ
+	mt19937 mt_(1);
+	uniform_int_distribution<int> dist_(80,180);
 }
 
 Enemy*
@@ -27,17 +32,18 @@ Asura::Asura(GameplayingScene* gs):Boss(gs) {
 	auto& fileMgr = FileManager::Instance();
 	ashuraH_ = fileMgr.Load(L"Resource/Image/Enemy/ashura.png")->Handle();
 
-	
-
 	auto rc = camera_->GetViewRange();
 	//左右中央に配置
 	pos_.x = static_cast<float>(rc.Left() + rc.Right()) / 2.0f;
 	pos_.y = chichu_y;//地中深くに
-	ground_line = rc.Height() - 16;
+	ground_line = rc.Height() - 16;//ちょうどボス戦の地面の高さ
 	circles_.emplace_back(Position2f(0, -400), 50);
 
 	life_ = 100;
 	effectManager_ = gs->GetEffectManager();
+	for (auto& t : energyTimes_) {
+		t = dist_(mt_);
+	}
 }
 
 //登場演出状態
@@ -60,7 +66,12 @@ Asura::GetCircles()const {
 //通常状態
 void 
 Asura::NormalUpdate() {
-
+	for (int i = 0; i < energyTimes_.size();++i) {
+		if (--energyTimes_[i] <= 0) {
+			energyTimes_[i] = dist_(mt_);
+			effectManager_->EmitEnergyBall(energyPositions_[i]+pos_);
+		}
+	}
 }
 
 void

@@ -1,5 +1,5 @@
 #include "ShurikenEquip.h"
-#include"ProjectileManager.h"
+#include"../ProjectileManager.h"
 #include"../Collision/CollisionManager.h"
 #include"../Collision/CircleCollider.h"
 #include<DxLib.h>

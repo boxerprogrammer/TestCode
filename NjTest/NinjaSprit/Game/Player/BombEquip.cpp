@@ -1,5 +1,5 @@
 #include "BombEquip.h"
-#include"ProjectileManager.h"
+#include"../ProjectileManager.h"
 #include"BombShot.h"
 #include"Player.h"
 #include"../../Input/Input.h"

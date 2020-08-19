@@ -59,6 +59,7 @@ CollisionManager::Update() {
 		}
 	}
 	for (auto& col : colliders_) {
+		if (col->IsDeletable() || col->OwnerIsDead())continue;
 		col->Awake();
 	}
 }

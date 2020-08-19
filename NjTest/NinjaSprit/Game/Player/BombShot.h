@@ -1,5 +1,5 @@
 #pragma once
-#include "Projectile.h"
+#include "../Projectile.h"
 /// <summary>
 /// ƒvƒŒƒCƒ„[‚ª”­Ë‚·‚é”š’e
 /// </summary>

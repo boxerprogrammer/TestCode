@@ -13,7 +13,7 @@
 #include"../Geometry.h"
 #include"../Game/Player/Player.h"
 #include"../Game/Background.h"
-#include"../Game/Player/ProjectileManager.h"
+#include"../Game/ProjectileManager.h"
 #include"../Game/Enemy/EnemyManager.h"
 #include"../Game/Enemy/SideSpawner.h"
 #include"../Game/Enemy/Slasher.h"
@@ -85,9 +85,7 @@ GameplayingScene::GetEffectManager() {
 //初期化用アップデータ
 void 
 GameplayingScene::InitializeUpdate(const Input&) {
-
 	auto& fileMgr = FileManager::Instance();
-
 	collisionManager_ = make_shared<CollisionManager>();
 
 	camera_ = make_shared<Camera>();
@@ -114,14 +112,6 @@ GameplayingScene::InitializeUpdate(const Input&) {
 			enemyManager_,
 			collisionManager_,
 			camera_));
-	//spawners_.emplace_back(new SideSpawner(
-	//	Position2f(0, 0),
-	//	new Slasher(player_, effectManager_, camera_, stage_),
-	//	enemyManager_,
-	//	collisionManager_,
-	//	camera_));
-
-
 
 	weaponUIH_[0] = fileMgr.Load(L"Resource/Image/UI/bomb.png")->Handle();
 	weaponUIH_[1] = fileMgr.Load(L"Resource/Image/UI/shuriken.png")->Handle();

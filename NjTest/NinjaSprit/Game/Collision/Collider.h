@@ -20,7 +20,7 @@ private:
 protected:
 	bool isDeletable_ = false;//死んでもいいフラグ
 	bool isImmortal_ = false;//不滅フラグ
-	bool isActive_ = true;
+	bool isActive_ = true;//アクティブなフラグ(多段ヒットに対応)
 	Vector2f GetCameraOffset();
 public:
 	Collider(std::shared_ptr<Character> owner,const char* tag="",bool immortal=false);

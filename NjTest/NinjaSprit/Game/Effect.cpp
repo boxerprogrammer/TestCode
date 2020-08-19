@@ -143,6 +143,44 @@ namespace {
 
 		}
 	};
+
+	/// <summary>
+	/// ÉGÉlÉãÉMÅ[ãÖ
+	/// </summary>
+	class Energyball : public Effect {
+	private:
+		bool isTurn_ = false;
+		int h_;
+		int lifetime_ = 60;
+	public:
+		Energyball(const Position2f& p, int h, std::shared_ptr<Camera> c,int lifetime, bool isTurn) :
+			Effect(p, c),
+			isTurn_(isTurn),
+			h_(h),
+			lifetime_(lifetime){
+			isDeletable_ = false;
+			frame_ = 0;
+		}
+		void Update()override {
+			if (frame_ >= lifetime_) {
+				isDeletable_ = true;
+			}
+		}
+		void Draw()override {
+			int idx = (frame_%60) / 2;
+			int idxX = idx % 6;
+			int idxY = idx / 6;
+			const auto xoffset = camera_->ViewOffset().x;
+			DrawRectRotaGraph(
+				static_cast<int>(pos_.x+ xoffset), static_cast<int>(pos_.y),
+				idxX*100,idxY*100,
+				100, 100,
+				1.0f, 0.0f,
+				h_, true, isTurn_);
+			++frame_;
+		}
+	};
+
 }
 mt19937 mt_;
 EffectManager::EffectManager(shared_ptr<Camera> c):camera_(c) {
@@ -166,7 +204,9 @@ EffectManager::EffectManager(shared_ptr<Camera> c):camera_(c) {
 	if (smokeExpH_ == -1) {
 		smokeExpH_ = fileMgr.Load(L"Resource/Image/Effect/smoke_exp.png")->Handle();
 	}
-
+	if (energyBallH_ == -1) {
+		energyBallH_ = fileMgr.Load(L"Resource/Image/Effect/chargeball.png")->Handle();
+	}
 }
 
 void 
@@ -177,6 +217,11 @@ EffectManager::EmitGroundExplosion(const Position2f& pos, bool isTurn) {
 void
 EffectManager::EmitSmokeExplosion(const Position2f& pos, bool isTurn) {
 
+}
+
+void 
+EffectManager::EmitEnergyBall(const Position2f& pos, int lifetime , bool isTurn ) {
+	effects_.emplace_back(new Energyball(pos,energyBallH_, camera_, lifetime,isTurn));
 }
 
 void 
