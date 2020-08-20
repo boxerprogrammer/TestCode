@@ -59,7 +59,7 @@ private:
 	/// 外側から入力テーブルをいじれる用の関数
 	/// </summary>
 	/// <param name="prt">変更が行われた入力テーブル(一部)</param>
-	void SetPeripheraReferenceTable(const PeripheralReferenceTable_t& prt)const;
+	void SetPeripheralReferenceTable(const PeripheralReferenceTable_t& prt)const;
 
 	int currentInputIndex_ = 0;///<summary>現在の入力バッファを指すインデックス</summary>
 	using InputStateTable_t = std::unordered_map<std::string, bool>;

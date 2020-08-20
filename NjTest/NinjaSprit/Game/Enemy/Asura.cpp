@@ -5,6 +5,8 @@
 #include"../../System/FileManager.h"
 #include"../Collision/Collider.h"
 #include"../../Scene/GameplayingScene.h"
+#include"../ProjectileManager.h"
+#include"AsuraBullet.h"
 #include"../Effect.h"
 #include<DxLib.h>
 #include<random>
@@ -30,7 +32,7 @@ Asura::Asura(GameplayingScene* gs):Boss(gs) {
 	drawer_ = &Asura::NormalDraw;
 
 	auto& fileMgr = FileManager::Instance();
-	ashuraH_ = fileMgr.Load(L"Resource/Image/Enemy/ashura.png")->Handle();
+	ashuraH_ = fileMgr.Load(L"Resource/Image/Enemy/asura/ashura.png")->Handle();
 
 	auto rc = camera_->GetViewRange();
 	//ç∂âEíÜâõÇ…îzíu
@@ -69,7 +71,15 @@ Asura::NormalUpdate() {
 	for (int i = 0; i < energyTimes_.size();++i) {
 		if (--energyTimes_[i] <= 0) {
 			energyTimes_[i] = dist_(mt_);
-			effectManager_->EmitEnergyBall(energyPositions_[i]+pos_);
+			auto pos = energyPositions_[i] + pos_;
+			effectManager_->EmitEnergyBall(pos);
+			float angle = 0.0f;
+			for(int i=0;i<8;++i){
+				Vector2f vel(cosf(angle), sinf(angle));
+				vel *= 4.0f;
+				gameScene_->GetProjectileManager().AddProjectile(new AsuraBullet(pos + vel, vel, camera_));
+				angle += DX_PI_F / 4.0f;
+			}
 		}
 	}
 }

@@ -95,20 +95,25 @@ Input::CheckPressed(const char* eventname, const char* keystate, int padstate) {
 	return ret;
 }
 void 
-Input::SetPeripheraReferenceTable(const PeripheralReferenceTable_t& p)const {
+Input::SetPeripheralReferenceTable(const PeripheralReferenceTable_t& p)const {
 	//あるやつだけ更新する
+	//const関数ではあるが、KeyconfigSceneのときにのみ
+	//mutableとして更新する
 	for (const auto& ref : p) {
 		peripheralReferenceTable_[ref.first] = ref.second;
 	}
 }
 void 
 Input::UnlockRawMode()const {
-	isRawMode_ = true;
-	
+	//この関数はconstだが、mutable変数のみは
+	//編集可能としている(friendなKeyconfigSceneに対してのみ)
+	isRawMode_ = true;	
 	rawkeystate_.resize(256);
 }
 void 
 Input::LockRawMode()const {
+	//この関数はconstだが、mutable変数のみは
+	//編集可能としている(friendなKeyconfigSceneに対してのみ)
 	isRawMode_ = false;
 	rawpadstate_ = 0;
 	rawkeystate_.clear();

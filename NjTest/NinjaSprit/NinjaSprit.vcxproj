@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Arithmetic.cpp" />
+    <ClCompile Include="Game\Enemy\AsuraBullet.cpp" />
     <ClCompile Include="Game\Enemy\BossSpawner.cpp" />
     <ClCompile Include="Game\Enemy\Asura.cpp" />
     <ClCompile Include="Game\Enemy\Boss.cpp" />
@@ -193,6 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arithmetic.h" />
+    <ClInclude Include="Game\Enemy\AsuraBullet.h" />
     <ClInclude Include="Game\Enemy\BossSpawner.h" />
     <ClInclude Include="Game\Enemy\Asura.h" />
     <ClInclude Include="Game\Enemy\Boss.h" />

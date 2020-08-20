@@ -25,7 +25,7 @@ inline bool IsDivisible(const T& val, const T& div) {
 /// <returns>è—]‰ÁZ‚ğs‚Á‚½’l</returns>
 template<typename T>
 inline T ModuloIncrement(const T& value, const T& modulo) {
-	static_assert(std::is_integral<T>::value);
+	static_assert(std::is_integral<T>::value,"®”Œ^‚ÉŒÀ‚é");
 	return (value + 1) % modulo;
 }
 /// <summary>
@@ -39,7 +39,7 @@ inline T ModuloIncrement(const T& value, const T& modulo) {
 /// <returns>è—]Œ¸Z‚ğs‚Á‚½’l</returns>
 template<typename T>
 inline T ModuloDecrement(const T& value, const T& modulo) {
-	static_assert(std::is_integral<T>::value);
+	static_assert(std::is_integral<T>::value, "®”Œ^‚ÉŒÀ‚é");
 	return (value + modulo - 1) % modulo;
 }
 

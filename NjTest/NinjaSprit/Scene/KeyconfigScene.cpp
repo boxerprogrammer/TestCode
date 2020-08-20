@@ -11,6 +11,77 @@
 using namespace std;
 
 namespace {
+	wstring vkeyname[256] = {};
+	void InitVkeyName() {
+		vkeyname[KEY_INPUT_RETURN] = L"ENTERキー";
+		vkeyname[KEY_INPUT_ESCAPE] = L"ESCキー";
+		vkeyname[KEY_INPUT_0] = L"０キー";
+		vkeyname[KEY_INPUT_1] = L"１キー";
+		vkeyname[KEY_INPUT_2] = L"２キー";
+		vkeyname[KEY_INPUT_3] = L"３キー";
+		vkeyname[KEY_INPUT_4] = L"４キー";
+		vkeyname[KEY_INPUT_5] = L"５キー";
+		vkeyname[KEY_INPUT_6] = L"６キー";
+		vkeyname[KEY_INPUT_7] = L"７キー";
+		vkeyname[KEY_INPUT_8] = L"８キー";
+		vkeyname[KEY_INPUT_9] = L"９キー";
+		vkeyname[KEY_INPUT_A] = L"Ａキー";
+		vkeyname[KEY_INPUT_B] = L"Ｂキー";
+		vkeyname[KEY_INPUT_C] = L"Ｃキー";
+		vkeyname[KEY_INPUT_D] = L"Ｄキー";
+		vkeyname[KEY_INPUT_E] = L"Ｅキー";
+		vkeyname[KEY_INPUT_F] = L"Ｆキー";
+		vkeyname[KEY_INPUT_G] = L"Ｇキー";
+		vkeyname[KEY_INPUT_H] = L"Ｈキー";
+		vkeyname[KEY_INPUT_I] = L"Ｉキー";
+		vkeyname[KEY_INPUT_J] = L"Ｊキー";
+		vkeyname[KEY_INPUT_K] = L"Ｋキー";
+		vkeyname[KEY_INPUT_L] = L"Ｌキー";
+		vkeyname[KEY_INPUT_M] = L"Ｍキー";
+		vkeyname[KEY_INPUT_N] = L"Ｎキー";
+		vkeyname[KEY_INPUT_O] = L"Ｏキー";
+		vkeyname[KEY_INPUT_P] = L"Ｐキー";
+		vkeyname[KEY_INPUT_Q] = L"Ｑキー";
+		vkeyname[KEY_INPUT_R] = L"Ｒキー";
+		vkeyname[KEY_INPUT_S] = L"Ｓキー";
+		vkeyname[KEY_INPUT_T] = L"Ｔキー";
+		vkeyname[KEY_INPUT_U] = L"Ｕキー";
+		vkeyname[KEY_INPUT_V] = L"Ｖキー";
+		vkeyname[KEY_INPUT_W] = L"Ｗキー";
+		vkeyname[KEY_INPUT_X] = L"Ｘキー";
+		vkeyname[KEY_INPUT_Y] = L"Ｙキー";
+		vkeyname[KEY_INPUT_Z] = L"Ｚキー";
+		vkeyname[KEY_INPUT_BACK] = L"BackSpaceキー";
+		vkeyname[KEY_INPUT_TAB] = L"Tabキー";
+		vkeyname[KEY_INPUT_LSHIFT] = L"左Shiftキー";
+		vkeyname[KEY_INPUT_RSHIFT] = L"右Shiftキー";
+		vkeyname[KEY_INPUT_LCONTROL] = L"左Ctrlキー";
+		vkeyname[KEY_INPUT_RCONTROL] = L"右Ctrlキー";
+		vkeyname[KEY_INPUT_ESCAPE] = L"Escキー";
+		vkeyname[KEY_INPUT_SPACE] = L"スペースキー";
+		vkeyname[KEY_INPUT_PGUP] = L"PageUpキー";
+		vkeyname[KEY_INPUT_PGDN] = L"PageDownキー";
+		vkeyname[KEY_INPUT_END] = L"Endキー";
+		vkeyname[KEY_INPUT_HOME] = L"Homeキー";
+		vkeyname[KEY_INPUT_LEFT] = L"左キー";
+		vkeyname[KEY_INPUT_UP] = L"上キー";
+		vkeyname[KEY_INPUT_RIGHT] = L"右キー";
+		vkeyname[KEY_INPUT_DOWN] = L"下キー";
+		vkeyname[KEY_INPUT_INSERT] = L"Insertキー";
+		vkeyname[KEY_INPUT_DELETE] = L"Deleteキー";
+		vkeyname[KEY_INPUT_F1] = L"Ｆ１キー";
+		vkeyname[KEY_INPUT_F2] = L"Ｆ２キー";
+		vkeyname[KEY_INPUT_F3] = L"Ｆ３キー";
+		vkeyname[KEY_INPUT_F4] = L"Ｆ４キー";
+		vkeyname[KEY_INPUT_F5] = L"Ｆ５キー";
+		vkeyname[KEY_INPUT_F6] = L"Ｆ６キー";
+		vkeyname[KEY_INPUT_F7] = L"Ｆ７キー";
+		vkeyname[KEY_INPUT_F8] = L"Ｆ８キー";
+		vkeyname[KEY_INPUT_F9] = L"Ｆ９キー";
+		vkeyname[KEY_INPUT_F10] = L"Ｆ１０キー";
+		vkeyname[KEY_INPUT_F11] = L"Ｆ１１キー";
+		vkeyname[KEY_INPUT_F12] = L"Ｆ１２キー";
+	}
 	constexpr int keyconfig_title_y = 32;//ポーズタイトルのY
 	constexpr int menubase_x = 64;//メニューの左
 	constexpr int menubase_y = 64;//メニューの一番上のY
@@ -42,8 +113,9 @@ namespace {
 }
 KeyconfigScene::KeyconfigScene(SceneController& c, const Vector2& offset) :
 	Scene(c),
-	updater_(&KeyconfigScene::InUpdate),
+	updater_(&KeyconfigScene::InitializeUpdate),
 	drawer_(&KeyconfigScene::NormalDraw) {
+	InitVkeyName();
 	frameRect_.pos += offset;
 	auto& fileMgr = FileManager::Instance();
 	titleW_ = static_cast<size_t>(DxLib::GetDrawStringWidth(keyconfig_title, static_cast<int>(wcslen(keyconfig_title))));
@@ -57,7 +129,7 @@ KeyconfigScene::KeyconfigScene(SceneController& c, const Vector2& offset) :
 
 void 
 KeyconfigScene::CommitCurrentKeyConfig(const Input& input) {
-	input.SetPeripheraReferenceTable(peripheralReferenceTable_);
+	input.SetPeripheralReferenceTable(peripheralReferenceTable_);
 }
 
 
@@ -81,7 +153,7 @@ KeyconfigScene::CancelEdit(const Input& input) {
 
 //最初のUpdate
 void
-KeyconfigScene::InUpdate(const Input& input) {
+KeyconfigScene::InitializeUpdate(const Input& input) {
 	if (peripheralReferenceTable_.empty()) {
 		string removableEvents[] = { "up","down","left","right" };
 		for (const auto& ref : input.peripheralReferenceTable_) {
@@ -115,8 +187,9 @@ KeyconfigScene::EditUpdate(const Input& input) {
 		auto& ref = peripheralReferenceTable_[menuItems_[currentSelectNo_]];
 		for (auto& p : ref) {
 			if (p.type == PeripheralType::keyboard) {
-				for (int i = 0; i < input.rawkeystate_.size(); ++i) {
-					if (input.rawkeystate_[i]) {
+				const auto& rawkeystate = input.GetRawKeyboardState();
+				for (int i = 0; i < rawkeystate.size(); ++i) {
+					if (rawkeystate[i] && vkeyname[i] != L"") {
 						if (i != p.inputIdx) {
 							PlaySoundMem(changeSE_, DX_PLAYTYPE_BACK);
 							p.inputIdx = i;
@@ -202,11 +275,19 @@ KeyconfigScene::NormalDraw(){
 		
 		for (auto& p : periRef.second) {
 			const wchar_t* wcstr = (p.type == PeripheralType::gamepad) ? L"gamepad" : L"keyboard";
-			DrawFormatString(rc.Left() + menubase_x + xoffset,
-				y,
-				mcolor,
-				L" %s=%04x", wcstr,p.inputIdx);
-			xoffset += 150;
+			if (p.type == PeripheralType::keyboard) {
+				DrawFormatString(rc.Left() + menubase_x + xoffset,
+					y,
+					mcolor,
+					L" %s=%s", wcstr, vkeyname[p.inputIdx].c_str());
+			}
+			else {
+				DrawFormatString(rc.Left() + menubase_x + xoffset,
+					y,
+					mcolor,
+					L" %s=%04x", wcstr, p.inputIdx);
+			}
+			xoffset += 180;
 		}
 		y += menu_y_interval;
 	}

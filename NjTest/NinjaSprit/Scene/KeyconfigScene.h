@@ -26,9 +26,15 @@ private:
 	Rect frameRect_ = { {200,100}, {500,400} };
 	KeyconfigScene(SceneController& c ,const Vector2& offset);
 	void CancelEdit(const Input& input);
-	void InUpdate(const Input&);
-	void EditUpdate(const Input&);
+	
+	//‰Šú‰»‚Ì‚½‚ß‚ÌUpdate
+	//Œ³‚ÌƒL[‚ÌŠ„‚è“–‚Ä‚È‚Ç‚ğ“Ç‚İ‚Ş
+	void InitializeUpdate(const Input&);
+	//’Êíó‘Ô‚ÌUpdate
 	void NormalUpdate(const Input&);
+	//•ÒW’†‚ÌUpdate
+	void EditUpdate(const Input&);
+	
 
 	using UpdateFunction_t = void (KeyconfigScene::*)(const Input&);
 	UpdateFunction_t updater_;
