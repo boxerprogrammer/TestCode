@@ -32,6 +32,7 @@ CollisionManager::Update() {
 			if (colA == colB) {
 				continue;
 			}
+			if (!colB->IsActive())continue;
 			
 			auto cnt= count(
 				begin(hit_combination_table),
@@ -42,13 +43,16 @@ CollisionManager::Update() {
 			if (colA->IsHit(colB) || colB->IsHit(colA)) {
 				CollisionInfo colInfoB = { colB };
 				colA->GetOwner()->OnHit(colInfoB);
+				
 				if (colA->GetOwner()->IsActive()) {
 					colA->Sleep();
 				}else {
 					colA->Suicide();
 				}
+				
 				CollisionInfo colInfoA = { colA };
 				colB->GetOwner()->OnHit(colInfoA);
+				colB->Suicide();
 				if (colB->GetOwner()->IsActive()) {
 					colB->Sleep();
 				}

@@ -14,12 +14,12 @@ BossSpawner::BossSpawner(const Position2f& pos,
 	std::shared_ptr<Camera> c) :
 	collisionManager_(cm)
 	, Spawner(pos, prototype, em, c) {
-	updater_ = &BossSpawner::CreateUpdate;
+	updater_ = &BossSpawner::SpawnUpdate;
 }
 
 
 void 
-BossSpawner::CreateUpdate() {
+BossSpawner::SpawnUpdate() {
 	auto clone = CreateClone();
 	enemyManager_->AddEnemy(clone);
 	const auto& circles=prototype_->GetCircles();
@@ -32,7 +32,7 @@ BossSpawner::CreateUpdate() {
 }
 void 
 BossSpawner::SleepUpdate() {
-	
+	//‰½‚à‚µ‚Ü‚¹‚ñ
 }
 
 

@@ -41,7 +41,7 @@ Asura::Asura(GameplayingScene* gs):Boss(gs) {
 	ground_line = rc.Height() - 16;//‚¿‚å‚¤‚Çƒ{ƒXí‚Ì’n–Ê‚Ì‚‚³
 	circles_.emplace_back(Position2f(0, -400), 50);
 
-	life_ = 100;
+	life_ = 50;
 	effectManager_ = gs->GetEffectManager();
 	for (auto& t : energyTimes_) {
 		t = dist_(mt_);
@@ -152,6 +152,7 @@ Asura::DamageDraw() {
 
 void
 Asura::ExitingDraw() {
+	pos_.x += ((frame_ % 3) - 1)*3;
 	NormalDraw();
 	SetDrawBlendMode(DX_BLENDMODE_MULA, 128);
 	NormalDraw();

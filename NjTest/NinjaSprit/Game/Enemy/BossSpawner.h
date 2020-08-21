@@ -9,7 +9,14 @@ class BossSpawner :
 private:
 	std::shared_ptr<CollisionManager> collisionManager_;//
 
-	void CreateUpdate();
+	/// <summary>
+	/// ƒ{ƒX‚ğ¶¬‚·‚é‚Æ‚«‚¾‚¯‚È‚éó‘Ô
+	/// </summary>
+	void SpawnUpdate();
+
+	/// <summary>
+	/// ‹x–°ó‘Ô
+	/// </summary>
 	void SleepUpdate();
 
 	using Updater_t = void (BossSpawner::*)();

@@ -14,8 +14,15 @@ class Character
 protected:
 	Position2f pos_;//キャラ中心座標
 	std::shared_ptr<Camera> camera_;
+	//生きてるかどうか
+	//だけど、一時的に休眠状態のときも
+	//falseになったりする
 	bool isActive_ = true;
 public:
+	/// <summary>
+	/// そのキャラが生きてるかどうか
+	/// </summary>
+	/// <returns>true:生きてる/false:死んでる</returns>
 	bool IsActive()const { return isActive_; }
 
 	/// <summary>

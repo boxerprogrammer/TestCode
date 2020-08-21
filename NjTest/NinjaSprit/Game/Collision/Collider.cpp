@@ -8,7 +8,7 @@ using namespace std;
 // 一時的に機能しなくする
 void 
 Collider::Sleep() {
-	isActive_ = true;
+	isActive_ = false;
 }
 // 機能するようにする
 void 

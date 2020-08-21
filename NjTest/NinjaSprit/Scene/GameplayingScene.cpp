@@ -100,8 +100,6 @@ GameplayingScene::InitializeUpdate(const Input&) {
 
 	effectManager_ = make_shared<EffectManager>(camera_);
 
-
-	//stage_ = make_shared<Stage>(camera_,this);
 	stage_.reset(new Stage(camera_, this));
 	stage_->Load(L"resource/level/level1.fmf");
 	camera_->SetStageSize(stage_->GetStageSize());
@@ -120,6 +118,7 @@ GameplayingScene::InitializeUpdate(const Input&) {
 	ChangeVolumeSoundMem(bgmVolume_, bgm_);
 	ashuraH_ = fileMgr.Load(L"Resource/Image/Enemy/ashura.png")->Handle();
 	bossBgm_ = LoadBGM(L"Resource/BGM/boss.mp3");
+
 	updater_ = &GameplayingScene::FadeinUpdate;
 }
 

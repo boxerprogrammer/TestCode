@@ -18,6 +18,7 @@ namespace {
 	constexpr float equip_offset_y = -48.0f;
 	constexpr int expansion_frames = 10;
 	constexpr float capsule_radius = 30.0f;
+	constexpr int reciprocal_frames = expansion_frames*2;
 }
 
 bool 
@@ -131,7 +132,7 @@ ChainEquip::Update() {
 		swingPerAngle_ = 0.0f;
 	}
 	//Ä¶‚µ‚Â‚­‚µ‚½‚ç-1‚É–ß‚·
-	if (frame_ > 20) {
+	if (frame_ > reciprocal_frames) {
 		frame_ = -1;
 	}
 	auto& vec = capsuleCollider_->GetCapsule().seg.vec;
@@ -141,8 +142,8 @@ ChainEquip::Update() {
 float 
 ChainEquip::GetCurrentChainLength()const {
 	//s‚Á‚Ä–ß‚é’·‚³‚ğ•\Œ»‚µ‚Ä‚¢‚é
-	int f = abs((frame_ + 10) % 20 - 10);
-	return static_cast<float>(f) * 400.0f / 10.0f;
+	int f = abs((frame_ + expansion_frames) % reciprocal_frames - expansion_frames);
+	return static_cast<float>(f) * 400.0f / (float)expansion_frames;
 }
 
 void
