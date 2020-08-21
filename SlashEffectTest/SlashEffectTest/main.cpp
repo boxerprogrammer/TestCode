@@ -72,7 +72,7 @@ float
 Slash::Radius()const {
 	return v1.Magnitude();
 }
-
+int normalH=-1;
 // ピクセルシェーダーを読み込む
 int pshandle;// = LoadPixelShader("VertexShaderTestPS.pso");
 void
@@ -107,10 +107,18 @@ Slash::Draw(unsigned int color) {
 		v[i * 2 + 0].pos = V2V(p);
 		v[i * 2 + 0].u = (p.x / 800.0f)+cos((float)i/(float)triangles_num)/20.0f;
 		v[i * 2 + 0].v = (p.y / 600.0f)+sin((float)i / (float)triangles_num) / 20.0f;
+		v[i * 2 + 0].dif.r = 0;
+		v[i * 2 + 0].dif.g = 0;
+		v[i * 2 + 0].dif.b = 0;
+		v[i * 2 + 0].dif.a = 0;
 		p = center + vstart;
 		v[i * 2 + 1].pos = V2V(p);
 		v[i * 2 + 1].u = (p.x / 800.0f) + cos((float)(i+2) / (float)triangles_num) / 50.0f;
 		v[i * 2 + 1].v = (p.y / 600.0f) + sin((float)(i+2) / (float)triangles_num) / 50.0f;
+		v[i * 2 + 1].dif.r = 192;
+		v[i * 2 + 1].dif.g = 192;
+		v[i * 2 + 1].dif.b = 255;
+		v[i * 2 + 1].dif.a = 255;
 		vstart = RotateMat(min_angle) * vstart;
 		r -= dr;
 	}
@@ -119,14 +127,23 @@ Slash::Draw(unsigned int color) {
 	v[idx].pos = V2V(pos);
 	v[idx].u = pos.x / 800.0f;
 	v[idx].v = pos.y / 600.0f;
+	v[idx].dif.r = 168;
+	v[idx].dif.g = 168;
+	v[idx].dif.b = 255;
+	v[idx].dif.a = 192;
 	pos = center + v2;
 	v[idx + 1].pos = V2V(pos);
 	v[idx + 1].u = pos.x / 800.0f;
 	v[idx + 1].v = pos.y / 600.0f;
+	v[idx + 1].dif.r = 255;
+	v[idx + 1].dif.g = 255;
+	v[idx + 1].dif.b = 255;
+	v[idx + 1].dif.a = 255;
 
 	// ２Ｄポリゴンを描画する
 	// 使用するピクセルシェーダーをセット
 	SetUseTextureToShader(0, bgH);
+	SetUseTextureToShader(1, normalH);
 	SetUsePixelShader(pshandle);
 	DrawPrimitive2DToShader(v.data(), v.size(), DX_PRIMTYPE_TRIANGLESTRIP);
 
@@ -199,6 +216,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 	bgH=LoadGraph(L"ss.png");
 	auto charaH = LoadGraph(L"chara.png");
+	normalH= LoadGraph(L"normal.png");
 	DxLib::SetDrawScreen(DX_SCREEN_BACK);
 
 	Rect rcA = { {0,0},100,100 };

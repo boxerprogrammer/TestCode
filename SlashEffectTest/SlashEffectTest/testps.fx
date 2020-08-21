@@ -1,9 +1,9 @@
 // ピクセルシェーダーの入力
 struct PS_INPUT
 {
-	float4 Position    : SV_POSITION ;
-	float4 Diffuse     : COLOR0 ;
-	float2 TexCoords0  : TEXCOORD0 ;
+	float4 pos    : SV_POSITION ;
+	float4 dif     : COLOR0 ;
+	float2 uv  : TEXCOORD0 ;
 };
 
 // ピクセルシェーダーの出力
@@ -17,6 +17,7 @@ struct PS_OUTPUT
 // 描画するテクスチャ
 SamplerState smp       : register( s0 ) ;
 Texture2D    tex       : register( t0 ) ;
+Texture2D    norm       : register( t1 ) ;
 
 
 // main関数
@@ -30,7 +31,8 @@ PS_OUTPUT main( PS_INPUT PSInput )
 //	}else{
 //		PSOutput.Output=tex.Sample( smp, PSInput.TexCoords0 ) ;
 //	}
-	PSOutput.Output=float4(0.1,0.1,0.1,1)+tex.Sample( smp, PSInput.TexCoords0 ) ;
+	float4 nuv=norm.Sample(smp,PSInput.uv);
+	PSOutput.Output=PSInput.dif*PSInput.dif+tex.Sample( smp, fmod(PSInput.uv+(nuv.xy*2-float2(1,1))/32.0f,float2(1.0,1.0))  );
 	// 関数の戻り値がラスタライザに渡される
 	return PSOutput ;
 }

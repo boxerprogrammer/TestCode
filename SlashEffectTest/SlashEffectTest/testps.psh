@@ -11,6 +11,7 @@
 // ------------------------------ ---------- ------- ----------- ---- --------
 // smp                               sampler      NA          NA    0        1
 // tex                               texture  float4          2d    0        1
+// norm                              texture  float4          2d    1        1
 //
 //
 //
@@ -19,7 +20,7 @@
 // Name                 Index   Mask Register SysValue Format   Used
 // -------------------- ----- ------ -------- -------- ------ ------
 // SV_POSITION              0   xyzw        0      POS  float       
-// COLOR                    0   xyzw        1     NONE  float       
+// COLOR                    0   xyzw        1     NONE  float   xyzw
 // TEXCOORD                 0   xy          2     NONE  float   xy  
 //
 //
@@ -35,26 +36,43 @@
 // Target Sampler Source Sampler  Source Resource
 // -------------- --------------- ----------------
 // s0             s0              t0               
+// s1             s0              t1               
 //
 //
 // Level9 shader bytecode:
 //
     ps_2_0
-    def c0, 0.100000001, 0.100000001, 0.100000001, 1
+    def c0, 2, -1, 0.03125, 0
+    dcl t0
     dcl t1.xy
     dcl_2d s0
-    texld r0, t1, s0
-    add r0, r0, c0
+    dcl_2d s1
+    texld r0, t1, s1
+    mad r0.xy, r0, c0.x, c0.y
+    mad r0.xy, r0, c0.z, t1
+    abs r0.zw, r0.wzyx
+    frc r0.zw, r0
+    cmp r0.xy, r0, r0.wzyx, -r0.wzyx
+    texld r0, r0, s0
+    mad r0, t0, t0, r0
     mov oC0, r0
 
-// approximately 3 instruction slots used (1 texture, 2 arithmetic)
+// approximately 9 instruction slots used (2 texture, 7 arithmetic)
 ps_4_0
 dcl_sampler s0, mode_default
 dcl_resource_texture2d (float,float,float,float) t0
+dcl_resource_texture2d (float,float,float,float) t1
+dcl_input_ps linear v1.xyzw
 dcl_input_ps linear v2.xy
 dcl_output o0.xyzw
 dcl_temps 1
-sample r0.xyzw, v2.xyxx, t0.xyzw, s0
-add o0.xyzw, r0.xyzw, l(0.100000, 0.100000, 0.100000, 1.000000)
+sample r0.xyzw, v2.xyxx, t1.xyzw, s0
+mad r0.xy, r0.xyxx, l(2.000000, 2.000000, 0.000000, 0.000000), l(-1.000000, -1.000000, 0.000000, 0.000000)
+mad r0.xy, r0.xyxx, l(0.031250, 0.031250, 0.000000, 0.000000), v2.xyxx
+ge r0.zw, r0.xxxy, -r0.xxxy
+frc r0.xy, |r0.xyxx|
+movc r0.xy, r0.zwzz, r0.xyxx, -r0.xyxx
+sample r0.xyzw, r0.xyxx, t0.xyzw, s0
+mad o0.xyzw, v1.xyzw, v1.xyzw, r0.xyzw
 ret 
-// Approximately 3 instruction slots used
+// Approximately 9 instruction slots used
