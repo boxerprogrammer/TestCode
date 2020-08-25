@@ -107,10 +107,10 @@ Slash::Draw(unsigned int color) {
 		v[i * 2 + 0].pos = V2V(p);
 		v[i * 2 + 0].u = (p.x / 800.0f)+cos((float)i/(float)triangles_num)/20.0f;
 		v[i * 2 + 0].v = (p.y / 600.0f)+sin((float)i / (float)triangles_num) / 20.0f;
-		v[i * 2 + 0].dif.r = 0;
-		v[i * 2 + 0].dif.g = 0;
-		v[i * 2 + 0].dif.b = 0;
-		v[i * 2 + 0].dif.a = 0;
+		v[i * 2 + 0].dif.r = 16;
+		v[i * 2 + 0].dif.g = 64;
+		v[i * 2 + 0].dif.b = 192;
+		v[i * 2 + 0].dif.a = 32;
 		p = center + vstart;
 		v[i * 2 + 1].pos = V2V(p);
 		v[i * 2 + 1].u = (p.x / 800.0f) + cos((float)(i+2) / (float)triangles_num) / 50.0f;
@@ -268,13 +268,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (keystate[KEY_INPUT_D]) {
 			rcB.pos.x += speed;
 		}
-
+		slash.center.x += vax;
+		slash.center.y += vay;
 		if (keystate[KEY_INPUT_Z]) {
-			slash.AddAngle(0.05f);
+			slash.AddAngle(0.15f);
 		}
 
 		if (keystate[KEY_INPUT_X]) {
-			slash.AddAngle(-0.05f);
+			slash.AddAngle(-0.15f);
 		}
 
 		unsigned int color = 0xffffff;//”’
