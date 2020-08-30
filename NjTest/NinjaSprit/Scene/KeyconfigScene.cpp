@@ -241,7 +241,7 @@ void
 KeyconfigScene::NormalDraw(){
 	auto& rc = frameRect_;
 	DrawBox(rc.Left(), rc.Top(), rc.Right(), rc.Bottom(), 0x114411, true);
-	DrawBoxAA(rc.Left(), rc.Top(), rc.Right(), rc.Bottom(), 0xffffff, false, 3);
+	DrawBoxAA(rc.LeftF(), rc.TopF(), rc.RightF(), rc.BottomF(), 0xffffff, false, 3);
 	int y = rc.Top() + keyconfig_title_y;
 	//ポーズのタイトル
 	DrawString(2+rc.Left() + static_cast<int>((rc.Width() - titleW_) / 2),

@@ -43,8 +43,9 @@ public:
 	/// <summary>
 	/// Õ“Ë”»’èƒCƒxƒ“ƒg
 	/// </summary>
-	/// <param name="colInfo">Õ“Ëî•ñ</param>
-	virtual void OnHit(CollisionInfo& colInfo) = 0;
+	/// <param name="me">Õ“Ëî•ñ©•ª</param>
+	/// <param name="another">Õ“Ëî•ñ‘Šè</param>
+	virtual void OnHit(CollisionInfo& me,CollisionInfo& another) = 0;
 
 };
 /// <summary>

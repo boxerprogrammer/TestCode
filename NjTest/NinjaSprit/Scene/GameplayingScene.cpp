@@ -19,10 +19,12 @@
 #include"../Game/Enemy/Slasher.h"
 #include"../Game/Effect.h"
 #include"../Game/Collision/CollisionManager.h"
+#include"../Game/Collision/CircleCollider.h"
 #include"../Game/Stage.h"
 #include"../Game/Camera.h"
 #include"../System/FileManager.h"
 #include"../System/File.h"
+#include"../Game/Player/Equipment.h"
 #include"../Arithmetic.h"
 #include<cassert>
 
@@ -96,24 +98,27 @@ GameplayingScene::InitializeUpdate(const Input&) {
 
 	player_ = make_shared<Player>(this);
 	player_->SetPosition(Position2f(400, 480));
+	collisionManager_->AddCollider(new CircleCollider(player_, Circle(Position2f(0,-50), 30),tag_player_damage));
 	camera_->SetPlayer(player_);
 
 	effectManager_ = make_shared<EffectManager>(camera_);
 
+	enemyManager_ = make_shared<EnemyManager>();
 	stage_.reset(new Stage(camera_, this));
 	stage_->Load(L"resource/level/level1.fmf");
 	camera_->SetStageSize(stage_->GetStageSize());
 
-	enemyManager_ = make_shared<EnemyManager>();
-	AddSpawner(new SideSpawner(Position2f(0, 0),
-			new Slasher(player_, effectManager_, camera_, stage_),
-			enemyManager_,
-			collisionManager_,
-			camera_));
+	
+	//AddSpawner(new SideSpawner(Position2f(0, 0),
+	//		new Slasher(player_, effectManager_, camera_, stage_),
+	//		enemyManager_,
+	//		collisionManager_,
+	//		camera_));
 
-	weaponUIH_[0] = fileMgr.Load(L"Resource/Image/UI/bomb.png")->Handle();
-	weaponUIH_[1] = fileMgr.Load(L"Resource/Image/UI/shuriken.png")->Handle();
-	weaponUIH_[2] = fileMgr.Load(L"Resource/Image/UI/chain.png")->Handle();
+	weaponUIH_[sword_equip_no] = fileMgr.Load(L"Resource/Image/UI/sword.png")->Handle();
+	weaponUIH_[bomb_equip_no] = fileMgr.Load(L"Resource/Image/UI/bomb.png")->Handle();
+	weaponUIH_[shuriken_equip_no] = fileMgr.Load(L"Resource/Image/UI/shuriken.png")->Handle();
+	weaponUIH_[chain_equip_no] = fileMgr.Load(L"Resource/Image/UI/chain.png")->Handle();
 	bgm_ = LoadBGM(L"Resource/BGM/stage1_normal.mp3");
 	ChangeVolumeSoundMem(bgmVolume_, bgm_);
 	ashuraH_ = fileMgr.Load(L"Resource/Image/Enemy/ashura.png")->Handle();

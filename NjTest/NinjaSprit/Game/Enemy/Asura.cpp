@@ -8,6 +8,8 @@
 #include"../ProjectileManager.h"
 #include"AsuraBullet.h"
 #include"../Effect.h"
+#include"../Collision/CollisionManager.h"
+#include"../Collision/CircleCollider.h"
 #include<DxLib.h>
 #include<random>
 
@@ -19,7 +21,8 @@ namespace {
 	constexpr float draw_scale = 1.2f;
 	constexpr float chichu_y = 1100.f;//ちょうど全身隠れる深さ
 	mt19937 mt_(1);
-	uniform_int_distribution<int> dist_(80,180);
+	uniform_int_distribution<int> rnd_range_(80,180);
+	uniform_real_distribution<float> bullet_angle_range_(0.0f,DX_PI_F/4.0f);
 }
 
 Enemy*
@@ -38,13 +41,13 @@ Asura::Asura(GameplayingScene* gs):Boss(gs) {
 	//左右中央に配置
 	pos_.x = static_cast<float>(rc.Left() + rc.Right()) / 2.0f;
 	pos_.y = chichu_y;//地中深くに
-	ground_line = rc.Height() - 16;//ちょうどボス戦の地面の高さ
-	circles_.emplace_back(Position2f(0, -400), 50);
+	ground_line = rc.Height() - 16.0f;//ちょうどボス戦の地面の高さ
+	circles_.emplace_back(Position2f(0.0f, -400.0f), 50.0f);
 
 	life_ = 50;
 	effectManager_ = gs->GetEffectManager();
-	for (auto& t : energyTimes_) {
-		t = dist_(mt_);
+	for (auto& b : energyBalls_) {
+		b.frame = rnd_range_(mt_);
 	}
 }
 
@@ -68,16 +71,23 @@ Asura::GetCircles()const {
 //通常状態
 void 
 Asura::NormalUpdate() {
-	for (int i = 0; i < energyTimes_.size();++i) {
-		if (--energyTimes_[i] <= 0) {
-			energyTimes_[i] = dist_(mt_);
-			auto pos = energyPositions_[i] + pos_;
+	for (auto& b:energyBalls_) {
+		if (--b.frame <= 0) {
+			b.frame = rnd_range_(mt_);
+			auto pos = b.pos + pos_;
 			effectManager_->EmitEnergyBall(pos);
-			float angle = 0.0f;
+			float angle = bullet_angle_range_(mt_);
 			for(int i=0;i<8;++i){
 				Vector2f vel(cosf(angle), sinf(angle));
 				vel *= 4.0f;
-				gameScene_->GetProjectileManager().AddProjectile(new AsuraBullet(pos + vel, vel, camera_));
+				auto& pm = gameScene_->GetProjectileManager();
+				pm.AddProjectile(new AsuraBullet(pos + vel, vel, camera_,gameScene_->GetEffectManager()));
+
+				//弾にコリジョンをつける
+				auto colMgr=gameScene_->GetCollisionManager();
+				colMgr->AddCollider(new CircleCollider(pm.GetProjectiles().back(),
+					Circle(Position2f::ZERO, 5.0f),
+					tag_enemy_bullet));
 				angle += DX_PI_F / 4.0f;
 			}
 		}
@@ -114,7 +124,7 @@ Asura::ExitingUpdate() {
 	if (frame_ % 5 == 0) {
 		int w, h;
 		GetGraphSize(ashuraH_, &w, &h);
-		float x = (rand() % w) - w/2;
+		float x = static_cast<float>(rand() % w) - w / 2.0f;
 		effectManager_->EmitGroundExplosion(Position2f(pos_.x+x, ground_line));
 	}
 	++frame_;
@@ -136,8 +146,10 @@ Asura::NormalDraw() {
 	int w, h;
 	GetGraphSize(ashuraH_, &w, &h);
 	const auto xoffset = camera_->ViewOffset().x;
+	int x = static_cast<int>(pos_.x + xoffset);
+	int y = static_cast<int>(pos_.y);
 	DrawRotaGraph2(
-		pos_.x+xoffset, pos_.y,
+		x,y,
 		w/2, 400, 
 		draw_scale, 0.0f,
 		ashuraH_, true);
@@ -160,7 +172,7 @@ Asura::ExitingDraw() {
 }
 
 void 
-Asura::OnHit(CollisionInfo& other) {
+Asura::OnHit(CollisionInfo& me, CollisionInfo& other) {
 	if (other.collider->GetTag() == tag_player_attack) {
 		if (updater_ == &Asura::NormalUpdate) {
 			OnDamage(1);

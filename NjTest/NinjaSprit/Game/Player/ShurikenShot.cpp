@@ -41,8 +41,8 @@ ShurikenShot::Draw(){
 }
 
 void 
-ShurikenShot::OnHit(CollisionInfo& info) {
-	if (info.collider->GetTag() == tag_enemy_damage) {
+ShurikenShot::OnHit(CollisionInfo& me, CollisionInfo& other) {
+	if (other.collider->GetTag() == tag_enemy_damage) {
 		isActive_ = false;
 	}
 }

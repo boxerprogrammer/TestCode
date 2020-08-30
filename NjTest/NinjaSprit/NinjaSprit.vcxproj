@@ -152,7 +152,11 @@
     <ClCompile Include="Game\Enemy\BossSpawner.cpp" />
     <ClCompile Include="Game\Enemy\Asura.cpp" />
     <ClCompile Include="Game\Enemy\Boss.cpp" />
+    <ClCompile Include="Game\Enemy\Kunai.cpp" />
+    <ClCompile Include="Game\Enemy\Samurai.cpp" />
     <ClCompile Include="Scene\KeyconfigScene.cpp" />
+    <ClCompile Include="Game\Player\ShadowClone.cpp" />
+    <ClCompile Include="Game\Player\SwordEquip.cpp" />
     <ClCompile Include="System\File.cpp" />
     <ClCompile Include="System\FileManager.cpp" />
     <ClCompile Include="System\Application.cpp" />
@@ -191,6 +195,7 @@
     <ClCompile Include="Game\Enemy\Slasher.cpp" />
     <ClCompile Include="Game\Enemy\SideSpawner.cpp" />
     <ClCompile Include="Game\Stage.cpp" />
+    <ClCompile Include="Game\Enemy\Thrower.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arithmetic.h" />
@@ -198,7 +203,11 @@
     <ClInclude Include="Game\Enemy\BossSpawner.h" />
     <ClInclude Include="Game\Enemy\Asura.h" />
     <ClInclude Include="Game\Enemy\Boss.h" />
+    <ClInclude Include="Game\Enemy\Kunai.h" />
+    <ClInclude Include="Game\Enemy\Samurai.h" />
     <ClInclude Include="Scene\KeyconfigScene.h" />
+    <ClInclude Include="Game\Player\ShadowClone.h" />
+    <ClInclude Include="Game\Player\SwordEquip.h" />
     <ClInclude Include="System\File.h" />
     <ClInclude Include="System\FileManager.h" />
     <ClInclude Include="System\Application.h" />
@@ -237,6 +246,7 @@
     <ClInclude Include="Game\Enemy\Slasher.h" />
     <ClInclude Include="Game\Enemy\SideSpawner.h" />
     <ClInclude Include="Game\Stage.h" />
+    <ClInclude Include="Game\Enemy\Thrower.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NjTest.rc" />

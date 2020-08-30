@@ -4,11 +4,15 @@
 #include<string>
 #include"../../Geometry.h"
 
-constexpr char tag_player_attack[] = "patk";
-constexpr char tag_enemy_damage[] = "edmg";
+constexpr char tag_player_attack[] = "patk";//プレイヤーの攻撃
+constexpr char tag_player_damage[] = "pdmg";//プレイヤーの食らい
+constexpr char tag_enemy_damage[] = "edmg";//敵の食らい
+constexpr char tag_enemy_bullet[] = "eblt";//敵弾用
+constexpr char tag_enemy_attack[] = "eatk";//敵斬りつけ
 
 class Character;
 class Camera;
+struct CollisionInfo;//①CollisionInfoをプロトタイプ宣言
 /// <summary>
 /// 当たり判定能力を持つ基底クラス
 /// </summary>
@@ -70,7 +74,7 @@ public:
 	/// </summary>
 	/// <param name="col">相手側コライダー</param>
 	/// <returns>true:衝突、false:非衝突</returns>
-	virtual bool IsHit(std::shared_ptr<Collider> col)=0;
+	virtual bool IsHit(CollisionInfo& col)=0;//②shared_ptr<Collision>をCollisionInfoの参照へ変更
 
 	/// <summary>
 	/// デバッグ用。もしデバッグ円やデバッグ矩形を表示したい場合は
@@ -87,5 +91,6 @@ public:
 /// </summary>
 struct CollisionInfo {
 	std::shared_ptr<Collider> collider;
+	Vector2f vec;//ヒットした方向(自分から見た相手の方向)
 };
 

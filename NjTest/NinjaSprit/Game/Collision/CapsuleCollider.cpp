@@ -20,7 +20,8 @@ CapsuleCollider::~CapsuleCollider() {
 }
 
 bool 
-CapsuleCollider::IsHit(std::shared_ptr<Collider> col) {
+CapsuleCollider::IsHit(CollisionInfo& colInfo) {
+	auto col = colInfo.collider;
 	assert(col != nullptr);
 	if (capsule_.seg.vec.SQMagnitude() == 0)return false;
 	auto ccol = dynamic_pointer_cast<CircleCollider>(col);
@@ -43,17 +44,13 @@ CapsuleCollider::Draw(){
 	if (!dbg.IsDebugMode())return;
 	if (capsule_.seg.vec.SQMagnitude() == 0)return ;
 	uint32_t color = 0xffaaaa;
-
+	if (OwnerIsDead())return;
 	Capsule capsule = { Segment(AcutualPosition(),capsule_.seg.vec), capsule_.radius };
 	auto& spos = capsule.seg.start;
 	auto epos = capsule.seg.start+capsule.seg.vec;
 
 	auto offset = GetCameraOffset();
-	DrawCircle(
-		static_cast<int>(spos.x+ offset.x), 
-		static_cast<int>(spos.y), 
-		static_cast<int>(capsule_.radius), 
-		color, false,2);
+	DrawCircleAA(spos.x + offset.x, spos.y, capsule_.radius, 16,color, false,2.0f);
 	
 	auto v90=capsule.seg.vec;//元のベクトルのコピー
 	v90 = { -v90.y, v90.x };//90°回転
@@ -70,7 +67,7 @@ CapsuleCollider::Draw(){
 		p4.x + offset.x, p4.y,
 		color, false,2);
 
-	DrawCircleAA(epos.x+ offset.x, epos.y,capsule_.radius, color, false,2);
+	DrawCircleAA(epos.x+ offset.x, epos.y,capsule_.radius, 16,color, false,2.0f);
 #endif
 }
 

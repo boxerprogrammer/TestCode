@@ -38,6 +38,9 @@ private:
 	bool isBossMode_=false;
 	void CheckBossMode();
 
+	//敵の配置情報を構築する
+	void BuildEnemyLayout();
+
 public:
 	/// <param name="camera">カメラポインタ</param>
 	Stage(std::shared_ptr<Camera> camera, GameplayingScene* gs);

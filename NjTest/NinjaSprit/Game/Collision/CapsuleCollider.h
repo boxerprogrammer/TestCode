@@ -22,7 +22,7 @@ public:
 	/// </summary>
 	/// <param name="col">相手側コライダー</param>
 	/// <returns>true:衝突、false:非衝突</returns>
-	bool IsHit(std::shared_ptr<Collider> col)override;
+	bool IsHit(CollisionInfo& col)override;//⑤派生クラスもCollisionInfoに変更
 
 	/// <summary>
 	/// デバッグ用。もしデバッグ円やデバッグ矩形を表示したい場合は

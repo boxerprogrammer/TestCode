@@ -33,8 +33,8 @@ namespace {
 	}
 }
 
-void Slasher::OnHit(CollisionInfo& col){
-	if (col.collider->GetTag() == tag_player_attack) {
+void Slasher::OnHit(CollisionInfo& me, CollisionInfo& other){
+	if (other.collider->GetTag() == tag_player_attack) {
 		float sign = Sign(velocity_.x);
 		effectManager_->EmitBlow3(pos_ + Vector2f(sign,0)*effect_offset_scale,
 			sign < 0.0f);
@@ -66,7 +66,7 @@ Slasher::Slasher(const std::shared_ptr<Player>& p, std::shared_ptr<EffectManager
 
 const std::vector<Circle>&
 Slasher::GetCircles()const{
-	return std::vector<Circle>();
+	return  circles_;
 }
 
 Enemy* 
@@ -174,7 +174,6 @@ Slasher::SlashUpdate() {
 		frame_ = 1;
 		updater_ = &Slasher::RunUpdate;
 		drawer_ = &Slasher::RunDraw;
-		
 	}
 }
 

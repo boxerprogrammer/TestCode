@@ -11,7 +11,12 @@
 #include"../System/FileManager.h"
 #include"../Scene/GameplayingScene.h"
 #include"Enemy/Asura.h"
+#include"Enemy/Slasher.h"
+#include"Enemy/Samurai.h"
+#include"Enemy/Thrower.h"
+#include"Enemy/SideSpawner.h"
 #include"Enemy/BossSpawner.h"
+#include"Enemy/EnemyManager.h"
 
 using namespace std;
 
@@ -105,6 +110,65 @@ Stage::Load(const TCHAR* path) {
 			}
 		}
 	}
+	BuildEnemyLayout();
+}
+
+void
+Stage::BuildEnemyLayout() {
+
+	constexpr uint8_t no_data = 0;
+	constexpr uint8_t slasher_side = 1;
+	constexpr uint8_t thrower_side = 2;
+	constexpr uint8_t samurai_side = 3;
+	constexpr uint8_t boss = 255;
+	auto yoffset = ground_line - header_.mapH * header_.chipH * block_scale;
+	for (size_t x = 0; x < header_.mapW; ++x) {
+		for (size_t y = 0; y < header_.mapH; ++y) {
+			auto pos = Position2f(static_cast<float>(x * header_.chipW), static_cast<float>(y * header_.chipH))
+				* block_scale + Vector2f(0, yoffset);
+			auto data = stagedata_[layer_no_enemy][y + x * header_.mapH];
+			if (data == 0)continue;
+			switch (data) {
+			case slasher_side://スラッシャー
+				gameScene_->AddSpawner(new SideSpawner(pos,
+					new Slasher(gameScene_->GetPlayer(),
+						gameScene_->GetEffectManager(),
+						camera_,
+						gameScene_->GetStage()),
+					gameScene_->GetEnemyManager(),
+					gameScene_->GetCollisionManager(),
+					camera_));
+				break;
+			case thrower_side://クナイ投げ
+				gameScene_->AddSpawner(new SideSpawner(pos,
+					new Thrower(gameScene_),
+					gameScene_->GetEnemyManager(),
+					gameScene_->GetCollisionManager(),
+					camera_,
+					40,//発生頻度は平均40フレーム
+					3,//一度に画面上に存在するのは3匹まで
+					true));//左右バランシングを行います。
+				break;
+			case samurai_side://侍
+				gameScene_->AddSpawner(new SideSpawner(pos,
+					new Samurai(gameScene_),
+					gameScene_->GetEnemyManager(),
+					gameScene_->GetCollisionManager(),
+					camera_,
+					30,//発生頻度は平均40フレーム
+					1));//左右バランシングを行います。
+				break;
+			case boss://ボス
+				gameScene_->AddSpawner(new BossSpawner(pos,
+					new Asura(gameScene_),
+					gameScene_->GetEnemyManager(),
+					gameScene_->GetCollisionManager(),
+					camera_));
+				break;
+			}
+			
+		}
+	}
 }
 
 void Stage::CreateSegment(Position2f& startPos,const  Position2f& endPos)
@@ -122,11 +186,7 @@ void
 Stage::NormalUpdate() {
 	CheckBossMode();
 	if (isBossMode_) {
-		gameScene_->AddSpawner(new BossSpawner(Position2f(0, 0),
-			new Asura(gameScene_),
-			gameScene_->GetEnemyManager(),
-			gameScene_->GetCollisionManager(),
-			camera_));
+
 		updater_ = &Stage::BossUpdate;
 	}
 }
@@ -185,7 +245,31 @@ Stage::DebugDraw() {
 #ifdef _DEBUG
 	auto& dbg = Debugger::Instance();
 	if (!dbg.IsDebugMode())return;
-	auto xoffset = camera_->ViewOffset().x;
+	
+	//敵配置のデバッグ表示
+	auto rc=camera_->GetViewRange();
+	const int yoffset = ground_line - static_cast<int>(static_cast<int>(header_.chipH) * header_.mapH * block_scale);
+	const int xoffset = static_cast<int>(camera_->ViewOffset().x);
+	constexpr auto triR = 20.0f;
+	constexpr auto rt3div2 = (1.732f / 2.0f);
+	for (size_t x = 0; x < header_.mapW; ++x) {
+		int xpos = static_cast<int>(x * header_.chipW * block_scale);
+		int xmargin = static_cast<int>(header_.chipW * block_scale);
+		if (xpos < rc.Left() - xmargin || rc.Right() + xmargin < xpos) {
+			continue;
+		}
+		for (size_t y = 0; y < header_.mapH; ++y) {
+			auto enemNo = stagedata_[layer_no_enemy][y + x * header_.mapH];//チップ番号取得
+			if (enemNo == 0)continue;
+			auto xpos = static_cast<int>(xoffset + x * header_.chipW * block_scale); //表示X座標
+			auto ypos = static_cast<int>(yoffset + y * header_.chipH * block_scale);//表示Y座標
+			DrawTriangleAA(xpos, ypos - triR,
+				xpos + triR * rt3div2, ypos + triR * 0.5f,
+				xpos - triR * rt3div2, ypos + triR * 0.5f, 0xff8888, false, 4.0f);
+		}
+	}
+
+	//地形セグメントの表示
 	for (const auto& seg : terrainSegment_) {
 		dbg.Draw(seg, 0xffffff, xoffset,0.0f , 3.0f);
 	}

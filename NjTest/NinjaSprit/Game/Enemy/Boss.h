@@ -10,8 +10,7 @@ protected:
 public:
     Boss(GameplayingScene* gs);
     virtual ~Boss() = default;
-	virtual void OnHit(CollisionInfo&) = 0;
-
+	
 	/// <summary>
 	/// UŒ‚‚ğó‚¯‚½
 	/// </summary>

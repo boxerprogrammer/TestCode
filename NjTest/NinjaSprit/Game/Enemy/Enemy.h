@@ -21,9 +21,7 @@ protected:
 public:
 	Enemy(const std::shared_ptr<Player>& p , std::shared_ptr<Camera> c);
 	virtual ~Enemy() = default;
-
-	virtual void OnHit(CollisionInfo&) = 0;
-
+	virtual void SetWeakRef(std::weak_ptr<Enemy> ref) {};
 	/// <summary>
 	/// UŒ‚‚ğó‚¯‚½
 	/// </summary>

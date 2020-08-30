@@ -24,6 +24,6 @@ public:
 	/// コリジョンを判定対象に追加する
 	/// </summary>
 	/// <param name="collider">判定対象オブジェクト</param>
-	void AddCollider(Collider* collider);
+	std::shared_ptr<Collider>  AddCollider(Collider* collider);
 };
 

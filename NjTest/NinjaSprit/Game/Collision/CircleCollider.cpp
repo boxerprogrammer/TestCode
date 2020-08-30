@@ -21,7 +21,8 @@ CircleCollider::GetCircle()const {
 }
 
 bool 
-CircleCollider::IsHit(shared_ptr<Collider> col) {
+CircleCollider::IsHit(CollisionInfo& other) {
+	auto col = other.collider;
 	assert(col != nullptr);
 	auto ccol = dynamic_pointer_cast<CircleCollider>(col);
 	if (ccol != nullptr) {
@@ -29,6 +30,7 @@ CircleCollider::IsHit(shared_ptr<Collider> col) {
 		Circle b = { ccol->AcutualPosition() ,ccol->circle_.radius };
 		auto sqDiff=(a.center - b.center).SQMagnitude();
 		auto totalRadius = a.radius + b.radius;
+		other.vec = a.center - b.center;
 		return sqDiff <= totalRadius * totalRadius;
 	}
 	return false;

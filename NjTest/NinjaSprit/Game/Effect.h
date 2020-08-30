@@ -46,6 +46,8 @@ private:
 	int bloodH_ = -1;
 	int bloodSE_ = -1;
 	int blowH_ = -1;
+	int hitEffectH_ = -1;
+	int eliminateH_ = -1;
 	int hitSE_ = -1;
 	int groundExpH_ = -1;
 	int smokeExpH_ = -1;
@@ -89,6 +91,21 @@ public:
 	/// <param name="pos">表示座標</param>
 	/// <param name="isTurn">反転フラグ</param>
 	void EmitBlow3(const Position2f& pos, bool isTurn = false);
+
+
+	/// <summary>
+	/// 小消滅エフェクト発生
+	/// </summary>
+	/// <param name="pos">表示座標</param>
+	/// <param name="isTurn">反転フラグ</param>
+	void EmitEliminate_s(const Position2f& pos, bool isTurn = false);
+
+	/// <summary>
+	/// 小ヒットエフェクト発生
+	/// </summary>
+	/// <param name="pos">表示座標</param>
+	/// <param name="isTurn">反転フラグ</param>
+	void EmitHitEffect_s(const Position2f& pos, bool isTurn = false);
 
 	/// <summary>
 	/// エフェクトすべてUpdate

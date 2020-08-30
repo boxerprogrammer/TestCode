@@ -27,7 +27,7 @@ Equipment(cm,camera){
 }
 
 void
-ShurikenEquip::Attack(const Player& player, const Input& input) {
+ShurikenEquip::Attack(const Player& player, const Input& input, Vector2f offset) {
 	Vector2f vel(0, 0);
 	if (input.IsPressed("right")) {
 		vel += { 1, 0 };
@@ -52,7 +52,7 @@ ShurikenEquip::Attack(const Player& player, const Input& input) {
 	vel.Normalize();
 	vel *= 10.0f;
 	PlaySoundMem(throwH_, DX_PLAYTYPE_BACK);
-	projectileMgr_.AddProjectile(new ShurikenShot(player.Position()+Vector2f(0,equip_offset_y), vel,camera_));
+	projectileMgr_.AddProjectile(new ShurikenShot(player.Position()+offset+Vector2f(0,equip_offset_y), vel,camera_));
 	collisionManager_->AddCollider(new CircleCollider(
 		projectileMgr_.GetProjectiles().back(),
 		{ {0,0},10 },

@@ -20,7 +20,11 @@ BossSpawner::BossSpawner(const Position2f& pos,
 
 void 
 BossSpawner::SpawnUpdate() {
+	auto rc = camera_->GetViewRange();
+	if (pos_.x < rc.Left() || rc.Right() < pos_.x)return;
 	auto clone = CreateClone();
+	auto pos = clone->GetPosition();
+	clone->SetPosition({ pos.x + camera_->GetPosition().x,pos.y });
 	enemyManager_->AddEnemy(clone);
 	const auto& circles=prototype_->GetCircles();
 	const auto& c=circles[0];

@@ -144,6 +144,52 @@ namespace {
 		}
 	};
 
+
+	/// <summary>
+	/// ヒットエフェクト
+	/// </summary>
+	class HitEffect : public Effect {
+	private:
+		int h_ = -1;
+		bool isTurn_ = false;
+
+
+		using Updater_t = void(HitEffect::*)();
+		Updater_t updater_;
+		void NormalUpdate() {
+			if (frame_ >= 9) {
+				isDeletable_ = true;
+			}
+			++frame_;
+		}
+	public:
+		HitEffect(const Position2f& p, int h, shared_ptr<Camera> c, bool isTurn) :
+			Effect(p, c),
+			isTurn_(isTurn),
+			h_(h) {
+
+			isDeletable_ = false;
+			frame_ = 0;
+			updater_ = &HitEffect::NormalUpdate;
+		}
+		void Update()override {
+			(this->*updater_)();
+		}
+		void Draw()override {
+			const auto xoffset = camera_->ViewOffset().x;
+			int idx = frame_ / 3;
+			DrawRectRotaGraph2(
+				static_cast<int>(pos_.x + xoffset), static_cast<int>(pos_.y),
+				32 * idx, 0,
+				32, 32,
+				isTurn_?32:0, 32,
+				3.0f, 0.0f,
+				h_, true, isTurn_);
+
+		}
+	};
+
+
 	/// <summary>
 	/// エネルギー球
 	/// </summary>
@@ -197,6 +243,9 @@ EffectManager::EffectManager(shared_ptr<Camera> c):camera_(c) {
 	if (blowH_ == -1) {
 		blowH_ = fileMgr.Load(L"Resource/Image/Effect/dron.png")->Handle();
 	}
+	if (eliminateH_ == -1) {
+		eliminateH_ = fileMgr.Load(L"Resource/Image/Effect/eliminate_b.png")->Handle();
+	}
 
 	if (groundExpH_ == -1) {
 		groundExpH_ = fileMgr.Load(L"Resource/Image/Effect/ground_exp.png")->Handle();
@@ -206,6 +255,9 @@ EffectManager::EffectManager(shared_ptr<Camera> c):camera_(c) {
 	}
 	if (energyBallH_ == -1) {
 		energyBallH_ = fileMgr.Load(L"Resource/Image/Effect/chargeball.png")->Handle();
+	}
+	if (hitEffectH_ == -1) {
+		hitEffectH_= fileMgr.Load(L"Resource/Image/Effect/hit_effect_s.png")->Handle();
 	}
 }
 
@@ -219,6 +271,11 @@ EffectManager::EmitSmokeExplosion(const Position2f& pos, bool isTurn) {
 
 }
 
+void
+EffectManager::EmitEliminate_s(const Position2f& p, bool isTurn) {
+	effects_.emplace_back(new Blow(p , eliminateH_, camera_, isTurn));
+}
+
 void 
 EffectManager::EmitEnergyBall(const Position2f& pos, int lifetime , bool isTurn ) {
 	effects_.emplace_back(new Energyball(pos,energyBallH_, camera_, lifetime,isTurn));
@@ -229,6 +286,12 @@ EffectManager::EmitBlood(const Position2f& p, bool isTurn) {
 	PlaySoundMem(bloodSE_, DX_PLAYTYPE_BACK);
 	effects_.emplace_back(new Blood(p,bloodH_,camera_,isTurn));
 }
+
+void 
+EffectManager::EmitHitEffect_s(const Position2f& pos, bool isTurn ) {
+	effects_.emplace_back(new HitEffect(pos, hitEffectH_, camera_, isTurn));
+}
+
 void 
 EffectManager::EmitBlow3(const Position2f& p, bool isTurn) {
 	uniform_real_distribution<float> dst(-10, 10);

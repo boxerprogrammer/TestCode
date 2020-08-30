@@ -1,10 +1,15 @@
 #pragma once
 
+#include"../../Geometry.h"
 #include<memory>
 class Camera;
 class Player;
 class Input;
 class CollisionManager;
+constexpr size_t sword_equip_no = 0;//刀
+constexpr size_t bomb_equip_no = 1;//爆弾
+constexpr size_t shuriken_equip_no = 2;//手裏剣
+constexpr size_t chain_equip_no = 3;//鎖鎌
 /// <summary>
 /// 装備品基底クラス
 /// </summary>
@@ -24,7 +29,7 @@ public:
 	/// </summary>
 	/// <param name="player">プレイヤーへの参照</param>
 	/// <param name="input">入力参照</param>
-	virtual void Attack(const Player& p, const Input& i) = 0;
+	virtual void Attack(const Player& p, const Input& i,Vector2f offset = Vector2f::ZERO) = 0;
 	/// <summary>
 	/// 追加入力(ほぼ鎖鎌用)
 	/// </summary>

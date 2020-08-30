@@ -50,7 +50,7 @@ public:
     /// </summary>
     /// <param name="other">他コライダーオブジェクト</param>
     /// <returns>true:当たっている</returns>
-    bool IsHit(std::shared_ptr<Collider> other)override;
+    bool IsHit(CollisionInfo& other)override;//③派生クラスもCollisionInfoに変更
 
     /// <summary>
     /// コライダーを見えるように描画する

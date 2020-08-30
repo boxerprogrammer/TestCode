@@ -27,7 +27,7 @@ Equipment(col,camera){
 }
 
 void 
-BombEquip::Attack(const Player& player, const Input& input) {
+BombEquip::Attack(const Player& player, const Input& input, Vector2f offset) {
 	Vector2f vel=Vector2f::ZERO;
 	if (player.GetDirection() == Player::Direction::right) {
 		vel = Vector2f::RIGHT;
@@ -43,7 +43,7 @@ BombEquip::Attack(const Player& player, const Input& input) {
 	}
 	vel *= bomb_shot_speed;
 	PlaySoundMem(throwH, DX_PLAYTYPE_BACK);
-	pm_.AddProjectile(new BombShot(player.Position()+ Vector2f(0, equip_offset_y), vel,camera_));
+	pm_.AddProjectile(new BombShot(player.Position()+ offset + Vector2f(0, equip_offset_y), vel,camera_));
 	collisionManager_->AddCollider(new CircleCollider(pm_.GetProjectiles().back(),
 		Circle(Position2f::ZERO,bomb_radius),
 		tag_player_attack));

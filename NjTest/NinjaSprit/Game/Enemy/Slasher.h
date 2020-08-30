@@ -11,6 +11,7 @@ class Slasher :
 private:
 	int runH = -1;
 	int slashH = -1;
+	std::vector<Circle> circles_;
 	std::shared_ptr<EffectManager> effectManager_;
 	std::shared_ptr<CollisionManager> collisionManager_;
 	std::shared_ptr<Stage> stage_;
@@ -35,10 +36,11 @@ public:
 	Slasher(const std::shared_ptr<Player>& p,std::shared_ptr<EffectManager> efktMng,  std::shared_ptr<Camera> camera, std::shared_ptr<Stage> stg);
 	
 	/// <summary>
-	/// 何かが当たったイベント(呼ばれる)
+	/// 衝突判定イベント
 	/// </summary>
-	/// <param name="colInfo">何がどう当たったか情報</param>
-	void OnHit(CollisionInfo& colInfo)override;
+	/// <param name="me">衝突情報自分</param>
+	/// <param name="another">衝突情報相手</param>
+	void OnHit(CollisionInfo& me, CollisionInfo& another)override;
 
 	/// <summary>
 	/// 攻撃を受けた

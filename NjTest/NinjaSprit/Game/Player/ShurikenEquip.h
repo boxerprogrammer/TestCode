@@ -26,6 +26,6 @@ public:
 	/// </summary>
 	/// <param name="player">プレイヤーへの参照</param>
 	/// <param name="input">入力参照</param>
-	void Attack(const Player& p, const Input& i) override;
+	void Attack(const Player& p, const Input& i, Vector2f offset = Vector2f::ZERO) override;
 };
 

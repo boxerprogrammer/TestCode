@@ -10,11 +10,18 @@ class Asura :
     public Boss
 {
 private:
-    std::array<Vector2f, 4> energyPositions_ = { Vector2f(-128.0f,-420.0f ),
-                                Vector2f(128.0f,-420.0f),
-                                Vector2f(-100.0f,-300.0f),
-                                Vector2f(100.0f,-300.0f)};
-    std::array<int, 4> energyTimes_;
+    struct EnergyBall {
+        Vector2f pos;
+        int frame;
+        EnergyBall(const Position2f& p):pos(p),frame(0) {
+        }
+    };
+    std::array<EnergyBall, 4> energyBalls_ = {
+        Vector2f(-128.0f,-420.0f),
+        Vector2f(128.0f,-420.0f),
+        Vector2f(-100.0f,-300.0f),
+        Vector2f(100.0f,-300.0f)};
+
     std::shared_ptr<EffectManager> effectManager_;
     int ashuraH_ = -1;
     int frame_ = 0;
@@ -50,7 +57,12 @@ public:
     Asura(GameplayingScene*);
     ~Asura()=default;
 
-	void OnHit(CollisionInfo&)override;
+    /// <summary>
+    /// Õ“Ë”»’èƒCƒxƒ“ƒg
+    /// </summary>
+    /// <param name="me">Õ“Ëî•ñ©•ª</param>
+    /// <param name="another">Õ“Ëî•ñ‘Šè</param>
+    void OnHit(CollisionInfo& me, CollisionInfo& another)override;
 
 	/// <summary>
 	/// UŒ‚‚ğó‚¯‚½

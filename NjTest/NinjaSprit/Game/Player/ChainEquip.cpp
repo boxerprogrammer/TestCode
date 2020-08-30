@@ -1,5 +1,6 @@
 #include "ChainEquip.h"
 #include"Player.h"
+#include"ShadowClone.h"
 #include"../../Input/Input.h"
 #include"../../Geometry.h"
 #include"../Collision/CollisionManager.h"
@@ -26,8 +27,9 @@ ChainEquip::CanBeAdditionalInput()const {
 	return frame_ <= expansion_frames;
 }
 
-ChainEquip::ChainEquip(std::shared_ptr<Player>& p ,std::shared_ptr<CollisionManager> cm,std::shared_ptr<Camera> camera):player_(p),
-Equipment(cm,camera){
+ChainEquip::ChainEquip(std::shared_ptr<Player>& p ,std::shared_ptr<CollisionManager> cm,std::shared_ptr<Camera> camera,ShadowClone* shadow):player_(p),
+Equipment(cm,camera),
+shadow_(shadow){
 	auto& fileMgr=FileManager::Instance();
 	if (throwSE_ == -1) {
 		throwSE_ = fileMgr.Load(L"Resource/Sound/Game/chainatk.mp3")->Handle();
@@ -40,7 +42,7 @@ Equipment(cm,camera){
 }
 
 void
-ChainEquip::Attack(const Player& player, const Input& input) {
+ChainEquip::Attack(const Player& player, const Input& input, Vector2f offset) {
 	if (frame_ >= 0)return;
 	direction_ = {0.0f,0.0f};
 	if (input.IsPressed("left")) {
@@ -73,9 +75,13 @@ ChainEquip::Attack(const Player& player, const Input& input) {
 	swingTargetAngle_ = currentAngle_;
 
 	if (capsuleCollider_ == nullptr) {
-		Capsule cap = { {{0,equip_offset_y},Vector2f::ZERO},capsule_radius };
+		Capsule cap = { {offset+Vector2f(0,equip_offset_y),Vector2f::ZERO},capsule_radius };
 		capsuleCollider_ = new CapsuleCollider(player_, cap, tag_player_attack, true);
 		collisionManager_->AddCollider(capsuleCollider_);
+	}
+	else {
+		Capsule& cap = capsuleCollider_->GetCapsule();
+		cap = { {offset + Vector2f(0,equip_offset_y),Vector2f::ZERO},capsule_radius };
 	}
 }
 
@@ -109,7 +115,10 @@ ChainEquip::AdditionalInput(const Input& input) {
 
 void 
 ChainEquip::Update() {
-	
+	if (shadow_ != nullptr) {
+		auto offset = shadow_->GetPosition() - player_->GetPosition();
+		capsuleCollider_->GetCapsule().seg.start= offset+ Vector2f(0, equip_offset_y);
+	}
 	if (frame_ < 0){
 		if (capsuleCollider_ != nullptr) {
 			capsuleCollider_->GetCapsule().seg.vec = Vector2f::ZERO;
@@ -151,8 +160,14 @@ ChainEquip::Draw() {
 	auto pos=player_->Position();
 	if (frame_ >=0) {
 		int w = static_cast<int>(GetCurrentChainLength());
+		auto& c = capsuleCollider_->GetCapsule();
+		
+		if (shadow_ != nullptr) {
+			pos = shadow_->GetPosition();
+		}
 		const auto xoffset = camera_->ViewOffset().x;
-		DrawRectRotaGraph2(static_cast<int>(pos.x+xoffset), static_cast<int>(pos.y+ equip_offset_y),
+		pos += Vector2f(0, equip_offset_y);
+		DrawRectRotaGraph2(static_cast<int>(pos.x+xoffset), static_cast<int>(pos.y),
 			400 - w, 0, 
 			w, 48,
 			0,24,

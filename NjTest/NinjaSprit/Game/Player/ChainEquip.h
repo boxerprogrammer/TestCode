@@ -4,6 +4,7 @@
 class Player;
 class CapsuleCollider;
 class Camera;
+class ShadowClone;
 /// <summary>
 /// 鎖鎌装備
 /// 伸び縮みする。伸びている最中に先行入力すると振り回すことができる
@@ -13,6 +14,7 @@ class ChainEquip : public Equipment
 private:
 	int throwSE_ = -1;
 	int chainH_ = -1;
+	ShadowClone* shadow_=nullptr;
 	CapsuleCollider* capsuleCollider_ = nullptr;
 	int frame_;
 	std::shared_ptr<Player>& player_;
@@ -32,13 +34,13 @@ public:
 	/// <param name="camera">カメラ</param>
 	ChainEquip(std::shared_ptr<Player>& player, 
 		std::shared_ptr<CollisionManager> collisionMgr, 
-		std::shared_ptr<Camera> camera);
+		std::shared_ptr<Camera> camera, ShadowClone* shadow=nullptr);
 	/// <summary>
 	/// 鎖鎌攻撃を加えます
 	/// </summary>
 	/// <param name="player">プレイヤーへの参照</param>
 	/// <param name="input">入力参照</param>
-	void Attack(const Player& player, const Input& input)override;
+	void Attack(const Player& player, const Input& input,Vector2f offset=Vector2f::ZERO)override;
 	/// <summary>
 	/// 追加入力(振り回しのためだけのメソッド)
 	/// </summary>

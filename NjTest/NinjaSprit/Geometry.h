@@ -27,6 +27,9 @@ struct Vector2D {
 	Vector2D operator-(const Vector2D& rval)const {
 		return Vector2D(x - rval.x, y - rval.y);
 	}
+	Vector2D operator-()const {
+		return Vector2D(-x, -y);
+	}
 	/// <summary>
 	/// 自分に指定値だけ加算する
 	/// </summary>
@@ -367,5 +370,38 @@ struct Capsule {
 	float radius;//カプセルの厚み
 };
 
+namespace DxLib {
+	struct tagVECTOR;
+	const tagVECTOR& V2V(const Vector2f& v);
+}
+float GetAngle2Vector(const Vector2f& v1, const Vector2f& v2);
 
+struct Matrix {
+	float m[3][3];
+};
 
+///単位行列を返す
+Matrix IdentityMat();
+
+///平行移動行列を返す
+///@param x X方向平行移動量
+///@param y Y方向平行移動量
+Matrix TranslateMat(float x, float y);
+
+///回転行列を返す
+///@param angle 回転角度
+Matrix RotateMat(float angle);
+
+///２つの行列の乗算を返す
+///@param lmat 左辺値(行列)
+///@param rmat 右辺値(行列)
+///@attention 乗算の順序に注意してください
+Matrix MultipleMat(const Matrix& lmat, const Matrix& rmat);
+
+///ベクトルに対して行列乗算を適用し、結果のベクトルを返す
+///@param mat 行列
+///@param vec ベクトル
+Vector2f MultipleVec(const Matrix& mat, const Vector2f& vec);
+
+Matrix operator*(const Matrix& lmat, const Matrix& rmat);
+Vector2f operator*(const Matrix& mat, const Vector2f& vec);

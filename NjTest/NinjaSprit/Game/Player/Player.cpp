@@ -5,6 +5,7 @@
 #include"../../Geometry.h"
 #include"../../Input/Input.h"
 #include"../../Scene/GameplayingScene.h"
+#include"SwordEquip.h"
 #include"BombEquip.h"
 #include"ShurikenEquip.h"
 #include"ChainEquip.h"
@@ -13,8 +14,12 @@
 #include"../../Geometry.h"
 #include"../../System/FileManager.h"
 #include"../../System/File.h"
+#include"../Collision/Collider.h"
+#include"../Effect.h"
+#include"../../Arithmetic.h"
 #include<cassert>
 #include<cmath>
+#include"ShadowClone.h"
 
 
 using namespace std;
@@ -89,51 +94,82 @@ Player::Player(GameplayingScene* gs) :Character(gs->GetCamera()) {
 				//しゃがみ
 			}
 			if (input.IsPressed("left")) {
-				player_.Move(Vector2f::LEFT* run_speed);
-				player_.isRight_ = false;
+				if (player_.updater_ != &Player::DamageUpdate) {
+					player_.Move(Vector2f::LEFT * run_speed);
+					player_.isRight_ = false;
+				}
 			}
 			if (input.IsPressed("right")) {
-				player_.Move(Vector2f::RIGHT * run_speed);
-				player_.isRight_ = true;
+				if (player_.updater_ != &Player::DamageUpdate) {
+					player_.Move(Vector2f::RIGHT * run_speed);
+					player_.isRight_ = true;
+				}
 			}
 			if (input.IsTriggered("shot")) {
-				player_.Attack(input);
+				if (player_.updater_ != &Player::DamageUpdate) {
+					player_.Attack(input);
+				}
 			}
 			if (input.IsTriggered("change")) {
 				player_.NextEquip();
 			}
 			if (input.IsTriggered("jump")) {
-				if (player_.updater_ == &Player::NormalUpdate) {
-					player_.Jump();
-					decidedGravity_ = false;
+				if (player_.updater_ != &Player::DamageUpdate) {
+					if (player_.updater_ == &Player::NormalUpdate) {
+						player_.Jump();
+						decidedGravity_ = false;
+					}
 				}
 			}
 			if (input.IsReleased("jump")) {
-				if (player_.updater_ == &Player::RiseUpdate && !decidedGravity_) {
-					player_.accelY_ = max(-player_.velY_ *gravity_rate,max_gravity);
-					decidedGravity_ = true;
+				if (player_.updater_ != &Player::DamageUpdate) {
+					if (player_.updater_ == &Player::RiseUpdate && !decidedGravity_) {
+						player_.accelY_ = max(-player_.velY_ * gravity_rate, max_gravity);
+						decidedGravity_ = true;
+					}
 				}
 			}
-			player_.CurrentEquipment()->AdditionalInput(input);
+			player_.AdditionalInput(input);
 		}
 	};
 	collisionManager_ = gs->GetCollisionManager();
 	gs->AddListener(make_shared< PlayerInputListener>(*this));
-	equipments_.push_back(make_shared<BombEquip>(gs->GetProjectileManager(), gs->GetCollisionManager(), gs->GetCamera()));
-	equipments_.push_back(make_shared<ShurikenEquip>(gs->GetProjectileManager(), gs->GetCollisionManager(), gs->GetCamera()));
-	equipments_.push_back(make_shared<ChainEquip>(gs->GetPlayer(), gs->GetCollisionManager(), gs->GetCamera()));
+	equipments_[sword_equip_no]= (make_shared<SwordEquip>(gs->GetPlayer(), gs->GetCollisionManager(), gs->GetCamera()));
+	equipments_[bomb_equip_no]=(make_shared<BombEquip>(gs->GetProjectileManager(), gs->GetCollisionManager(), gs->GetCamera()));
+	equipments_[shuriken_equip_no]=(make_shared<ShurikenEquip>(gs->GetProjectileManager(), gs->GetCollisionManager(), gs->GetCamera()));
+	equipments_[chain_equip_no]=(make_shared<ChainEquip>(gs->GetPlayer(), gs->GetCollisionManager(), gs->GetCamera()));
 	if (changeSE_ == -1) {
 		changeSE_ = fileMgr.Load(L"Resource/Sound/Game/changeweapon.wav")->Handle();
 	}
-	updater_ = &Player::NormalUpdate;
+	updater_ = &Player::InitUpdate;
 	drawer_ = &Player::NormalDraw;
 
 	fill(moveHistory_.begin(), moveHistory_.end(), pos_);
 	lastPos_ = pos_;
 	gameScene_ = gs;
 	accelY_ = max_gravity;
+
+}
+
+Vector2f Player::GetVelocity()const {
+	return pos_ - lastPos_;
+}
+
+void
+Player::InitUpdate() {
+	shadowClones_.push_back(make_shared<ShadowClone>(gameScene_, this, camera_));
+	shadowClones_.push_back(make_shared<ShadowClone>(gameScene_, this, camera_));
+	updater_ = &Player::NormalUpdate;
 }
 Player::~Player() {
+}
+
+void
+Player::AdditionalInput(const Input& input) {
+	CurrentEquipment()->AdditionalInput(input);
+	for (auto& shadow : shadowClones_) {
+		shadow->AdditionalInput(input);
+	}
 }
 
 shared_ptr<Equipment>
@@ -148,6 +184,9 @@ Player::CurrentEquipmentNo()const {
 void
 Player::Attack(const Input& input) {
 	equipments_[currentEquipmentNo_]->Attack(*this, input);
+	for (auto& shadow : shadowClones_) {
+		shadow->Attack(input, currentEquipmentNo_);
+	}
 }
 
 void
@@ -183,6 +222,13 @@ Player::Jump() {
 	drawer_ = &Player::RiseDraw;
 	frame_ = 0;
 	idx_ = 0;
+}
+
+void 
+Player::DamageUpdate() {
+	if (--knockbackFrame_==0) {
+		updater_ = &Player::NormalUpdate;
+	}
 }
 
 void
@@ -266,8 +312,11 @@ Player::Update() {
 	//個別部分
 	(this->*updater_)();
 
-
-
+	int time = 16;
+	for (auto& shadow : shadowClones_) {
+		shadow->Update(GetBackTimePosition(time));
+		time += 16;
+	}
 }
 
 Player::Direction
@@ -281,7 +330,12 @@ Player::GetDirection()const {
 
 void
 Player::NormalDraw() {
-	const auto xoffset = camera_->ViewOffset().x;
+
+	auto xoffset = camera_->ViewOffset().x;
+	if (updater_ == &Player::DamageUpdate) {
+		xoffset += (knockbackFrame_ % 2) * 4;
+	}
+	
 	auto gH = runH_[idx_];
 	int w, h;
 	GetGraphSize(gH, &w, &h);
@@ -293,7 +347,10 @@ Player::NormalDraw() {
 }
 void
 Player::RiseDraw() {
-	const auto xoffset = camera_->ViewOffset().x;
+	auto xoffset = camera_->ViewOffset().x;
+	if (updater_ == &Player::DamageUpdate) {
+		xoffset += (knockbackFrame_ % 2) * 4;
+	}
 	auto gH = jumpH_[idx_];
 	int w, h;
 	GetGraphSize(gH, &w, &h);
@@ -308,7 +365,10 @@ Player::FallDraw() {
 	auto gH = fallH_[idx_];
 	int w, h;
 	GetGraphSize(gH, &w, &h);
-	const auto xoffset = camera_->ViewOffset().x;
+	auto xoffset = camera_->ViewOffset().x;
+	if (updater_ == &Player::DamageUpdate) {
+		xoffset += (knockbackFrame_ % 2) * 4;
+	}
 	DrawRotaGraph2(static_cast<int>(pos_.x + xoffset),
 		static_cast<int>(pos_.y),
 		w / 2,
@@ -319,6 +379,9 @@ Player::FallDraw() {
 
 void
 Player::Draw() {
+
+	DrawFormatString(400, 10, 0xffffff, L"life=%d", life_);
+
 	equipments_[currentEquipmentNo_]->Draw();
 
 	(this->*drawer_)();
@@ -328,6 +391,7 @@ Player::Draw() {
 	auto gH = runH_[idx_];
 	int w, h;
 	GetGraphSize(gH, &w, &h);
+	//分身の描画
 	Rect maskRc(- 64 + xoffset,  - 128, 128, 129);
 	{
 		const auto& spos = GetBackTimePosition(16);
@@ -360,10 +424,28 @@ Player::Draw() {
 	}
 	DeleteMaskScreen();
 	
+	for (auto& shadow : shadowClones_) {
+		shadow->Draw();
+	}
 
 }
 
 void
-Player::OnHit(CollisionInfo&) {
-
+Player::OnHit(CollisionInfo& me, CollisionInfo& another) {
+	//ダメージイベント
+	if (updater_ == &Player::DamageUpdate)return;
+	if (me.collider->GetTag() == tag_player_damage){
+		if (another.collider->GetTag() == tag_enemy_bullet) {
+			gameScene_->GetEffectManager()->EmitHitEffect_s(pos_ + Vector2f(0, -40), another.vec.x >= 0);
+			updater_ = &Player::DamageUpdate;
+			knockbackFrame_ = 6;
+			life_ = SaturateSubtract(life_, 1, 0);
+		}
+		else if (another.collider->GetTag() == tag_enemy_attack) {
+			gameScene_->GetEffectManager()->EmitBlood(pos_ + Vector2f(0, -15), another.vec.x >= 0);
+			updater_ = &Player::DamageUpdate;
+			knockbackFrame_ = 8;
+			life_ = SaturateSubtract(life_, 1, 0);
+		}
+	}
 }

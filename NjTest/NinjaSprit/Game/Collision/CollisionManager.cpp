@@ -7,8 +7,12 @@
 
 using namespace std;
 namespace {
+	//“–‚½‚èƒpƒ^[ƒ“‚ğ“o˜^‚µ‚Ä‚¨‚­
 	pair<string, string> hit_combination_table[] = { 
-		{tag_enemy_damage,tag_player_attack} 
+		{tag_enemy_damage,tag_player_attack},
+		{tag_enemy_bullet,tag_player_attack},
+		{tag_enemy_bullet,tag_player_damage},
+		{tag_enemy_attack,tag_player_damage}
 	};
 }
 
@@ -40,9 +44,13 @@ CollisionManager::Update() {
 				make_pair(colA->GetTag(),colB->GetTag()));
 			if (cnt == 0)continue;
 
-			if (colA->IsHit(colB) || colB->IsHit(colA)) {
-				CollisionInfo colInfoB = { colB };
-				colA->GetOwner()->OnHit(colInfoB);
+			CollisionInfo colInfoA = { colA };
+			CollisionInfo colInfoB = { colB };
+			if (colA->IsHit(colInfoB) || colB->IsHit(colInfoA)) {
+				if (colInfoA.vec == Vector2f::ZERO) {
+					colInfoA.vec = -colInfoB.vec;
+				}
+				colA->GetOwner()->OnHit(colInfoA,colInfoB);
 				
 				if (colA->GetOwner()->IsActive()) {
 					colA->Sleep();
@@ -50,9 +58,8 @@ CollisionManager::Update() {
 					colA->Suicide();
 				}
 				
-				CollisionInfo colInfoA = { colA };
-				colB->GetOwner()->OnHit(colInfoA);
-				colB->Suicide();
+				
+				colB->GetOwner()->OnHit(colInfoB,colInfoA);
 				if (colB->GetOwner()->IsActive()) {
 					colB->Sleep();
 				}
@@ -67,9 +74,10 @@ CollisionManager::Update() {
 		col->Awake();
 	}
 }
-void 
+std::shared_ptr<Collider> 
 CollisionManager::AddCollider(Collider* collider) {
 	colliders_.emplace_back(collider);
+	return colliders_.back();
 }
 
 void 

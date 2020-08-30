@@ -40,7 +40,8 @@ struct Slash {
 	Slash(const Position2& p, const Vector2& inv, float angle);
 	void Draw(unsigned int color = 0xffffff);
 	float Radius()const;
-	void AddAngle(float angle);
+	void AddAngle1(float angle);
+	void AddAngle2(float angle);
 	float GetAngle()const;
 };
 Slash::Slash(const Position2& p, const Vector2& inv1, const Vector2& inv2) :
@@ -61,9 +62,14 @@ Slash::GetAngle()const {
 }
 
 void
-Slash::AddAngle(float angle) {
-	float tmpAngle = GetAngle2Vector(v1, v2);
+Slash::AddAngle1(float angle) {
+	float tmpAngle = GetAngle2Vector(v2, v1);
+	v1 = RotateMat(tmpAngle + angle) * v2;
+}
 
+void
+Slash::AddAngle2(float angle) {
+	float tmpAngle = GetAngle2Vector(v1, v2);
 	v2 = RotateMat(tmpAngle + angle) * v1;
 }
 
@@ -271,11 +277,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		slash.center.x += vax;
 		slash.center.y += vay;
 		if (keystate[KEY_INPUT_Z]) {
-			slash.AddAngle(0.15f);
+			slash.AddAngle2(0.15f);
 		}
 
 		if (keystate[KEY_INPUT_X]) {
-			slash.AddAngle(-0.15f);
+			slash.AddAngle2(-0.15f);
+		}
+		if (keystate[KEY_INPUT_C]) {
+			slash.AddAngle1(0.15f);
+		}
+
+		if (keystate[KEY_INPUT_V]) {
+			slash.AddAngle1(-0.15f);
 		}
 
 		unsigned int color = 0xffffff;//”’

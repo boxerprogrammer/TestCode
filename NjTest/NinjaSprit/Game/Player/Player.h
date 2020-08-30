@@ -3,25 +3,31 @@
 #include<vector>
 #include<array>
 #include<list>
+
 ///プレイヤークラス
 class GameplayingScene;
 class Equipment;
 class Input;
 class PlayerInputListener;
-
+class EffectManager;
 class CollisionManager;
+class ShadowClone;
 /// <summary>
 /// プレイヤークラス
 /// </summary>
 class Player : public Character {
 	friend PlayerInputListener;
 private:
+	int life_ = 100;
 	int maskH_ = -1;
 	int changeSE_ = -1;
 	int runH_[6] = { -1,-1,-1,-1, -1, -1 };
 	int jumpH_[4] = { -1, -1, -1, -1 };
 	int fallH_[2] = { -1, -1 };
 	std::array<Position2f, 60> moveHistory_;
+
+	std::vector<std::shared_ptr<ShadowClone>> shadowClones_;
+
 	size_t currentMoveIndex_ = 0;
 	void SetCurrentPosition(Position2f& pos);
 	const Position2f& GetBackTimePosition(size_t backFrame)const;
@@ -30,9 +36,19 @@ private:
 	float velY_ = 0.0f;
 	float accelY_ = 0.0f;
 	bool isRight_ = true;
-	std::vector<std::shared_ptr<Equipment>> equipments_;
+	std::array<std::shared_ptr<Equipment>,4> equipments_;
 	size_t currentEquipmentNo_ = 0;
+	int knockbackFrame_ = 0;//ノックバックフレーム
 	std::shared_ptr<CollisionManager> collisionManager_;
+
+	std::shared_ptr<EffectManager> effectMgr_;
+
+
+	void AdditionalInput(const Input& input);
+
+	void InitUpdate();
+
+	void DamageUpdate();
 
 	void ExitUpdate();
 	//通常状態
@@ -41,6 +57,7 @@ private:
 	void FallUpdate();
 	//上昇状態
 	void RiseUpdate();
+
 	using Updater_t = void (Player::*)();
 	using Drawer_t = void (Player::*)();
 
@@ -76,11 +93,14 @@ public:
 	/// <returns>向きを表すenum</returns>
 	Direction GetDirection()const;
 
+	Vector2f GetVelocity()const;
+
 	/// <summary>
-	/// 当たったときイベント
+	/// 衝突判定イベント
 	/// </summary>
-	/// <param name="colInfo">衝突情報</param>
-	void OnHit(CollisionInfo& colInfo)override;
+	/// <param name="me">衝突情報自分</param>
+	/// <param name="another">衝突情報相手</param>
+	void OnHit(CollisionInfo& me, CollisionInfo& another)override;
 
 	/// <param name="owner">持ち主ゲームシーン</param>
 	Player(GameplayingScene* owner);

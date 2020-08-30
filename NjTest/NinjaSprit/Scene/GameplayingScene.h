@@ -2,6 +2,7 @@
 #include"Scene.h"
 #include<memory>
 #include<vector>
+#include<array>
 
 class TitleScene;
 class Player;
@@ -20,7 +21,7 @@ class GameplayingScene:public Scene
 	friend TitleScene;
 private:
 
-	int weaponUIH_[3];
+	std::array<int,4> weaponUIH_;
 
 	int bgm_ = -1;
 	int bgmVolume_ = 150;
