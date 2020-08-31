@@ -92,8 +92,8 @@ Fan::Draw(uint32_t color ) {
 		vend = RotateMat(min_angle) * vstart;
 	}
 	// ‚Q‚cƒ|ƒŠƒSƒ“‚ð•`‰æ‚·‚é
-	//DrawPrimitive2D(v.data(), v.size(), DX_PRIMTYPE_TRIANGLEFAN, DX_NONE_GRAPH,true);
-	DrawPolygon2D(v.data(), v.size()/3,DX_NONE_GRAPH, true);
+	DrawPrimitive2D(v.data(), v.size(), DX_PRIMTYPE_TRIANGLELIST, DX_NONE_GRAPH,true);
+	//DrawPolygon2D(v.data(), v.size()/3,DX_NONE_GRAPH, true);
 
 	Position2 p = center + v1;
 	DrawLine(center.x, center.y, p.x, p.y, 0xff8888);

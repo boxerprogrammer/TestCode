@@ -145,3 +145,6 @@ x64
 /onefinger/OneFingerMonkPunch/Log.txt
 *
 *.png
+/SlashEffectTest/SlashEffectTest/Log.txt
+/SlashEffectTest/SlashEffectTest/SlashEffectTest.vcxproj.user
+/SlashEffectTest/SlashEffectTest/testps.pso
