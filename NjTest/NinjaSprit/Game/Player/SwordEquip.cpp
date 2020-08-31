@@ -40,7 +40,7 @@ SwordEquip::Attack(const Player& player, const Input& input, Vector2f offset) {
 	pos += Vector2f(0, equip_offset_y);
 	slash_.center.x = pos.x + xoffset;
 
-	slash_.v1 = slash_.v2=Vector2f(-125, -125);
+	slash_.v1 = slash_.v2=Vector2f(-150, -150);
 	swingTargetAngle_ = 2.0f*DX_PI_F / 3.0f;
 	swingPerAngle_ = 2.0f*swingTargetAngle_/(float)swingFrame_;
 	currentAngle_ = 0.0f;

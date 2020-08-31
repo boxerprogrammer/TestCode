@@ -376,6 +376,9 @@ namespace DxLib {
 }
 float GetAngle2Vector(const Vector2f& v1, const Vector2f& v2);
 
+/// <summary>
+/// 行列
+/// </summary>
 struct Matrix {
 	float m[3][3];
 };
@@ -405,3 +408,75 @@ Vector2f MultipleVec(const Matrix& mat, const Vector2f& vec);
 
 Matrix operator*(const Matrix& lmat, const Matrix& rmat);
 Vector2f operator*(const Matrix& mat, const Vector2f& vec);
+
+/// <summary>
+/// 扇形構造体
+/// </summary>
+///<attention>
+///不変条件
+///v1→v2は必ず時計回りであること
+///v1とv2の大きさは必ず同じであること
+///</attention>
+struct FanShape {
+	Position2f center;///<中心座標
+	Vector2f v1;///<扇形の端点①までのベクトル
+	Vector2f v2;///<扇形の端点②までのベクトル
+	FanShape(const Position2f& incenter, const Vector2f& inV1, const Vector2f& inV2);
+	FanShape(const Position2f& incenter, const Vector2f& inV1, float angle);
+	void AddAngle1(float angle);
+	void AddAngle2(float angle);
+	void SetAngle1(float angle);
+	void SetAngle2(float angle);
+
+	/// <summary>
+	/// 扇形を描画する
+	/// </summary>
+	void Draw(int graphH=-1, float amp=0.0f);
+	/// <summary>
+	/// 半径を返す
+	/// </summary>
+	/// <returns>半径</returns>
+	float Radius();
+	/// <summary>
+	/// V1→V2の角度を返す
+	/// </summary>
+	/// <returns>V1→V2の角度</returns>
+	float GetAngle();
+	
+};
+
+/// <summary>
+/// 斬撃軌跡構造体
+/// </summary>
+///<attention>
+///不変条件
+///v1→v2は必ず時計回りであること
+///v1とv2の大きさは必ず同じであること
+///</attention>
+struct SlashShape {
+	Position2f center;///<中心座標
+	Vector2f v1;///<端点①までのベクトル
+	Vector2f v2;///<端点②までのベクトル
+	SlashShape(const Position2f& incenter, const Vector2f& inV1, const Vector2f& inV2);
+	SlashShape(const Position2f& incenter, const Vector2f& inV1, float angle);
+	void AddAngle1(float angle);
+	void AddAngle2(float angle);
+	void SetAngle1(float angle);
+	void SetAngle2(float angle);
+
+	/// <summary>
+	/// 扇形を描画する
+	/// </summary>
+	void Draw(int graphH = -1, float amp = 0.0f);
+	/// <summary>
+	/// 半径を返す
+	/// </summary>
+	/// <returns>半径</returns>
+	float Radius();
+	/// <summary>
+	/// V1→V2の角度を返す
+	/// </summary>
+	/// <returns>V1→V2の角度</returns>
+	float GetAngle();
+
+};

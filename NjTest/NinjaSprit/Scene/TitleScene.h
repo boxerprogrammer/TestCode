@@ -12,6 +12,8 @@ private:
 	int titleH_=-1;
 	int startH_=-1;
 	int startSE_ = -1;
+	float angle_=3.14f;//テスト用
+	float dist_ = 0.0f;//テスト用ゆがみパラメータ
 	void FadeinUpdate(const Input&);
 	void WaitUpdate(const Input&);
 	void BlinkUpdate(const Input&);
