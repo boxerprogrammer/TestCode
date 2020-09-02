@@ -89,7 +89,7 @@ struct Vector2D {
 	/// </summary>
 	/// <param name="v">右辺値</param>
 	/// <returns>true:等しい false:等しくない</returns>
-	bool operator==(const Vector2D<T>& v) {
+	bool operator==(const Vector2D<T>& v)const {
 		assert(!IsNil());
 		return x == v.x && y == v.y;
 	}
@@ -465,9 +465,9 @@ struct SlashShape {
 	void SetAngle2(float angle);
 
 	/// <summary>
-	/// 扇形を描画する
+	/// スラッシュエフェクトを描画する
 	/// </summary>
-	void Draw(int graphH = -1, float amp = 0.0f);
+	void Draw(int graphH = -1, float amp = 0.0f,int psH=-1,int normalH=-1);
 	/// <summary>
 	/// 半径を返す
 	/// </summary>
