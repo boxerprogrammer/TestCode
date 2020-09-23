@@ -33,7 +33,8 @@ public:
 	virtual void OnUpdate();
 	virtual void OnRender();
 	virtual void OnDestroy();
-
+	virtual void OnButtonDown(UINT32);
+	virtual void OnMouseMove(UINT8, UINT32);
 private:
 	static const UINT FrameCount = 2;
 
@@ -130,6 +131,11 @@ private:
 	ComPtr<ID3D12DescriptorHeap> m_constHeap;
 	uint32_t m_cameraBufferSize = 0;
 
+	void CreateGlobalConstantBuffer();
+	ComPtr<ID3D12Resource> m_globalConstantBuffer;
+
+	void CreatePerInstanceConstantBuffers();
+	std::vector<ComPtr<ID3D12Resource>> m_perInstanceConstantBuffers;
 public:
 	void CheckRaytracingSupport();
 };

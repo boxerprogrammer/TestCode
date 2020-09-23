@@ -11,6 +11,7 @@
 #include<stdexcept>
 #include<Windows.h>
 #include"stdafx.h"
+
 #include"nv_helpers_dx12/TopLevelASGenerator.h"
 #include"nv_helpers_dx12/BottomLevelASGenerator.h"
 #include"nv_helpers_dx12/RaytracingPipelineGenerator.h"
@@ -19,7 +20,14 @@
 #include"DXRHelper.h"
 #include "D3D12HelloTriangle.h"
 
+void 
+D3D12HelloTriangle::OnButtonDown(UINT32) {
 
+}
+void 
+D3D12HelloTriangle::OnMouseMove(UINT8, UINT32) {
+
+}
 
 
 
@@ -50,7 +58,8 @@ D3D12HelloTriangle::CreateRayGenSignature() {
 ComPtr<ID3D12RootSignature> 
 D3D12HelloTriangle::CreateHitSignature() {
 	nv_helpers_dx12::RootSignatureGenerator rsc;
-	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV);//register(t0)に対応
+	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV,0);//register(t0)に対応
+	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_CBV, 0);
 	return rsc.Generate(m_device.Get(), true);
 }
 
@@ -72,17 +81,18 @@ D3D12HelloTriangle::CreateRaytracingPipeline() {
 
 	pipeline.AddLibrary(m_rayGenLibrary.Get(), { L"RayGen" });
 	pipeline.AddLibrary(m_missLibrary.Get(), { L"Miss" });
-	pipeline.AddLibrary(m_hitLibrary.Get(), { L"ClosestHit" });
+	pipeline.AddLibrary(m_hitLibrary.Get(), { L"ClosestHit",L"PlaneClosestHit" });
 
 	m_rayGenSignature = CreateRayGenSignature();
 	m_missSignature = CreateMissSignature();
 	m_hitSignature = CreateHitSignature();
 
 	pipeline.AddHitGroup(L"HitGroup", L"ClosestHit");
+	pipeline.AddHitGroup(L"PlaneHitGroup", L"PlaneClosestHit");
 
 	pipeline.AddRootSignatureAssociation(m_rayGenSignature.Get(), { L"RayGen" });
 	pipeline.AddRootSignatureAssociation(m_missSignature.Get(), { L"Miss" });
-	pipeline.AddRootSignatureAssociation(m_hitSignature.Get(), { L"HitGroup" });
+	pipeline.AddRootSignatureAssociation(m_hitSignature.Get(), { L"HitGroup",L"PlaneHitGroup" });
 
 	pipeline.SetMaxPayloadSize(sizeof(XMFLOAT4));//ペイロードサイズ(RGB+距離)
 	pipeline.SetMaxAttributeSize(sizeof(XMFLOAT2));//重心UV
@@ -103,8 +113,11 @@ D3D12HelloTriangle::CreateShaderBindingTable() {
 
 	m_sbtHelper.AddRayGenerationProgram(L"RayGen", { heapPointer });
 	m_sbtHelper.AddMissProgram(L"Miss", {});
-	m_sbtHelper.AddHitGroup(L"HitGroup", {(void*)(m_vertexBuffer->GetGPUVirtualAddress())});
-
+	for (int i = 0; i < 3; ++i) {
+		m_sbtHelper.AddHitGroup(L"HitGroup",{ (void*)(m_vertexBuffer->GetGPUVirtualAddress()),(void*)(m_perInstanceConstantBuffers[i]->GetGPUVirtualAddress())});
+	}
+	m_sbtHelper.AddHitGroup(L"PlaneHitGroup", {});
+	//m_sbtHelper.AddHitGroup(L"HitGroup", { (void*)(m_vertexBuffer->GetGPUVirtualAddress()), (void*)(m_globalConstantBuffer->GetGPUVirtualAddress()) });
 	uint32_t sbtSize = m_sbtHelper.ComputeSBTSize();
 	m_sbtStorage = nv_helpers_dx12::CreateBuffer(m_device.Get(), sbtSize, D3D12_RESOURCE_FLAG_NONE,
 		D3D12_RESOURCE_STATE_GENERIC_READ, nv_helpers_dx12::kUploadHeapProps);
@@ -166,6 +179,9 @@ D3D12HelloTriangle::CreateShaderResourceHeap() {
 	cbvDesc.BufferLocation = m_cameraBuffer->GetGPUVirtualAddress();
 	cbvDesc.SizeInBytes = m_cameraBufferSize;
 	m_device->CreateConstantBufferView(&cbvDesc, srvHandle);
+
+
+
 }
 
 
@@ -190,7 +206,10 @@ D3D12HelloTriangle::OnInit()
 	
 	CreateAccelerationStructures();
 	ThrowIfFailed(m_commandList->Close());
+	
 	CreateRaytracingPipeline();
+	CreateGlobalConstantBuffer();
+	CreatePerInstanceConstantBuffers();
 	CreateRaytracingOutputBuffer();
 	CreateCameraBuffer();
 	CreateShaderResourceHeap();
@@ -471,7 +490,7 @@ D3D12HelloTriangle::CreateTLAS(const Instances_t& instances) {
 			instances[i].first.Get(),
 			instances[i].second, 
 			static_cast<UINT>(i),
-			static_cast<UINT>(0));
+			static_cast<UINT>(i));
 	}
 
 
@@ -620,12 +639,16 @@ D3D12HelloTriangle::CreateCameraBuffer() {
 void
 D3D12HelloTriangle::UpdateCameraBuffer() {
 	std::vector<XMMATRIX> matrices(4);
+	static float angle = 0.0f;
+	constexpr float r = 1.5f * 1.4142f;
 
-	XMVECTOR eye = XMVectorSet(1.5f, 1.5f, 1.5f, 0.0f);
+	XMVECTOR eye = XMVectorSet(r*cos(angle),1.5f , r * sin(angle), 0.0f);
+	//XMVECTOR eye = XMVectorSet(1.5f, 0.5f, 1.5f, 0.0f);
 	XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	matrices[0] = XMMatrixLookAtRH(eye, at, up);
 
+	angle += 0.01f;
 
 	float fovAngleY = XM_PIDIV4;
 	matrices[1] = XMMatrixPerspectiveFovRH(fovAngleY, m_aspectRatio, 0.1f, 1000.0f);
@@ -780,5 +803,72 @@ void D3D12HelloTriangle::OnKeyUp(UINT8 key)
 	if (key == VK_SPACE)
 	{
 		m_raster = !m_raster;
+	}
+}
+
+void
+D3D12HelloTriangle::CreateGlobalConstantBuffer() {
+	XMVECTOR bufferData[] = {
+		//A
+		XMVECTOR{1.0f,0.0f,0.0f,1.0f},
+		XMVECTOR{0.7f,0.4f,0.0f,1.0f},
+		XMVECTOR{0.4f,0.7f,0.0f,1.0f},
+
+		//B
+		XMVECTOR{0.0f,1.0f,0.0f,1.0f},
+		XMVECTOR{0.0f,0.7f,0.4f,1.0f},
+		XMVECTOR{0.0f,0.4f,0.7f,1.0f},
+
+		//C
+		XMVECTOR{0.0f,0.0f,1.0f,1.0f},
+		XMVECTOR{0.4f,0.0f,0.7f,1.0f},
+		XMVECTOR{0.7f,0.0f,0.4f,1.0f},
+	};
+	auto sz = sizeof(bufferData) ;
+	sz = ROUND_UP(sz, 256);
+	m_globalConstantBuffer = nv_helpers_dx12::CreateBuffer(
+		m_device.Get(),
+		sz,
+		D3D12_RESOURCE_FLAG_NONE,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nv_helpers_dx12::kUploadHeapProps);
+
+	uint8_t* pData;
+	ThrowIfFailed(m_globalConstantBuffer->Map(0, nullptr, (void**)&pData));
+	memcpy(pData, bufferData, sizeof(bufferData));
+	m_globalConstantBuffer->Unmap(0, nullptr);
+
+}
+
+
+void 
+D3D12HelloTriangle::CreatePerInstanceConstantBuffers() {
+	XMVECTOR bufferData[] = {
+		//A
+		XMVECTOR{1.0f,0.0f,0.0f,1.0f},
+		XMVECTOR{1.0f,0.4f,0.0f,1.0f},
+		XMVECTOR{1.0f,0.7f,0.0f,1.0f},
+
+		//B
+		XMVECTOR{0.0f,1.0f,0.0f,1.0f},
+		XMVECTOR{0.0f,1.0f,0.4f,1.0f},
+		XMVECTOR{0.0f,1.0f,0.7f,1.0f},
+
+		//C
+		XMVECTOR{0.0f,0.0f,1.0f,1.0f},
+		XMVECTOR{0.4f,0.0f,1.0f,1.0f},
+		XMVECTOR{0.7f,0.0f,1.0f,1.0f},
+	};
+	m_perInstanceConstantBuffers.resize(3);
+	int i(0);
+	for (auto& cb : m_perInstanceConstantBuffers) {
+		const uint32_t bufferSize = sizeof(XMVECTOR) * 3;
+		cb = nv_helpers_dx12::CreateBuffer(m_device.Get(), bufferSize, D3D12_RESOURCE_FLAG_NONE,
+			D3D12_RESOURCE_STATE_GENERIC_READ, nv_helpers_dx12::kUploadHeapProps);
+		uint8_t* data=nullptr;
+		ThrowIfFailed(cb->Map(0, nullptr, (void**)&data));
+		memcpy(data, &bufferData[i * 3], bufferSize);
+		cb->Unmap(0, nullptr);
+		++i;
 	}
 }
