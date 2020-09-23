@@ -6,10 +6,13 @@
 #include"ShadowClone.h"
 #include<DxLib.h>
 #include<vector>
+#include"../Collision/CollisionManager.h"
+#include"../Collision/FanCollider.h"
 using namespace std;
 namespace {
-	constexpr float equip_offset_y = -60.0f;
+	constexpr float equip_offset_y = -48.0f;
 	constexpr int swing_frame = 30;
+	constexpr float sword_r = 100.0f;
 	constexpr int swing_frame_div2 = swing_frame/2;
 	int pixelShaderH_ = -1;
 	int screenH_ = -1;
@@ -19,12 +22,13 @@ namespace {
 };
 SwordEquip::SwordEquip(std::shared_ptr<Player>& p, std::shared_ptr<CollisionManager> cm, std::shared_ptr<Camera> camera, ShadowClone* shadow) :player_(p),
 Equipment(cm, camera),
-shadow_(shadow){
+shadow_(shadow),
+frame_(0){
 	if (pixelShaderH_==-1) {
 		pixelShaderH_=LoadPixelShader(L"Resource/Etc/testps.pso");
 	}
 	auto& fileMgr = FileManager::Instance();
-	normalH_ = fileMgr.Load(L"Resource/Etc/normal.png")->Handle();
+	normalH_ = fileMgr.Load(L"Resource/Etc/NormalMap.png")->Handle();
 	if (screenH_ == -1) {
 		SetUseDivGraphFlag(false);
 		screenH_ = MakeScreen(w_, h_);
@@ -34,16 +38,36 @@ shadow_(shadow){
 
 void
 SwordEquip::Attack(const Player& player, const Input& input, Vector2f offset) {
+	if (swingFrame_ > 0)return;
 	swingFrame_ = swing_frame;
 	auto pos = player_->GetPosition();
 	const auto xoffset = camera_->ViewOffset().x;
 	pos += Vector2f(0, equip_offset_y);
 	slash_.center.x = pos.x + xoffset;
-
-	slash_.v1 = slash_.v2=Vector2f(-150, -150);
-	swingTargetAngle_ = 2.0f*DX_PI_F / 3.0f;
+	if (player_->GetDirection() == Player::Direction::right) {
+		slash_.v1 = slash_.v2 = Vector2f(-sword_r, -sword_r);
+		rotDir_ = RotateDir::cw;
+		swingTargetAngle_ = 3.0f * DX_PI_F / 4.0f;
+	}
+	else {
+		slash_.v1 = slash_.v2 = Vector2f(sword_r, -sword_r);
+		rotDir_ = RotateDir::ccw;
+		swingTargetAngle_ = -3.0f * DX_PI_F / 4.0f;
+	}
+	
 	swingPerAngle_ = 2.0f*swingTargetAngle_/(float)swingFrame_;
 	currentAngle_ = 0.0f;
+
+	if (fanCollider_ == nullptr) {
+		FanShape fan(offset + Vector2f(0,equip_offset_y),slash_.v1,0.0f );
+		fanCollider_ = new FanCollider(player_, fan, tag_player_attack, true);
+		collisionManager_->AddCollider(fanCollider_);
+	}
+	else {
+		FanShape& fan = fanCollider_->GetFanShape();
+		fan = FanShape( offset + Vector2f(0,equip_offset_y),slash_.v1 ,0.0f );
+	}
+
 }
 
 void
@@ -59,15 +83,39 @@ SwordEquip::Update() {
 	pos += Vector2f(0, equip_offset_y);
 	slash_.center = pos;
 	slash_.center.x = pos.x + xoffset;
-	if (swingFrame_ >= swing_frame_div2) {
-		currentAngle_ += swingPerAngle_;
-		slash_.AddAngle2(swingPerAngle_);
+	if (rotDir_ == RotateDir::cw) {
+		if (swingFrame_ >= swing_frame_div2) {
+			currentAngle_ += swingPerAngle_;
+			slash_.AddAngle2(swingPerAngle_);
+			auto& fan = fanCollider_->GetFanShape();
+			fan.AddAngle2(swingPerAngle_);
+		}
+		else {
+			currentAngle_ -= swingPerAngle_;
+			slash_.AddAngle1(swingPerAngle_);
+			auto& fan = fanCollider_->GetFanShape();
+			fan.AddAngle1(swingPerAngle_);
+		}
 	}
 	else {
-		currentAngle_ -= swingPerAngle_;
-		slash_.AddAngle1(swingPerAngle_);
+		if (swingFrame_ >= swing_frame_div2) {
+			currentAngle_ += swingPerAngle_;
+			slash_.AddAngle1(swingPerAngle_);
+			auto& fan = fanCollider_->GetFanShape();
+			fan.AddAngle1(swingPerAngle_);
+		}
+		else {
+			currentAngle_ -= swingPerAngle_;
+			slash_.AddAngle2(swingPerAngle_);
+			auto& fan = fanCollider_->GetFanShape();
+			fan.AddAngle2(swingPerAngle_);
+		}
 	}
 	--swingFrame_;
+	if (swingFrame_ == 0) {
+		auto& fan = fanCollider_->GetFanShape();
+		fan.v2 = fan.v1;
+	}
 }
 
 void
@@ -81,11 +129,12 @@ SwordEquip::Draw() {
 		const auto xoffset = camera_->ViewOffset().x;
 		pos += Vector2f(0, equip_offset_y);
 		slash_.center.x = pos.x+xoffset;
+		slash_.center.y = pos.y;
 		if (pixelShaderH_ > 0) {
 			if (shadow_ == nullptr) {
 				GetDrawScreenGraph(0, 0, w_, h_, screenH_);
 			}
-			slash_.Draw(screenH_,pixelShaderH_,normalH_);
+			slash_.Draw(screenH_,pixelShaderH_,normalH_,0xffffff,rotDir_==RotateDir::ccw);
 		}
 		else {
 			//DX_NONE_GRAPH;
@@ -131,16 +180,19 @@ Slash::Radius()const {
 }
 
 void
-Slash::Draw( int graphH,int psH,int normalH,unsigned int color) {
-	constexpr float min_angle = DX_PI_F / 36.0f;//だいたい5度くらい
-	float angle = GetAngle2Vector(v1, v2);
-
-	size_t triangles_num = (size_t)ceil(angle / min_angle);
+Slash::Draw( int graphH,int psH,int normalH,unsigned int color,bool isTurn) {
+	constexpr float step_angle = DX_PI_F / 36.0f;//だいたい5度くらい
+	float angle_range = GetAngle2Vector(v1, v2);
+	
+	size_t triangles_num = (size_t)ceil(angle_range / step_angle);
 	++triangles_num;
 	vector<VERTEX2DSHADER> v;
 	vector<VERTEX2D> ngV;
 	float r = v1.Magnitude();
 	float dr = r / (float)triangles_num;
+	if (isTurn) {
+
+	}
 	auto vstart = v1;
 	if (psH==-1) {
 		
@@ -158,19 +210,20 @@ Slash::Draw( int graphH,int psH,int normalH,unsigned int color) {
 			ngV[i * 2 + 0].pos = V2V(p);
 			ngV[i * 2 + 0].u = (p.x / w_)+cos((float)i / (float)triangles_num) / 20.0f;
 			ngV[i * 2 + 0].v = (p.y / h_)+sin((float)i / (float)triangles_num) / 20.0f;
-			v[i * 2 + 0].dif.r = 16;
-			v[i * 2 + 0].dif.g = 64;
-			v[i * 2 + 0].dif.b = 192;
-			v[i * 2 + 0].dif.a = 32;
+			//v[i * 2 + 0].dif.r = 16;
+			//v[i * 2 + 0].dif.g = 64;
+			//v[i * 2 + 0].dif.b = 192;
+			//v[i * 2 + 0].dif.a = 32;
+
 			p = center + vstart;
 			ngV[i * 2 + 1].pos = V2V(p);
 			ngV[i * 2 + 1].u = (p.x / w_)+cos((float)(i + 2) / (float)triangles_num) / 50.0f;
 			ngV[i * 2 + 1].v = (p.y / h_)+sin((float)(i + 2) / (float)triangles_num) / 50.0f;
-			v[i * 2 + 1].dif.r = 192;
-			v[i * 2 + 1].dif.g = 192;
-			v[i * 2 + 1].dif.b = 255;
-			v[i * 2 + 1].dif.a = 255;
-			vstart = RotateMat(min_angle) * vstart;
+			ngV[i * 2 + 1].dif.r = 192;
+			ngV[i * 2 + 1].dif.g = 192;
+			ngV[i * 2 + 1].dif.b = 255;
+			ngV[i * 2 + 1].dif.a = 255;
+			vstart = RotateMat(step_angle) * vstart;
 			r -= dr;
 		}
 		//最後の三角形
@@ -194,49 +247,65 @@ Slash::Draw( int graphH,int psH,int normalH,unsigned int color) {
 	}
 	else {
 		v.resize(2 * (size_t)triangles_num);
-
+		float curAngle = 0.0f;
 		for (size_t i = 0; i < triangles_num - 1; ++i) {
-			auto p = center + vstart.Normalized() * r;
+			auto ratio = curAngle / angle_range;
+			auto inr = r * (isTurn? ratio: (1 - ratio));
+			auto p = center + vstart.Normalized() * inr;
 			v[i * 2 + 0].pos = V2V(p);
 			v[i * 2 + 0].u = (p.x / w_)+cos((float)i / (float)triangles_num) / 20.0f;
 			v[i * 2 + 0].v = (p.y / h_)+sin((float)i / (float)triangles_num) / 20.0f;
 			v[i * 2 + 0].rhw = 1.0f;
-			v[i * 2 + 0].dif.r = 16;
-			v[i * 2 + 0].dif.g = 64;
-			v[i * 2 + 0].dif.b = 192;
-			v[i * 2 + 0].dif.a = 32;
+			v[i * 2 + 0].dif.r = 0x00;
+			v[i * 2 + 0].dif.g = 0x00;
+			v[i * 2 + 0].dif.b = 0x88;
+			v[i * 2 + 0].dif.a = 0xff;
 			p = center + vstart;
 			v[i * 2 + 1].pos = V2V(p);
 			v[i * 2 + 1].u = (p.x / w_)+cos((float)(i + 2) / (float)triangles_num) / 50.0f;
 			v[i * 2 + 1].v = (p.y / h_)+sin((float)(i + 2) / (float)triangles_num) / 50.0f;
 			v[i * 2 + 1].rhw = 1.0f;
-			v[i * 2 + 1].dif.r = 192;
-			v[i * 2 + 1].dif.g = 192;
-			v[i * 2 + 1].dif.b = 255;
-			v[i * 2 + 1].dif.a = 255;
-			vstart = RotateMat(min_angle) * vstart;
-			r -= dr;
+			//v[i * 2 + 1].dif.r = 192;
+			//v[i * 2 + 1].dif.g = 192;
+			//v[i * 2 + 1].dif.b = 255;
+			//v[i * 2 + 1].dif.a = 255;
+			v[i * 2 + 1].dif.r = 0xaa;
+			v[i * 2 + 1].dif.g = 0xff;
+			v[i * 2 + 1].dif.b = 0xff;
+			v[i * 2 + 1].dif.a = 0xff;
+			vstart = RotateMat(step_angle) * vstart;
+			curAngle += step_angle;
 		}
 		//最後の三角形
 		size_t idx = ((size_t)triangles_num - 1) * 2;
-		auto pos = center + v2.Normalized() * r;
+		auto ratio = curAngle / angle_range;
+		auto inr = r * (isTurn ? ratio : (1 - ratio));
+		auto pos = center + v2.Normalized() * inr;
 		v[idx].pos = V2V(pos);
 		v[idx].u = pos.x / w_;
 		v[idx].v = pos.y / h_;
 		v[idx].rhw = 1.0f;
-		v[idx].dif.r = 168;
-		v[idx].dif.g = 168;
-		v[idx].dif.b = 255;
-		v[idx].dif.a = 192;
+		//v[idx].dif.r = 168;
+		//v[idx].dif.g = 168;
+		//v[idx].dif.b = 255;
+		//v[idx].dif.a = 192;
+		v[idx].dif.r = 0x00;
+		v[idx].dif.g = 0x00;
+		v[idx].dif.b = 0x88;
+		v[idx].dif.a = 0xff;
 		pos = center + v2;
 		v[idx + 1].pos = V2V(pos);
 		v[idx + 1].u = pos.x / w_;
 		v[idx + 1].v = pos.y / h_;
 		v[idx + 1].rhw = 1.0f;
-		v[idx + 1].dif.r = 255;
-		v[idx + 1].dif.g = 255;
-		v[idx + 1].dif.b = 255;
-		v[idx + 1].dif.a = 255;
+		//v[idx + 1].dif.r = 255;
+		//v[idx + 1].dif.g = 255;
+		//v[idx + 1].dif.b = 255;
+		//v[idx + 1].dif.a = 255;
+		v[idx + 1].dif.r = 0xaa;
+		v[idx + 1].dif.g = 0xff;
+		v[idx + 1].dif.b = 0xff;
+		v[idx + 1].dif.a = 0xff;
 	}
 
 	

@@ -19,6 +19,9 @@ namespace {
 	unsigned int blinkInterval_ = blink_interval_normal;
 	unsigned int blinkTimer_ = 0;
 	int captureH_ = -1;
+	int psH_ = -1;
+	int normalH_ = -1;
+	SlashShape slash({ 400.0f,300.0f }, { -150.0f,-150.0f }, DX_PI_F);
 }
 
 TitleScene::TitleScene(SceneController& c) :
@@ -32,6 +35,12 @@ TitleScene::TitleScene(SceneController& c) :
 	startSE_ = fileMgr.Load(L"Resource/Sound/System/start.wav")->Handle();
 	auto rc=Application::Instance().GetViewport().GetRect();
 	captureH_ = MakeScreen(rc.Width(), rc.Height());
+	if (psH_ == -1) {
+		psH_ = LoadPixelShader(L"Resource/Etc/testps.pso");
+	}
+	if (normalH_ == -1) {
+		normalH_ =fileMgr.Load(L"Resource/Etc/NormalMap.png")->Handle();
+	}
 }
 
 //‘Ò‚¿
@@ -45,16 +54,24 @@ TitleScene::WaitUpdate(const Input& input) {
 	}
 	else {
 		if (input.IsPressed("left")) {
-			angle_ -= 0.01f;
+			slash.AddAngle2(-0.01f);
 		}
 		if (input.IsPressed("right")) {
-			angle_ += 0.01f;
+			slash.AddAngle2(0.01f);
 		}
-		if (input.IsPressed("up")) {
-			dist_ += 1.f;
+
+		if (input.IsPressed("left")) {
+			slash.AddAngle2(-0.01f);
 		}
-		if (input.IsPressed("down")) {
-			dist_ -= 1.f;
+		if (input.IsPressed("right")) {
+			slash.AddAngle2(0.01f);
+		}
+
+		if (input.IsPressed("shot")) {
+			slash.AddAngle1(-0.01f);
+		}
+		if (input.IsPressed("jump")) {
+			slash.AddAngle1(0.01f);
 		}
 	}
 }
@@ -111,11 +128,11 @@ TitleScene::NormalDraw() {
 	if ((blinkTimer_ / blinkInterval_) % 2 == 1) {
 		DrawRotaGraph(static_cast<int>(vsize.w / 2),400,1.0f,0.0f,startH_,true);
 	}
-	SlashShape slash({400.0f,300.0f}, { -150.0f,-150.0f },angle_ );
+	
 	
 	DxLib::GetDrawScreenGraph(0, 0, 800, 600, captureH_);
 
-	slash.Draw(captureH_,dist_);
+	slash.Draw(captureH_,dist_,psH_,normalH_);
 }
 void
 TitleScene::FadeDraw() {

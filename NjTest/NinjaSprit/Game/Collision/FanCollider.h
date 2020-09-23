@@ -1,12 +1,16 @@
 #pragma once
 #include "Collider.h"
+#include"../../Geometry.h"
+
 class FanCollider :
     public Collider
 {
+private:
+	FanShape fan_;///<判定に使用する扇形
 public:
 
-	FanCollider(std::shared_ptr<Character> owner, const Capsule& cup, const char* tag = "", bool isImmortal = false);
-	~FanCollider();
+	FanCollider(std::shared_ptr<Character> owner, const FanShape& cup, const char* tag = "", bool isImmortal = false);
+	~FanCollider()=default;
 	///外からいじれるように参照を返す
 	FanShape& GetFanShape();
 
