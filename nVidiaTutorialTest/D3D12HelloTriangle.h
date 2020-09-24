@@ -57,9 +57,10 @@ private:
 	std::vector<std::pair<ComPtr<ID3D12Resource>, DirectX::XMMATRIX>> m_instances;
 
 	AccelerationStructureBuffers CreateBLAS(VertBuff_t vertBuff);
-	void CreateTLAS(const Instances_t& instances);
+	void CreateTLAS(const Instances_t& instances,bool updateOnly=false);
 	void CreateAccelerationStructures();
 
+	uint32_t m_time = 0;
 
 	// Pipeline objects.
 	CD3DX12_VIEWPORT m_viewport;

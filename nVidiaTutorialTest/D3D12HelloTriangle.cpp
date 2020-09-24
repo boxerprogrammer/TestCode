@@ -451,6 +451,15 @@ void D3D12HelloTriangle::LoadAssets()
 void D3D12HelloTriangle::OnUpdate()
 {
 	UpdateCameraBuffer();
+	++m_time;
+	m_instances[0].second = XMMatrixRotationAxis({ 0.0f,1.0f,0.0f }, static_cast<float>(m_time) / 50.0f) *
+		XMMatrixTranslation(0.0f, 0.1f * cosf((float)m_time / 20.0f), 0.0f);
+
+	m_instances[1].second = XMMatrixRotationAxis({ 0.0f,-1.0f,0.0f }, static_cast<float>(m_time) / 50.0f) *
+		XMMatrixTranslation(0.75f, 0.1f * cosf((float)m_time / 10.0f), 0.0f);
+
+	m_instances[2].second = XMMatrixRotationAxis({ 0.0f,1.0f,0.0f }, static_cast<float>(m_time*2) / 50.0f) *
+		XMMatrixTranslation(-0.75f, 0.1f * cosf((float)m_time / 40.0f), 0.0f);
 }
 
 void 
@@ -484,41 +493,44 @@ D3D12HelloTriangle::CreatePlaneVB() {
 }
 
 void 
-D3D12HelloTriangle::CreateTLAS(const Instances_t& instances) {
-	for (size_t i = 0; i < instances.size(); ++i) {
-		m_TLAS.AddInstance(
-			instances[i].first.Get(),
-			instances[i].second, 
-			static_cast<UINT>(i),
-			static_cast<UINT>(i));
+D3D12HelloTriangle::CreateTLAS(const Instances_t& instances , bool updateOnly) {
+	if (!updateOnly) {
+		for (size_t i = 0; i < instances.size(); ++i) {
+			m_TLAS.AddInstance(
+				instances[i].first.Get(),
+				instances[i].second,
+				static_cast<UINT>(i),
+				static_cast<UINT>(i));
+		}
+
+
+		UINT64 scratchSize, resultSize, instanceDescSize;
+		m_TLAS.ComputeASBufferSizes(m_device.Get(), true, &scratchSize, &resultSize, &instanceDescSize);
+
+		m_TLASBuffer.pScratch = nv_helpers_dx12::CreateBuffer(m_device.Get(),
+			scratchSize,
+			D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS,
+			D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
+			nv_helpers_dx12::kDefaultHeapProps);
+
+		m_TLASBuffer.pResult = nv_helpers_dx12::CreateBuffer(m_device.Get(),
+			resultSize,
+			D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS,
+			D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE,
+			nv_helpers_dx12::kDefaultHeapProps);
+
+		m_TLASBuffer.pInstanceDesc = nv_helpers_dx12::CreateBuffer(m_device.Get(),
+			instanceDescSize,
+			D3D12_RESOURCE_FLAG_NONE,
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			nv_helpers_dx12::kUploadHeapProps);
 	}
-
-
-	UINT64 scratchSize, resultSize, instanceDescSize;
-	m_TLAS.ComputeASBufferSizes(m_device.Get(), true, &scratchSize, &resultSize, &instanceDescSize);
-
-	m_TLASBuffer.pScratch = nv_helpers_dx12::CreateBuffer(m_device.Get(), 
-		scratchSize, 
-		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS,
-		D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
-		nv_helpers_dx12::kDefaultHeapProps);
-
-	m_TLASBuffer.pResult = nv_helpers_dx12::CreateBuffer(m_device.Get(), 
-		resultSize, 
-		D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS,
-		D3D12_RESOURCE_STATE_RAYTRACING_ACCELERATION_STRUCTURE,
-		nv_helpers_dx12::kDefaultHeapProps);
-
-	m_TLASBuffer.pInstanceDesc = nv_helpers_dx12::CreateBuffer(m_device.Get(), 
-		instanceDescSize, 
-		D3D12_RESOURCE_FLAG_NONE,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nv_helpers_dx12::kUploadHeapProps);
-
 	m_TLAS.Generate(m_commandList.Get(), 
 		m_TLASBuffer.pScratch.Get(), 
 		m_TLASBuffer.pResult.Get(), 
-		m_TLASBuffer.pInstanceDesc.Get());
+		m_TLASBuffer.pInstanceDesc.Get(),
+		updateOnly,
+		m_TLASBuffer.pResult.Get());
 
 }
 
@@ -675,6 +687,9 @@ void D3D12HelloTriangle::PopulateCommandList()
 	// list, that command list can then be reset at any time and must be before 
 	// re-recording.
 	ThrowIfFailed(m_commandList->Reset(m_commandAllocator.Get(), m_pipelineState.Get()));
+
+	CreateTLAS(m_instances,true);
+
 
 	// Set necessary state.
 	m_commandList->SetGraphicsRootSignature(m_rootSignature.Get());
