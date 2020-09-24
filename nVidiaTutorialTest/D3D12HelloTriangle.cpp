@@ -44,12 +44,14 @@ D3D12HelloTriangle::D3D12HelloTriangle(UINT width, UINT height, std::wstring nam
 ComPtr<ID3D12RootSignature> 
 D3D12HelloTriangle::CreateRayGenSignature() {
 	nv_helpers_dx12::RootSignatureGenerator rsc;
-	rsc.AddHeapRangesParameter({ {0,1,0,
+	rsc.AddHeapRangesParameter({ 
+		{0,1,0,
 		D3D12_DESCRIPTOR_RANGE_TYPE_UAV,0},//u0
 		{0,1,0,
 		D3D12_DESCRIPTOR_RANGE_TYPE_SRV,1},//t0
 		{0,1,0,
-		D3D12_DESCRIPTOR_RANGE_TYPE_CBV,2}//b0
+		D3D12_DESCRIPTOR_RANGE_TYPE_CBV,2},//b0
+		
 		});
 
 	return rsc.Generate(m_device.Get(), true);
@@ -58,8 +60,12 @@ D3D12HelloTriangle::CreateRayGenSignature() {
 ComPtr<ID3D12RootSignature> 
 D3D12HelloTriangle::CreateHitSignature() {
 	nv_helpers_dx12::RootSignatureGenerator rsc;
-	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV,0);//register(t0)に対応
+	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 0);//register(t0)に対応
 	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_CBV, 0);
+	rsc.AddHeapRangesParameter({ 
+		{ 2,1,0,
+		D3D12_DESCRIPTOR_RANGE_TYPE_SRV,1 }, //t2
+		});//
 	return rsc.Generate(m_device.Get(), true);
 }
 
@@ -78,6 +84,10 @@ D3D12HelloTriangle::CreateRaytracingPipeline() {
 	m_missLibrary = nv_helpers_dx12::CompileShaderLibrary(L"shaders/Miss.hlsl");
 	m_hitLibrary = nv_helpers_dx12::CompileShaderLibrary(L"shaders/Hit.hlsl");
 
+	m_shadowLibrary = nv_helpers_dx12::CompileShaderLibrary(L"shaders/ShadowRay.hlsl");
+
+	pipeline.AddLibrary(m_shadowLibrary.Get(), { L"ShadowClosestHit",L"ShadowMiss" });
+	m_shadowSignature = CreateHitSignature();
 
 	pipeline.AddLibrary(m_rayGenLibrary.Get(), { L"RayGen" });
 	pipeline.AddLibrary(m_missLibrary.Get(), { L"Miss" });
@@ -89,14 +99,19 @@ D3D12HelloTriangle::CreateRaytracingPipeline() {
 
 	pipeline.AddHitGroup(L"HitGroup", L"ClosestHit");
 	pipeline.AddHitGroup(L"PlaneHitGroup", L"PlaneClosestHit");
+	pipeline.AddHitGroup(L"ShadowHitGroup", L"ShadowClosestHit");
 
 	pipeline.AddRootSignatureAssociation(m_rayGenSignature.Get(), { L"RayGen" });
 	pipeline.AddRootSignatureAssociation(m_missSignature.Get(), { L"Miss" });
+	pipeline.AddRootSignatureAssociation(m_hitSignature.Get(), { L"HitGroup" });
+
+	pipeline.AddRootSignatureAssociation(m_shadowSignature.Get(), { L"ShadowHitGroup" });
+	pipeline.AddRootSignatureAssociation(m_missSignature.Get(), { L"Miss" ,L"ShadowMiss" });
 	pipeline.AddRootSignatureAssociation(m_hitSignature.Get(), { L"HitGroup",L"PlaneHitGroup" });
 
 	pipeline.SetMaxPayloadSize(sizeof(XMFLOAT4));//ペイロードサイズ(RGB+距離)
 	pipeline.SetMaxAttributeSize(sizeof(XMFLOAT2));//重心UV
-	pipeline.SetMaxRecursionDepth(1);
+	pipeline.SetMaxRecursionDepth(2);
 
 	m_rtStateObject = pipeline.Generate();
 	ThrowIfFailed(m_rtStateObject->QueryInterface(IID_PPV_ARGS(&m_rtStateObjectProps)));
@@ -113,11 +128,14 @@ D3D12HelloTriangle::CreateShaderBindingTable() {
 
 	m_sbtHelper.AddRayGenerationProgram(L"RayGen", { heapPointer });
 	m_sbtHelper.AddMissProgram(L"Miss", {});
+	m_sbtHelper.AddMissProgram(L"ShadowMiss", {});
 	for (int i = 0; i < 3; ++i) {
 		m_sbtHelper.AddHitGroup(L"HitGroup",{ (void*)(m_vertexBuffer->GetGPUVirtualAddress()),(void*)(m_perInstanceConstantBuffers[i]->GetGPUVirtualAddress())});
+		m_sbtHelper.AddHitGroup(L"ShadowHitGroup", {});
 	}
-	m_sbtHelper.AddHitGroup(L"PlaneHitGroup", {});
-	//m_sbtHelper.AddHitGroup(L"HitGroup", { (void*)(m_vertexBuffer->GetGPUVirtualAddress()), (void*)(m_globalConstantBuffer->GetGPUVirtualAddress()) });
+	
+	m_sbtHelper.AddHitGroup(L"PlaneHitGroup", {heapPointer});
+	m_sbtHelper.AddHitGroup(L"ShadowHitGroup", {});
 	uint32_t sbtSize = m_sbtHelper.ComputeSBTSize();
 	m_sbtStorage = nv_helpers_dx12::CreateBuffer(m_device.Get(), sbtSize, D3D12_RESOURCE_FLAG_NONE,
 		D3D12_RESOURCE_STATE_GENERIC_READ, nv_helpers_dx12::kUploadHeapProps);
@@ -500,7 +518,7 @@ D3D12HelloTriangle::CreateTLAS(const Instances_t& instances , bool updateOnly) {
 				instances[i].first.Get(),
 				instances[i].second,
 				static_cast<UINT>(i),
-				static_cast<UINT>(i));
+				static_cast<UINT>(2*i));
 		}
 
 

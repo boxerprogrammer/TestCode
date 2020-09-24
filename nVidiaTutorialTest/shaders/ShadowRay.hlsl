@@ -1,19 +1,19 @@
-struct ShadpwHitInfo{
+struct ShadowHitInfo{
 	bool isHit;
 };
 
-strucgt Attributes{
+struct Attributes{
 	float2 uv;
 };
 
 
 [shader("closesthit")] 
-void ShadowClosestHit(inout ShadowHitInfo hit : SV_Raypayload) {
+void ShadowClosestHit(inout ShadowHitInfo hit ,Attributes bary) {
 	hit.isHit=true;
 }
 
 [shader("miss")]
-void ShadowMiss(intout ShadowHitInfo hit : SV_Raypayload){
+void ShadowMiss(inout ShadowHitInfo hit ){
 	hit.isHit=false;
 }
 
