@@ -87,4 +87,21 @@
       <Filter>Assets\Shaders</Filter>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\RayGen.hlsl">
+      <Filter>Assets</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Common.hlsl">
+      <Filter>Assets</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Hit.hlsl">
+      <Filter>Assets</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Miss.hlsl">
+      <Filter>Assets</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\ShadowRay.hlsl">
+      <Filter>Assets</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>
