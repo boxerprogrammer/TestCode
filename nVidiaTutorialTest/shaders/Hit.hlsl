@@ -65,6 +65,6 @@ void ClosestHit(inout HitInfo payload, Attributes attrib)
 	if(iid<3){
 		hitColor=cA*brycent.x+cB*brycent.y+cC*brycent.z;
 	}
-
+	//hitColor*=BTrivertex[]
  	payload.colorAndDistance = float4(hitColor, RayTCurrent());
 }

@@ -92,6 +92,7 @@ private:
 
 	void LoadPipeline();
 	void LoadAssets();
+	void LoadPMDFile(const wchar_t* path);
 	void PopulateCommandList();
 	void WaitForPreviousFrame();
 
@@ -143,6 +144,9 @@ private:
 
 	ComPtr<ID3D12Resource> m_indexBuffer;
 	D3D12_INDEX_BUFFER_VIEW m_indexBufferView;
+
+	std::vector<Vertex> m_pmdVert;
+	std::vector<UINT> m_pmdIndex;
 
 public:
 	void CheckRaytracingSupport();

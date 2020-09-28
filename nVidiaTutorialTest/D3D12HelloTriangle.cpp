@@ -344,6 +344,7 @@ void D3D12HelloTriangle::LoadPipeline()
 // Load the sample assets.
 void D3D12HelloTriangle::LoadAssets()
 {
+	LoadPMDFile(L"model/satori.pmd");
 	// Create an empty root signature.
 	{
 		CD3DX12_ROOT_PARAMETER constantParameter;
@@ -424,7 +425,7 @@ void D3D12HelloTriangle::LoadAssets()
 			{ { 0.0f,0.0f,1.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } }
 		};
 
-		const UINT vertexBufferSize = sizeof(triangleVertices);
+		const UINT vertexBufferSize = sizeof(Vertex) * m_pmdVert.size();
 
 		// Note: using upload heaps to transfer static data like vert buffers is not 
 		// recommended. Every time the GPU needs it, the upload heap will be marshalled 
@@ -442,7 +443,7 @@ void D3D12HelloTriangle::LoadAssets()
 		UINT8* pVertexDataBegin;
 		CD3DX12_RANGE readRange(0, 0);		// We do not intend to read from this resource on the CPU.
 		ThrowIfFailed(m_vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)));
-		memcpy(pVertexDataBegin, triangleVertices, sizeof(triangleVertices));
+		memcpy(pVertexDataBegin, m_pmdVert.data(),vertexBufferSize);
 		m_vertexBuffer->Unmap(0, nullptr);
 
 		// Initialize the vertex buffer view.
@@ -451,8 +452,8 @@ void D3D12HelloTriangle::LoadAssets()
 		m_vertexBufferView.SizeInBytes = vertexBufferSize;
 
 
-		std::vector<UINT> indices = { 0,1,2,0,3,1,0,2,3,1,3,2 };
-		const UINT indexBufferSize = static_cast<UINT>(indices.size()) * sizeof(UINT);
+		//std::vector<UINT> indices = { 0,1,2,0,3,1,0,2,3,1,3,2 };
+		const UINT indexBufferSize = static_cast<UINT>(m_pmdIndex.size()) * sizeof(UINT);
 		CD3DX12_HEAP_PROPERTIES heapProperty = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 		CD3DX12_RESOURCE_DESC bufferResource = CD3DX12_RESOURCE_DESC::Buffer(indexBufferSize);
 		ThrowIfFailed(m_device->CreateCommittedResource(
@@ -462,7 +463,7 @@ void D3D12HelloTriangle::LoadAssets()
 
 		UINT* indexDataBegin;
 		ThrowIfFailed(m_indexBuffer->Map(0, &readRange, (void**)&indexDataBegin));
-		std::copy(indices.begin(), indices.end(), indexDataBegin);
+		std::copy(m_pmdIndex.begin(), m_pmdIndex.end(), indexDataBegin);
 		m_indexBuffer->Unmap(0, nullptr);
 
 		m_indexBufferView.BufferLocation = m_indexBuffer->GetGPUVirtualAddress();
@@ -511,12 +512,12 @@ void D3D12HelloTriangle::OnUpdate()
 void 
 D3D12HelloTriangle::CreatePlaneVB() {
 	Vertex planeVertices[] = {
-		{{-1.5f,-0.8f,1.5f},{1.0f,1.0f,1.0f,1.0f}},//0
-		{{-1.5f,-0.8f,-1.5f},{1.0f,1.0f,1.0f,1.0f}},//1
-		{{1.5f,-0.8f,1.5f},{1.0f,1.0f,1.0f,1.0f}},//2
-		{{1.5f,-0.8f,1.5f},{1.0f,1.0f,1.0f,1.0f}},//2
-		{{-1.5f,-0.8f,-1.5f},{1.0f,1.0f,1.0f,1.0f}},//1
-		{{1.5f,-0.8f,-1.5f},{1.0f,1.0f,1.0f,1.0f}},//3
+		{{-1.5f,-0.1f,1.5f},{1.0f,1.0f,1.0f,1.0f}},//0
+		{{-1.5f,-0.1f,-1.5f},{1.0f,1.0f,1.0f,1.0f}},//1
+		{{1.5f,-0.1f,1.5f},{1.0f,1.0f,1.0f,1.0f}},//2
+		{{1.5f,-0.1f,1.5f},{1.0f,1.0f,1.0f,1.0f}},//2
+		{{-1.5f,-0.1f,-1.5f},{1.0f,1.0f,1.0f,1.0f}},//1
+		{{1.5f,-0.1f,-1.5f},{1.0f,1.0f,1.0f,1.0f}},//3
 	};
 	const UINT planeBufferSize = sizeof(planeVertices);
 
@@ -582,7 +583,7 @@ D3D12HelloTriangle::CreateTLAS(const Instances_t& instances , bool updateOnly) {
 
 void 
 D3D12HelloTriangle::CreateAccelerationStructures() {
-	AccelerationStructureBuffers blasBuffers = CreateBLAS({ {m_vertexBuffer.Get(),4} }, {{ m_indexBuffer.Get(),12 }});
+	AccelerationStructureBuffers blasBuffers = CreateBLAS({ {m_vertexBuffer.Get(),m_pmdVert.size()} }, {{ m_indexBuffer.Get(),m_pmdIndex.size() }});
 	
 	auto planeBLASBuffers = CreateBLAS({ { m_planeBuffer.Get(), 6 } });
 	
@@ -608,6 +609,53 @@ D3D12HelloTriangle::CreateAccelerationStructures() {
 
 	ThrowIfFailed(m_commandList->Reset(m_commandAllocator.Get(), m_pipelineState.Get()));
 	m_BLAS = blasBuffers.pResult;
+}
+
+void 
+D3D12HelloTriangle::LoadPMDFile(const wchar_t* path) {
+	//PMDヘッダ構造体
+	struct PMDHeader {
+		float version; //例：00 00 80 3F == 1.00
+		char model_name[20];//モデル名
+		char comment[256];//モデルコメント
+	};
+	char signature[3];
+	PMDHeader pmdheader = {};
+
+	std::wstring strModelPath = path;
+	FILE* fp;
+	auto err = _wfopen_s(&fp,strModelPath.c_str(), L"rb");
+	if (fp == nullptr) {
+		//エラー処理
+		assert(0);
+		return ;
+	}
+	fread(signature, sizeof(signature), 1, fp);
+	fread(&pmdheader, sizeof(pmdheader), 1, fp);
+
+	unsigned int vertNum;//頂点数
+	fread(&vertNum, sizeof(vertNum), 1, fp);
+	m_pmdVert.resize(vertNum);
+	for (auto& v : m_pmdVert) {
+		fread(&v.position, sizeof(v.position), 1, fp);
+		v.position.x *= 0.05f;
+		v.position.y *= 0.05f;
+		v.position.z *= 0.05f;
+		v.color = {1.0f,1.0f,1.0f,1.0f};
+		fread(&v.color, sizeof(XMFLOAT3), 1, fp);
+		fseek(fp, 14, SEEK_CUR);
+	}
+
+	unsigned int indicesNum;//インデックス数
+	fread(&indicesNum, sizeof(indicesNum), 1, fp);//
+	m_pmdIndex.resize(indicesNum);
+	for (auto& idx : m_pmdIndex) {
+		uint16_t index;
+		fread(&index, sizeof(index), 1, fp);
+		idx = index;
+	}
+
+	fclose(fp);
 }
 
 D3D12HelloTriangle::AccelerationStructureBuffers
