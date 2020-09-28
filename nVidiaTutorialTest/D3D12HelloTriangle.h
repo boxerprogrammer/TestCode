@@ -50,13 +50,14 @@ private:
 		ComPtr<ID3D12Resource> pInstanceDesc;//インスタンスに与える行列領域
 	};
 	using VertBuff_t = std::vector < std::pair<ComPtr<ID3D12Resource>, uint32_t>>;
+	using IndexBuff_t = std::vector < std::pair<ComPtr<ID3D12Resource>, uint32_t>>;
 	using Instances_t= std::vector < std::pair<ComPtr<ID3D12Resource>, DirectX::XMMATRIX>>;
 	ComPtr<ID3D12Resource> m_BLAS;
 	nv_helpers_dx12::TopLevelASGenerator m_TLAS;
 	AccelerationStructureBuffers m_TLASBuffer;
 	std::vector<std::pair<ComPtr<ID3D12Resource>, DirectX::XMMATRIX>> m_instances;
 
-	AccelerationStructureBuffers CreateBLAS(VertBuff_t vertBuff);
+	AccelerationStructureBuffers CreateBLAS(VertBuff_t vertBuff, IndexBuff_t idxBuff = {});
 	void CreateTLAS(const Instances_t& instances,bool updateOnly=false);
 	void CreateAccelerationStructures();
 
@@ -139,6 +140,9 @@ private:
 
 	void CreatePerInstanceConstantBuffers();
 	std::vector<ComPtr<ID3D12Resource>> m_perInstanceConstantBuffers;
+
+	ComPtr<ID3D12Resource> m_indexBuffer;
+	D3D12_INDEX_BUFFER_VIEW m_indexBufferView;
 
 public:
 	void CheckRaytracingSupport();

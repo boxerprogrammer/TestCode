@@ -409,11 +409,19 @@ void D3D12HelloTriangle::LoadAssets()
 	// Create the vertex buffer.
 	{
 		// Define the geometry for a triangle.
+		//Vertex triangleVertices[] =
+		//{
+		//	{ { 0.0f, 0.25f * m_aspectRatio, 0.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
+		//	{ { 0.25f, -0.25f * m_aspectRatio, 0.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
+		//	{ { -0.25f, -0.25f * m_aspectRatio, 0.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } }
+		//};
+
 		Vertex triangleVertices[] =
 		{
-			{ { 0.0f, 0.25f * m_aspectRatio, 0.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
-			{ { 0.25f, -0.25f * m_aspectRatio, 0.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-			{ { -0.25f, -0.25f * m_aspectRatio, 0.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } }
+			{ { std::sqrtf(8.0f/9.0f),0.0f, -1.0f/3.0f}, { 1.0f, 0.0f, 0.0f, 1.0f } },
+			{ { -std::sqrtf(2.0f / 9.0f),std::sqrtf(2.0f/3.0f), -1.0f / 3.0f}, { 0.0f, 1.0f, 0.0f, 1.0f } },
+			{ { -std::sqrtf(2.0f / 9.0f),-std::sqrtf(2.0f / 3.0f), -1.0f / 3.0f}, { 0.0f, 0.0f, 1.0f, 1.0f } },
+			{ { 0.0f,0.0f,1.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } }
 		};
 
 		const UINT vertexBufferSize = sizeof(triangleVertices);
@@ -441,6 +449,26 @@ void D3D12HelloTriangle::LoadAssets()
 		m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
 		m_vertexBufferView.StrideInBytes = sizeof(Vertex);
 		m_vertexBufferView.SizeInBytes = vertexBufferSize;
+
+
+		std::vector<UINT> indices = { 0,1,2,0,3,1,0,2,3,1,3,2 };
+		const UINT indexBufferSize = static_cast<UINT>(indices.size()) * sizeof(UINT);
+		CD3DX12_HEAP_PROPERTIES heapProperty = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+		CD3DX12_RESOURCE_DESC bufferResource = CD3DX12_RESOURCE_DESC::Buffer(indexBufferSize);
+		ThrowIfFailed(m_device->CreateCommittedResource(
+			&heapProperty, D3D12_HEAP_FLAG_NONE, &bufferResource,
+			D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&m_indexBuffer)
+		));
+
+		UINT* indexDataBegin;
+		ThrowIfFailed(m_indexBuffer->Map(0, &readRange, (void**)&indexDataBegin));
+		std::copy(indices.begin(), indices.end(), indexDataBegin);
+		m_indexBuffer->Unmap(0, nullptr);
+
+		m_indexBufferView.BufferLocation = m_indexBuffer->GetGPUVirtualAddress();
+		m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+		m_indexBufferView.SizeInBytes = indexBufferSize;
+
 	}
 
 	CreatePlaneVB();
@@ -554,7 +582,7 @@ D3D12HelloTriangle::CreateTLAS(const Instances_t& instances , bool updateOnly) {
 
 void 
 D3D12HelloTriangle::CreateAccelerationStructures() {
-	AccelerationStructureBuffers blasBuffers = CreateBLAS({ {m_vertexBuffer.Get(),3} });
+	AccelerationStructureBuffers blasBuffers = CreateBLAS({ {m_vertexBuffer.Get(),4} }, {{ m_indexBuffer.Get(),12 }});
 	
 	auto planeBLASBuffers = CreateBLAS({ { m_planeBuffer.Get(), 6 } });
 	
@@ -583,16 +611,24 @@ D3D12HelloTriangle::CreateAccelerationStructures() {
 }
 
 D3D12HelloTriangle::AccelerationStructureBuffers
-D3D12HelloTriangle::CreateBLAS(VertBuff_t vertBuffs) {
+D3D12HelloTriangle::CreateBLAS(VertBuff_t vertBuffs,IndexBuff_t idxBuffs) {
 	nv_helpers_dx12::BottomLevelASGenerator blas;
-	for (const auto& vb : vertBuffs) {
+	//for (const auto& vb : vertBuffs) {
+	for(size_t i=0;i<vertBuffs.size();++i){
 		//1.バッファ本体
 		//2.オフセット
 		//3.頂点数
 		//4.1頂点当たりのサイズ
 		//5.座標変換バッファ
 		//6.座標変換バッファオフセット
-		blas.AddVertexBuffer(vb.first.Get(), 0, vb.second, sizeof(Vertex), 0, 0);
+		auto& vb = vertBuffs[i];
+		if (i < idxBuffs.size() && idxBuffs[i].second>0) {
+			auto& ib = idxBuffs[i];
+			blas.AddVertexBuffer(vb.first.Get(), 0, vb.second, sizeof(Vertex), ib.first.Get(), 0,ib.second,nullptr,0,true);
+		}
+		else {
+			blas.AddVertexBuffer(vb.first.Get(), 0, vb.second, sizeof(Vertex), 0, 0);
+		}
 	}
 
 	UINT64 scratchSizeInBytes = 0;
@@ -732,11 +768,15 @@ void D3D12HelloTriangle::PopulateCommandList()
 		m_commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
 		m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
-		m_commandList->DrawInstanced(3, 1, 0, 0);
+		//m_commandList->DrawInstanced(3, 1, 0, 0);
+		m_commandList->IASetIndexBuffer(&m_indexBufferView);
+		m_commandList->DrawIndexedInstanced(12, 1, 0, 0, 0);
 
 		m_commandList->IASetVertexBuffers(0, 1, &m_planeBufferView);
-		m_commandList->DrawInstanced(6, 1, 0, 0);
 
+
+		m_commandList->DrawInstanced(6, 1, 0, 0);
+		
 	}
 	else {
 		const float clearColor[] = { 0.6f, 0.8f, 0.4f, 1.0f };
