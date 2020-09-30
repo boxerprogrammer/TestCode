@@ -140,6 +140,7 @@ private:
 	ComPtr<ID3D12Resource> m_globalConstantBuffer;
 
 	void CreatePerInstanceConstantBuffers();
+	void UpdateConstantBuffer(bool first=false);
 	std::vector<ComPtr<ID3D12Resource>> m_perInstanceConstantBuffers;
 
 	ComPtr<ID3D12Resource> m_indexBuffer;

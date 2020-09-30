@@ -9,6 +9,7 @@
 //
 //*********************************************************
 #include<stdexcept>
+#include<cmath>
 #include<Windows.h>
 #include"stdafx.h"
 
@@ -19,6 +20,25 @@
 #include"nv_helpers_dx12/ShaderBindingTableGenerator.h"
 #include"DXRHelper.h"
 #include "D3D12HelloTriangle.h"
+
+namespace {
+	XMVECTOR bufferData[] = {//9å¬ÇÃÉfÅ[É^
+	//A
+	XMVECTOR{1.0f,1.0f,0.0f,1.0f},
+	XMVECTOR{1.0f,0.4f,0.0f,1.0f},
+	XMVECTOR{1.0f,0.7f,0.0f,1.0f},
+
+	//B
+	XMVECTOR{0.0f,1.0f,1.0f,1.0f},
+	XMVECTOR{0.0f,1.0f,0.4f,1.0f},
+	XMVECTOR{0.0f,1.0f,0.7f,1.0f},
+
+	//C
+	XMVECTOR{1.0f,0.0f,1.0f,1.0f},
+	XMVECTOR{0.4f,0.0f,1.0f,1.0f},
+	XMVECTOR{0.7f,0.0f,1.0f,1.0f},
+	};
+}
 
 void 
 D3D12HelloTriangle::OnButtonDown(UINT32) {
@@ -61,6 +81,8 @@ ComPtr<ID3D12RootSignature>
 D3D12HelloTriangle::CreateHitSignature() {
 	nv_helpers_dx12::RootSignatureGenerator rsc;
 	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 0);//register(t0)Ç…ëŒâû
+	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 1);//register(t0)Ç…ëŒâû
+
 	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_CBV, 0);
 	rsc.AddHeapRangesParameter({ 
 		{ 2,1,0,
@@ -130,7 +152,9 @@ D3D12HelloTriangle::CreateShaderBindingTable() {
 	m_sbtHelper.AddMissProgram(L"Miss", {});
 	m_sbtHelper.AddMissProgram(L"ShadowMiss", {});
 	for (int i = 0; i < 3; ++i) {
-		m_sbtHelper.AddHitGroup(L"HitGroup",{ (void*)(m_vertexBuffer->GetGPUVirtualAddress()),(void*)(m_perInstanceConstantBuffers[i]->GetGPUVirtualAddress())});
+		m_sbtHelper.AddHitGroup(L"HitGroup",{ (void*)(m_vertexBuffer->GetGPUVirtualAddress()),
+			(void*)(m_indexBuffer->GetGPUVirtualAddress()),
+			(void*)(m_perInstanceConstantBuffers[i]->GetGPUVirtualAddress())});
 		m_sbtHelper.AddHitGroup(L"ShadowHitGroup", {});
 	}
 	
@@ -507,6 +531,7 @@ void D3D12HelloTriangle::OnUpdate()
 
 	m_instances[2].second = XMMatrixRotationAxis({ 0.0f,1.0f,0.0f }, static_cast<float>(m_time*2) / 50.0f) *
 		XMMatrixTranslation(-0.75f, 0.1f * cosf((float)m_time / 40.0f), 0.0f);
+	UpdateConstantBuffer();
 }
 
 void 
@@ -931,17 +956,17 @@ void
 D3D12HelloTriangle::CreateGlobalConstantBuffer() {
 	XMVECTOR bufferData[] = {
 		//A
-		XMVECTOR{1.0f,0.0f,0.0f,1.0f},
+		XMVECTOR{1.0f,1.0f,0.0f,1.0f},
 		XMVECTOR{0.7f,0.4f,0.0f,1.0f},
 		XMVECTOR{0.4f,0.7f,0.0f,1.0f},
 
 		//B
-		XMVECTOR{0.0f,1.0f,0.0f,1.0f},
+		XMVECTOR{0.0f,1.0f,1.0f,1.0f},
 		XMVECTOR{0.0f,0.7f,0.4f,1.0f},
 		XMVECTOR{0.0f,0.4f,0.7f,1.0f},
 
 		//C
-		XMVECTOR{0.0f,0.0f,1.0f,1.0f},
+		XMVECTOR{1.0f,0.0f,1.0f,1.0f},
 		XMVECTOR{0.4f,0.0f,0.7f,1.0f},
 		XMVECTOR{0.7f,0.0f,0.4f,1.0f},
 	};
@@ -964,32 +989,29 @@ D3D12HelloTriangle::CreateGlobalConstantBuffer() {
 
 void 
 D3D12HelloTriangle::CreatePerInstanceConstantBuffers() {
-	XMVECTOR bufferData[] = {
-		//A
-		XMVECTOR{1.0f,0.0f,0.0f,1.0f},
-		XMVECTOR{1.0f,0.4f,0.0f,1.0f},
-		XMVECTOR{1.0f,0.7f,0.0f,1.0f},
 
-		//B
-		XMVECTOR{0.0f,1.0f,0.0f,1.0f},
-		XMVECTOR{0.0f,1.0f,0.4f,1.0f},
-		XMVECTOR{0.0f,1.0f,0.7f,1.0f},
-
-		//C
-		XMVECTOR{0.0f,0.0f,1.0f,1.0f},
-		XMVECTOR{0.4f,0.0f,1.0f,1.0f},
-		XMVECTOR{0.7f,0.0f,1.0f,1.0f},
-	};
 	m_perInstanceConstantBuffers.resize(3);
+	UpdateConstantBuffer(true);
+}
+
+void D3D12HelloTriangle::UpdateConstantBuffer(bool first)
+{
+	static float angle = 0.0f;
 	int i(0);
+	float s = sinf(angle);
 	for (auto& cb : m_perInstanceConstantBuffers) {
 		const uint32_t bufferSize = sizeof(XMVECTOR) * 3;
-		cb = nv_helpers_dx12::CreateBuffer(m_device.Get(), bufferSize, D3D12_RESOURCE_FLAG_NONE,
-			D3D12_RESOURCE_STATE_GENERIC_READ, nv_helpers_dx12::kUploadHeapProps);
-		uint8_t* data=nullptr;
+		//bufferData[i * 3 + 0] = { (s+1.0f)/2.0f, 1.0f, 1.0f, 1.0f };
+		bufferData[i * 3 + 1] = XMQuaternionRotationMatrix(m_instances[i].second);
+		if (first) {
+			cb = nv_helpers_dx12::CreateBuffer(m_device.Get(), bufferSize, D3D12_RESOURCE_FLAG_NONE,
+				D3D12_RESOURCE_STATE_GENERIC_READ, nv_helpers_dx12::kUploadHeapProps);
+		}
+		uint8_t* data = nullptr;
 		ThrowIfFailed(cb->Map(0, nullptr, (void**)&data));
 		memcpy(data, &bufferData[i * 3], bufferSize);
 		cb->Unmap(0, nullptr);
 		++i;
 	}
+	angle += 0.01f;
 }
