@@ -15,8 +15,13 @@ struct MyStructColor{
 };
 
 StructuredBuffer<STriVertex> BTriVertex : register(t0);
+//struct VerexAndMaterialID {
+//	int vertId;
+//	float material;
+//};
 StructuredBuffer<int> indices : register(t1);
 RaytracingAccelerationStructure SceneBVH : register(t2);
+StructuredBuffer<float> mtlTbl : register(t3);
 
 cbuffer Colors : register(b0){
 	float3 cA;

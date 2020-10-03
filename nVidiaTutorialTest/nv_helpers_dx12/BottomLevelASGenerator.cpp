@@ -88,8 +88,9 @@ void BottomLevelASGenerator::AddVertexBuffer(
                                      // vertices. This buffer cannot be nullptr
     UINT64 transformOffsetInBytes,   // Offset of the transform matrix in the
                                      // transform buffer
-    bool isOpaque /* = true */ // If true, the geometry is considered opaque,
+    bool isOpaque, /* = true */ // If true, the geometry is considered opaque,
                                // optimizing the search for a closest hit
+    bool complexIndex
 ) {
   // Create the DX12 descriptor representing the input data, assumed to be
   // opaque triangles, with 3xf32 vertex coordinates and 32-bit indices
@@ -104,7 +105,8 @@ void BottomLevelASGenerator::AddVertexBuffer(
       indexBuffer ? (indexBuffer->GetGPUVirtualAddress() + indexOffsetInBytes)
                   : 0;
   descriptor.Triangles.IndexFormat =
-      indexBuffer ? DXGI_FORMAT_R32_UINT : DXGI_FORMAT_UNKNOWN;
+      indexBuffer&&!complexIndex ? DXGI_FORMAT_R32_UINT : DXGI_FORMAT_UNKNOWN;
+  
   descriptor.Triangles.IndexCount = indexCount;
   descriptor.Triangles.Transform3x4 =
       transformBuffer
