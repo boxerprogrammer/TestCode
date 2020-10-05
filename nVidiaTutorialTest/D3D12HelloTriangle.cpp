@@ -83,21 +83,12 @@ D3D12HelloTriangle::CreateHitSignature() {
 	nv_helpers_dx12::RootSignatureGenerator rsc;
 	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 0);//register(t0)‚É‘Î‰ž(Vertex)
 	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 1);//register(t1)‚É‘Î‰ž(Index)
-<<<<<<< HEAD
 	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_CBV, 0);//register(b0)‚É‘Î‰ž
 	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 3);//register(t3)‚É‘Î‰ž(MaterialTable)
-=======
-	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_CBV, 0);
->>>>>>> 4099280cc3055f3afe6e7f9542b7c3134268c309
 	rsc.AddHeapRangesParameter({ 
 		{ 2,1,0,
 		D3D12_DESCRIPTOR_RANGE_TYPE_SRV,1 }, //t2
 		});//
-<<<<<<< HEAD
-
-=======
-	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 3);//register(t3)‚É‘Î‰ž(MaterialTable)
->>>>>>> 4099280cc3055f3afe6e7f9542b7c3134268c309
 
 	return rsc.Generate(m_device.Get(), true);
 }
@@ -728,11 +719,7 @@ D3D12HelloTriangle::LoadPMDFile(const wchar_t* path) {
 		_materials[i].specular = materials[i].specular;
 		_materials[i].ambient = materials[i].ambient;
 		for (size_t j = 0; j < materials[i].indexNum/3; ++j) {
-<<<<<<< HEAD
 			m_materialIDs[idx]=(float)(i+1) / (float)msize;
-=======
-			m_materialIDs[idx]=(float)i / (float)msize;
->>>>>>> 4099280cc3055f3afe6e7f9542b7c3134268c309
 			++idx;
 		}
 	}

@@ -162,12 +162,9 @@ private:
 	//};
 	std::vector<UINT> m_pmdIndex;
 	std::vector<float> m_materialIDs;//プリミティブごとのマテリアルID
-<<<<<<< HEAD
 
 	ComPtr<ID3D12Resource> m_matIdBuffer;
 
-=======
->>>>>>> 4099280cc3055f3afe6e7f9542b7c3134268c309
 
 public:
 	void CheckRaytracingSupport();
