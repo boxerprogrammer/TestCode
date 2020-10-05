@@ -36,6 +36,15 @@ public:
 	virtual void OnButtonDown(UINT32);
 	virtual void OnMouseMove(UINT8, UINT32);
 private:
+
+	struct Material {
+		DirectX::XMFLOAT4 diffuse;//ディフューズ色
+		float power;//スペキュラ強さ
+		DirectX::XMFLOAT3 specular;//スペキュラ色
+		DirectX::XMFLOAT3 ambient;//環境色
+		uint32_t indicesNum;//インデックス数
+	};
+	std::vector<Material> _materials;// マテリアルデータ
 	static const UINT FrameCount = 2;
 
 	struct Vertex
@@ -147,7 +156,15 @@ private:
 	D3D12_INDEX_BUFFER_VIEW m_indexBufferView;
 
 	std::vector<Vertex> m_pmdVert;
+	//struct IndexData {
+	//	UINT idx;
+	//	float mtl;
+	//};
 	std::vector<UINT> m_pmdIndex;
+	std::vector<float> m_materialIDs;//プリミティブごとのマテリアルID
+
+	ComPtr<ID3D12Resource> m_matIdBuffer;
+
 
 public:
 	void CheckRaytracingSupport();

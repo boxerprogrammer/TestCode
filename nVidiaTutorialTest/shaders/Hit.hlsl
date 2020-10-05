@@ -15,8 +15,13 @@ struct MyStructColor{
 };
 
 StructuredBuffer<STriVertex> BTriVertex : register(t0);
+//struct VerexAndMaterialID {
+//	int vertId;
+//	float material;
+//};
 StructuredBuffer<int> indices : register(t1);
 RaytracingAccelerationStructure SceneBVH : register(t2);
+StructuredBuffer<float> mtlTbl : register(t3);
 
 cbuffer Colors : register(b0){
 	float3 cA;
@@ -89,6 +94,7 @@ void ClosestHit(inout HitInfo payload, Attributes attrib)
 	lightPos = normalize(lightPos);
 	nV = RotVectorByQuat(nV, cB);
 	float b = dot(lightPos, nV);
+	float p=mtlTbl[PrimitiveIndex()];
 
- 	payload.colorAndDistance = float4(b*cA, RayTCurrent());
+ 	payload.colorAndDistance = float4(b*cA*p, RayTCurrent());
 }

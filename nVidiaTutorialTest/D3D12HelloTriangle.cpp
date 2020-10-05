@@ -56,7 +56,8 @@ D3D12HelloTriangle::D3D12HelloTriangle(UINT width, UINT height, std::wstring nam
 	m_frameIndex(0),
 	m_viewport(0.0f, 0.0f, static_cast<float>(width), static_cast<float>(height)),
 	m_scissorRect(0, 0, static_cast<LONG>(width), static_cast<LONG>(height)),
-	m_rtvDescriptorSize(0)
+	m_rtvDescriptorSize(0),
+	m_raster(false)
 {
 }
 
@@ -80,14 +81,16 @@ D3D12HelloTriangle::CreateRayGenSignature() {
 ComPtr<ID3D12RootSignature> 
 D3D12HelloTriangle::CreateHitSignature() {
 	nv_helpers_dx12::RootSignatureGenerator rsc;
-	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 0);//register(t0)に対応
-	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 1);//register(t0)に対応
-
-	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_CBV, 0);
+	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 0);//register(t0)に対応(Vertex)
+	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 1);//register(t1)に対応(Index)
+	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_CBV, 0);//register(b0)に対応
+	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 3);//register(t3)に対応(MaterialTable)
 	rsc.AddHeapRangesParameter({ 
 		{ 2,1,0,
 		D3D12_DESCRIPTOR_RANGE_TYPE_SRV,1 }, //t2
 		});//
+
+
 	return rsc.Generate(m_device.Get(), true);
 }
 
@@ -154,7 +157,8 @@ D3D12HelloTriangle::CreateShaderBindingTable() {
 	for (int i = 0; i < 3; ++i) {
 		m_sbtHelper.AddHitGroup(L"HitGroup",{ (void*)(m_vertexBuffer->GetGPUVirtualAddress()),
 			(void*)(m_indexBuffer->GetGPUVirtualAddress()),
-			(void*)(m_perInstanceConstantBuffers[i]->GetGPUVirtualAddress())});
+			(void*)(m_perInstanceConstantBuffers[i]->GetGPUVirtualAddress()),
+			(void*)(m_matIdBuffer->GetGPUVirtualAddress())});
 		m_sbtHelper.AddHitGroup(L"ShadowHitGroup", {});
 	}
 	
@@ -197,17 +201,18 @@ D3D12HelloTriangle::CreateRaytracingOutputBuffer() {
 }
 void 
 D3D12HelloTriangle::CreateShaderResourceHeap() {
-	m_srvUavHeap = nv_helpers_dx12::CreateDescriptorHeap(m_device.Get(), 3, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, true);
+	//マテリアルのために3→4へ
+	m_srvUavHeap = nv_helpers_dx12::CreateDescriptorHeap(m_device.Get(), 4, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, true);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle = m_srvUavHeap->GetCPUDescriptorHandleForHeapStart();
 
-
+	//0
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
 	m_device->CreateUnorderedAccessView(m_outputResource.Get(), nullptr, &uavDesc, srvHandle);
 
+	//1
 	srvHandle.ptr += m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_RAYTRACING_ACCELERATION_STRUCTURE;
@@ -215,15 +220,24 @@ D3D12HelloTriangle::CreateShaderResourceHeap() {
 	srvDesc.RaytracingAccelerationStructure.Location = m_TLASBuffer.pResult->GetGPUVirtualAddress();
 	m_device->CreateShaderResourceView(nullptr, &srvDesc, srvHandle);
 
-	
+	//2
 	srvHandle.ptr += m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
 	cbvDesc.BufferLocation = m_cameraBuffer->GetGPUVirtualAddress();
 	cbvDesc.SizeInBytes = m_cameraBufferSize;
 	m_device->CreateConstantBufferView(&cbvDesc, srvHandle);
 
-
-
+	//3
+	//マテリアルIDテーブル
+	srvHandle.ptr += m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	srvDesc.Buffer.FirstElement = 0;
+	srvDesc.Buffer.NumElements = m_materialIDs.size();
+	srvDesc.Buffer.StructureByteStride = sizeof(float);
+	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	m_device->CreateShaderResourceView(m_matIdBuffer.Get(), &srvDesc, srvHandle);
 }
 
 
@@ -477,7 +491,7 @@ void D3D12HelloTriangle::LoadAssets()
 
 
 		//std::vector<UINT> indices = { 0,1,2,0,3,1,0,2,3,1,3,2 };
-		const UINT indexBufferSize = static_cast<UINT>(m_pmdIndex.size()) * sizeof(UINT);
+		const UINT indexBufferSize = static_cast<UINT>(m_pmdIndex.size()) * sizeof(m_pmdIndex[0]);
 		CD3DX12_HEAP_PROPERTIES heapProperty = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 		CD3DX12_RESOURCE_DESC bufferResource = CD3DX12_RESOURCE_DESC::Buffer(indexBufferSize);
 		ThrowIfFailed(m_device->CreateCommittedResource(
@@ -485,7 +499,8 @@ void D3D12HelloTriangle::LoadAssets()
 			D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&m_indexBuffer)
 		));
 
-		UINT* indexDataBegin;
+		auto type = m_pmdIndex[0];
+		decltype(type)* indexDataBegin;
 		ThrowIfFailed(m_indexBuffer->Map(0, &readRange, (void**)&indexDataBegin));
 		std::copy(m_pmdIndex.begin(), m_pmdIndex.end(), indexDataBegin);
 		m_indexBuffer->Unmap(0, nullptr);
@@ -679,7 +694,36 @@ D3D12HelloTriangle::LoadPMDFile(const wchar_t* path) {
 		fread(&index, sizeof(index), 1, fp);
 		idx = index;
 	}
-
+#pragma pack(1)
+	struct PMDMaterial {
+		XMFLOAT4 diffuse;//ディフューズ色
+		float power;//スペキュラ乗数
+		XMFLOAT3 specular;//スペキュラ色
+		XMFLOAT3 ambient;//環境光
+		uint8_t toon;//トゥーン番号
+		uint8_t edge;//エッジフラグ
+		uint32_t indexNum;//インデックス数
+		char texturePath[20];//テクスチャパス(相対)
+	};
+#pragma pack()
+	unsigned int materialCount;
+	fread(&materialCount, sizeof(materialCount), 1, fp);
+	std::vector<PMDMaterial> materials(materialCount);
+	_materials.resize(materialCount);
+	m_materialIDs.resize(indicesNum/3);
+	fread(materials.data(), sizeof(PMDMaterial), materialCount, fp);
+	UINT idx = 0;
+	auto msize = materials.size();
+	for (int i = 0; i < msize; ++i) {
+		_materials[i].diffuse = materials[i].diffuse;
+		_materials[i].power = materials[i].power;
+		_materials[i].specular = materials[i].specular;
+		_materials[i].ambient = materials[i].ambient;
+		for (size_t j = 0; j < materials[i].indexNum/3; ++j) {
+			m_materialIDs[idx]=(float)(i+1) / (float)msize;
+			++idx;
+		}
+	}
 	fclose(fp);
 }
 
@@ -842,7 +886,7 @@ void D3D12HelloTriangle::PopulateCommandList()
 		m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
 		//m_commandList->DrawInstanced(3, 1, 0, 0);
-		m_commandList->IASetIndexBuffer(&m_indexBufferView);
+		//m_commandList->IASetIndexBuffer(&m_indexBufferView);
 		m_commandList->DrawIndexedInstanced(12, 1, 0, 0, 0);
 
 		m_commandList->IASetVertexBuffers(0, 1, &m_planeBufferView);
@@ -1012,6 +1056,15 @@ void D3D12HelloTriangle::UpdateConstantBuffer(bool first)
 		memcpy(data, &bufferData[i * 3], bufferSize);
 		cb->Unmap(0, nullptr);
 		++i;
+	}
+	if (first) {
+
+		m_matIdBuffer = nv_helpers_dx12::CreateBuffer(m_device.Get(), sizeof(float) * m_materialIDs.size(), D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_GENERIC_READ, nv_helpers_dx12::kUploadHeapProps);
+		auto desc = m_matIdBuffer->GetDesc();
+		float* mat;
+		m_matIdBuffer->Map(0, nullptr, (void**)&mat);
+		std::copy(m_materialIDs.begin(), m_materialIDs.end(), mat);
+		m_matIdBuffer->Unmap(0, nullptr);
 	}
 	angle += 0.01f;
 }
