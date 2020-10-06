@@ -85,6 +85,7 @@ D3D12HelloTriangle::CreateHitSignature() {
 	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 1);//register(t1)に対応(Index)
 	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_CBV, 0);//register(b0)に対応
 	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 3);//register(t3)に対応(MaterialTable)
+	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 4);//register(t4)に対応(MaterialTable)
 	rsc.AddHeapRangesParameter({ 
 		{ 2,1,0,
 		D3D12_DESCRIPTOR_RANGE_TYPE_SRV,1 }, //t2
@@ -157,11 +158,13 @@ D3D12HelloTriangle::CreateShaderBindingTable() {
 		m_sbtHelper.AddHitGroup(L"HitGroup",{ (void*)(m_vertexBuffer->GetGPUVirtualAddress()),
 			(void*)(m_indexBuffer->GetGPUVirtualAddress()),
 			(void*)(m_perInstanceConstantBuffers[i]->GetGPUVirtualAddress()),
-			(void*)(m_matIdBuffer->GetGPUVirtualAddress())});
+			(void*)(m_matIdBuffer->GetGPUVirtualAddress()),
+			(void*)(m_materialBuffer->GetGPUVirtualAddress())
+	});
 		m_sbtHelper.AddHitGroup(L"ShadowHitGroup", {});
 	}
 	
-	m_sbtHelper.AddHitGroup(L"PlaneHitGroup", {heapPointer});
+	m_sbtHelper.AddHitGroup(L"PlaneHitGroup", {(void*)(m_vertexBuffer->GetGPUVirtualAddress()),heapPointer });
 	m_sbtHelper.AddHitGroup(L"ShadowHitGroup", {});
 	uint32_t sbtSize = m_sbtHelper.ComputeSBTSize();
 	m_sbtStorage = nv_helpers_dx12::CreateBuffer(m_device.Get(), sbtSize, D3D12_RESOURCE_FLAG_NONE,
@@ -200,8 +203,8 @@ D3D12HelloTriangle::CreateRaytracingOutputBuffer() {
 }
 void 
 D3D12HelloTriangle::CreateShaderResourceHeap() {
-	//マテリアルのために3→4へ
-	m_srvUavHeap = nv_helpers_dx12::CreateDescriptorHeap(m_device.Get(), 4, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, true);
+	//マテリアルのために3→5へ
+	m_srvUavHeap = nv_helpers_dx12::CreateDescriptorHeap(m_device.Get(), 5, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, true);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle = m_srvUavHeap->GetCPUDescriptorHandleForHeapStart();
 
@@ -233,10 +236,23 @@ D3D12HelloTriangle::CreateShaderResourceHeap() {
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 	srvDesc.Buffer.FirstElement = 0;
 	srvDesc.Buffer.NumElements = m_materialIDs.size();
-	srvDesc.Buffer.StructureByteStride = sizeof(float);
+	srvDesc.Buffer.StructureByteStride = sizeof(m_materialIDs[0]);
 	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	m_device->CreateShaderResourceView(m_matIdBuffer.Get(), &srvDesc, srvHandle);
+
+	//4
+	//マテリアルヒープ
+	srvHandle.ptr += m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	srvDesc.Buffer.FirstElement = 0;
+	srvDesc.Buffer.NumElements = m_materials.size();
+	srvDesc.Buffer.StructureByteStride = sizeof(m_materials[0]);
+	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	m_device->CreateShaderResourceView(m_materialBuffer.Get(), &srvDesc, srvHandle);
+
 }
 
 
@@ -381,7 +397,8 @@ void D3D12HelloTriangle::LoadPipeline()
 // Load the sample assets.
 void D3D12HelloTriangle::LoadAssets()
 {
-	LoadPMDFile(L"model/satori.pmd");
+//	LoadPMDFile(L"model/satori.pmd");
+	LoadPMDFile(L"model/miku.pmd");
 	// Create an empty root signature.
 	{
 		CD3DX12_ROOT_PARAMETER constantParameter;
@@ -416,7 +433,8 @@ void D3D12HelloTriangle::LoadAssets()
 		D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
 		};
 
 		// Describe and create the graphics pipeline state object (PSO).
@@ -454,13 +472,13 @@ void D3D12HelloTriangle::LoadAssets()
 		//	{ { -0.25f, -0.25f * m_aspectRatio, 0.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } }
 		//};
 
-		Vertex triangleVertices[] =
-		{
-			{ { std::sqrtf(8.0f/9.0f),0.0f, -1.0f/3.0f}, { 1.0f, 0.0f, 0.0f, 1.0f } },
-			{ { -std::sqrtf(2.0f / 9.0f),std::sqrtf(2.0f/3.0f), -1.0f / 3.0f}, { 0.0f, 1.0f, 0.0f, 1.0f } },
-			{ { -std::sqrtf(2.0f / 9.0f),-std::sqrtf(2.0f / 3.0f), -1.0f / 3.0f}, { 0.0f, 0.0f, 1.0f, 1.0f } },
-			{ { 0.0f,0.0f,1.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } }
-		};
+		//Vertex triangleVertices[] =
+		//{
+		//	{ { std::sqrtf(8.0f/9.0f),0.0f, -1.0f/3.0f}, { 1.0f, 0.0f, 0.0f, 1.0f } },
+		//	{ { -std::sqrtf(2.0f / 9.0f),std::sqrtf(2.0f/3.0f), -1.0f / 3.0f}, { 0.0f, 1.0f, 0.0f, 1.0f } },
+		//	{ { -std::sqrtf(2.0f / 9.0f),-std::sqrtf(2.0f / 3.0f), -1.0f / 3.0f}, { 0.0f, 0.0f, 1.0f, 1.0f } },
+		//	{ { 0.0f,0.0f,1.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } }
+		//};
 
 		const UINT vertexBufferSize = sizeof(Vertex) * m_pmdVert.size();
 
@@ -551,24 +569,24 @@ void D3D12HelloTriangle::OnUpdate()
 void 
 D3D12HelloTriangle::CreatePlaneVB() {
 	Vertex planeVertices[] = {
-		{{-1.5f,-0.1f,1.5f},{1.0f,1.0f,1.0f,1.0f}},//0
-		{{-1.5f,-0.1f,-1.5f},{1.0f,1.0f,1.0f,1.0f}},//1
-		{{1.5f,-0.1f,1.5f},{1.0f,1.0f,1.0f,1.0f}},//2
-		{{1.5f,-0.1f,1.5f},{1.0f,1.0f,1.0f,1.0f}},//2
-		{{-1.5f,-0.1f,-1.5f},{1.0f,1.0f,1.0f,1.0f}},//1
-		{{1.5f,-0.1f,-1.5f},{1.0f,1.0f,1.0f,1.0f}},//3
+		{{-1.5f,-0.1f,1.5f},{0.0f,1.0f,0.0f},{0,1}},//0
+		{{-1.5f,-0.1f,-1.5f},{0.0f,1.0f,0.0f},{0,0}},//1
+		{{1.5f,-0.1f,1.5f},{0.0f,1.0f,0.0f},{1,1}},//2
+		{{1.5f,-0.1f,1.5f},{0.0f,1.0f,0.0f},{1,1}},//2
+		{{-1.5f,-0.1f,-1.5f},{0.0f,1.0f,0.0f},{0,0}},//1
+		{{1.5f,-0.1f,-1.5f},{0.0f,1.0f,0.0f},{1,0}},//3
 	};
-	const UINT planeBufferSize = sizeof(planeVertices);
+	const UINT planeBufferSize = sizeof(Vertex)*6;
 
 	CD3DX12_HEAP_PROPERTIES heapProp = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	auto bufferResource = CD3DX12_RESOURCE_DESC::Buffer(planeBufferSize);
 	ThrowIfFailed(m_device->CreateCommittedResource(&heapProp, D3D12_HEAP_FLAG_NONE, &bufferResource,
 		D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&m_planeBuffer)));
-	UINT8* pVertexDataBegin;
+	Vertex* pVertexDataBegin;
 	CD3DX12_RANGE readRange(0, 0);
 	ThrowIfFailed(m_planeBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)));
-	memcpy(pVertexDataBegin, planeVertices, sizeof(planeVertices));
+	std::copy(std::begin(planeVertices), std::end(planeVertices), pVertexDataBegin);
 	m_planeBuffer->Unmap(0, nullptr);
 
 
@@ -680,9 +698,9 @@ D3D12HelloTriangle::LoadPMDFile(const wchar_t* path) {
 		v.position.x *= 0.05f;
 		v.position.y *= 0.05f;
 		v.position.z *= 0.05f;
-		v.color = {1.0f,1.0f,1.0f,1.0f};
-		fread(&v.color, sizeof(XMFLOAT3), 1, fp);
-		fseek(fp, 14, SEEK_CUR);
+		fread(&v.normal, sizeof(v.normal), 1, fp);
+		fread(&v.uv, sizeof(v.uv), 1, fp);
+		fseek(fp, 6, SEEK_CUR);
 	}
 
 	unsigned int indicesNum;//インデックス数
@@ -708,6 +726,7 @@ D3D12HelloTriangle::LoadPMDFile(const wchar_t* path) {
 	unsigned int materialCount;
 	fread(&materialCount, sizeof(materialCount), 1, fp);
 	std::vector<PMDMaterial> materials(materialCount);
+	m_materials.resize(materialCount);
 	_materials.resize(materialCount);
 	m_materialIDs.resize(indicesNum/3);
 	fread(materials.data(), sizeof(PMDMaterial), materialCount, fp);
@@ -719,9 +738,12 @@ D3D12HelloTriangle::LoadPMDFile(const wchar_t* path) {
 		_materials[i].specular = materials[i].specular;
 		_materials[i].ambient = materials[i].ambient;
 		for (size_t j = 0; j < materials[i].indexNum/3; ++j) {
-			m_materialIDs[idx]=(float)(i+1) / (float)msize;
+			m_materialIDs[idx]=i;//プリミティブ単位でマテリアル番号を登録
 			++idx;
 		}
+		m_materials[i].x = materials[i].diffuse.x;
+		m_materials[i].y = materials[i].diffuse.y;
+		m_materials[i].z = materials[i].diffuse.z;
 	}
 	fclose(fp);
 }
@@ -1058,12 +1080,19 @@ void D3D12HelloTriangle::UpdateConstantBuffer(bool first)
 	}
 	if (first) {
 
-		m_matIdBuffer = nv_helpers_dx12::CreateBuffer(m_device.Get(), sizeof(float) * m_materialIDs.size(), D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_GENERIC_READ, nv_helpers_dx12::kUploadHeapProps);
-		auto desc = m_matIdBuffer->GetDesc();
-		float* mat;
+		m_matIdBuffer = nv_helpers_dx12::CreateBuffer(m_device.Get(), sizeof(m_materialIDs[0]) * m_materialIDs.size(), D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_GENERIC_READ, nv_helpers_dx12::kUploadHeapProps);
+		auto t = m_materialIDs[0];
+		decltype(t)* mat;
 		m_matIdBuffer->Map(0, nullptr, (void**)&mat);
 		std::copy(m_materialIDs.begin(), m_materialIDs.end(), mat);
 		m_matIdBuffer->Unmap(0, nullptr);
+
+		m_materialBuffer= nv_helpers_dx12::CreateBuffer(m_device.Get(), sizeof(m_materials[0]) * m_materials.size(), D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_GENERIC_READ, nv_helpers_dx12::kUploadHeapProps);
+		auto m = m_materials.back();
+		decltype(m)* mtl;
+		m_materialBuffer->Map(0, nullptr, (void**)&mtl);
+		std::copy(m_materials.begin(), m_materials.end(), mtl);
+		m_materialBuffer->Unmap(0, nullptr);
 	}
 	angle += 0.01f;
 }

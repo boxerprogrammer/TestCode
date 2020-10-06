@@ -5,8 +5,9 @@ struct ShadowHitInfo{
 };
 
 struct STriVertex{
-	float3 vertex;
-	float4 color;
+	float3 pos;
+	float3 normal;
+	float2 uv;
 };
 struct MyStructColor{
 	float4 a;
@@ -21,7 +22,9 @@ StructuredBuffer<STriVertex> BTriVertex : register(t0);
 //};
 StructuredBuffer<int> indices : register(t1);
 RaytracingAccelerationStructure SceneBVH : register(t2);
-StructuredBuffer<float> mtlTbl : register(t3);
+StructuredBuffer<int> mtlTbl : register(t3);
+StructuredBuffer<float3> materials : register(t4);
+
 
 cbuffer Colors : register(b0){
 	float3 cA;
@@ -64,11 +67,24 @@ void PlaneClosestHit(inout HitInfo payload, Attributes attrib) {
 	ray.TMax = 100000.0f;
 	TraceRay(SceneBVH, RAY_FLAG_NONE, 0xff, 0, 0, 1, ray, payload);
 	
-	float factor = shadowPayload.isHit?0.3f:1.0f;
+	float shadowFactor = shadowPayload.isHit?0.3f:1.0f;
 	
-	float3 barycentrics=float3(1.0f-attrib.bary.x-attrib.bary.y,attrib.bary.x,attrib.bary.y);
-	float3 hitColor=float3(0.7f,0.7f,0.3f)*0.5+payload.colorAndDistance.rgb*0.5;
-	payload.colorAndDistance=float4(hitColor*factor,RayTCurrent());
+	float3 brycent=float3(1.0f-attrib.bary.x-attrib.bary.y,
+		attrib.bary.x,
+		attrib.bary.y);
+	uint vertId = 3 * PrimitiveIndex();
+	STriVertex v0 = BTriVertex[vertId+0];
+	STriVertex v1 = BTriVertex[vertId + 1];
+	STriVertex v2 = BTriVertex[vertId + 2];
+	//float2 uv = v0.uv * brycent.x + v1.uv * brycent.y+v2.uv*brycent.z;
+	float2 uv = v0.uv + attrib.bary.x * (v1.uv - v0.uv) + attrib.bary.y * (v2.uv - v0.uv);
+	float3 col = float3(0, 0, 0);
+	if (fmod(uv.x + uv.y, 1.f) < 0.5) {
+		col = float3(0, 0.8,0.0);
+	} 
+	col = float3(v0.normal.xyz);
+	float3 hitColor=col*0.5+payload.colorAndDistance.rgb*0.5;//”½ŽËƒuƒŒƒ“ƒh
+	payload.colorAndDistance=float4(hitColor* shadowFactor,RayTCurrent());
 }
 
 [shader("closesthit")] 
@@ -77,24 +93,32 @@ void ClosestHit(inout HitInfo payload, Attributes attrib)
 
 	float3 brycent=float3(1.0f-attrib.bary.x-attrib.bary.y,attrib.bary.x,attrib.bary.y);
 
-
 	float3 hitColor=float3(0.6,0.7,0.6);
 	uint iid=InstanceID();
 	
-	if(iid<3){
-		hitColor=cA*brycent.x+cB*brycent.y+cC*brycent.z;
-	}
+	//if(iid<3){
+	//	hitColor=cA*brycent.x+cB*brycent.y+cC*brycent.z;
+	//}
 	uint vertId = 3 * PrimitiveIndex();
 	//hitColor = cA;
-	float3 nV = BTriVertex[indices[vertId + 0]].color * brycent.x +
-		BTriVertex[indices[vertId + 1]].color * brycent.y +
-		BTriVertex[indices[vertId + 2]].color * brycent.z;
+	STriVertex v0 = BTriVertex[indices[vertId + 0]];
+	STriVertex v1 = BTriVertex[indices[vertId + 1]];
+	STriVertex v2 = BTriVertex[indices[vertId + 2]];
+	float3 nV = v0.normal * brycent.x +
+		v1.normal * brycent.y +
+		v2.normal * brycent.z;
 
 	float3 lightPos = float3(2, 2, -2);
 	lightPos = normalize(lightPos);
 	nV = RotVectorByQuat(nV, cB);
-	float b = dot(lightPos, nV);
-	float p=mtlTbl[PrimitiveIndex()];
-
- 	payload.colorAndDistance = float4(b*cA*p, RayTCurrent());
+	float b = saturate(dot(lightPos, nV)+0.5);
+	uint idx = mtlTbl[PrimitiveIndex()] % 14;
+	float3 p = materials[idx];
+	//float2 uv = v0.uv * brycent.x + v1.uv * brycent.y + v2.uv * brycent.z;
+	float2 uv = v0.uv + brycent.x * (v1.uv - v0.uv) + brycent.y * (v2.uv - v0.uv);
+	float3 col = float3(0, 0, 0);
+	if (fmod(uv.x + uv.y, 0.08f) < 0.04) {
+		col = float3(0, 0.8, 0.0);
+	}
+ 	payload.colorAndDistance = float4(b*p, RayTCurrent());
 }

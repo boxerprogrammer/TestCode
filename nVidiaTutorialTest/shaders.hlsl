@@ -21,7 +21,7 @@ struct PSInput
 	float4 color : COLOR;
 };
 
-PSInput VSMain(float4 position : POSITION, float4 color : COLOR)
+PSInput VSMain(float4 position : POSITION, float4 color : NORMAL,float2 uv: TEXCOORD)
 {
 	PSInput result;
 

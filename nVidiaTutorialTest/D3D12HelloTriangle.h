@@ -50,7 +50,8 @@ private:
 	struct Vertex
 	{
 		XMFLOAT3 position;
-		XMFLOAT4 color;
+		XMFLOAT3 normal;
+		XMFLOAT2 uv;
 	};
 
 	struct AccelerationStructureBuffers {
@@ -161,10 +162,12 @@ private:
 	//	float mtl;
 	//};
 	std::vector<UINT> m_pmdIndex;
-	std::vector<float> m_materialIDs;//プリミティブごとのマテリアルID
+	std::vector<UINT> m_materialIDs;//プリミティブごとのマテリアルID
 
 	ComPtr<ID3D12Resource> m_matIdBuffer;
 
+	std::vector<XMFLOAT3> m_materials;
+	ComPtr<ID3D12Resource> m_materialBuffer;
 
 public:
 	void CheckRaytracingSupport();
