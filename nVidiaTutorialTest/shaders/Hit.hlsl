@@ -22,9 +22,15 @@ StructuredBuffer<STriVertex> BTriVertex : register(t0);
 //};
 StructuredBuffer<int> indices : register(t1);
 RaytracingAccelerationStructure SceneBVH : register(t2);
-StructuredBuffer<int> mtlTbl : register(t3);
+struct mattex{
+	int matid;
+	int texid;
+};
+StructuredBuffer<mattex> mtlTbl : register(t3);
 StructuredBuffer<float3> materials : register(t4);
 
+Texture2D<float4> textures[]:register(t5);
+SamplerState smp : register(s0);
 
 cbuffer Colors : register(b0){
 	float3 cA;
@@ -76,26 +82,26 @@ void PlaneClosestHit(inout HitInfo payload, Attributes attrib) {
 	STriVertex v0 = BTriVertex[vertId+0];
 	STriVertex v1 = BTriVertex[vertId + 1];
 	STriVertex v2 = BTriVertex[vertId + 2];
-	//float2 uv = v0.uv * brycent.x + v1.uv * brycent.y+v2.uv*brycent.z;
-	float2 uv = v0.uv + attrib.bary.x * (v1.uv - v0.uv) + attrib.bary.y * (v2.uv - v0.uv);
-	float3 col = float3(0, 0, 0);
-	if (fmod(uv.x + uv.y, 1.f) < 0.5) {
+	float2 uv = v0.uv * brycent.x + v1.uv * brycent.y+v2.uv*brycent.z;
+	//float2 uv = v0.uv + attrib.bary.x * (v1.uv - v0.uv) + attrib.bary.y * (v2.uv - v0.uv);
+	float3 col = float3(1, 0, 1);
+	if (fmod(saturate(uv.x + uv.y), 0.1f) < 0.05) {
 		col = float3(0, 0.8,0.0);
 	} 
-	col = float3(v0.normal.xyz);
+	col = float3(uv,0);
 	float3 hitColor=col*0.5+payload.colorAndDistance.rgb*0.5;//”½ŽËƒuƒŒƒ“ƒh
 	payload.colorAndDistance=float4(hitColor* shadowFactor,RayTCurrent());
 }
 
 [shader("closesthit")] 
-void ClosestHit(inout HitInfo payload, Attributes attrib) 
+void ClosestHit(inout HitInfo payload, Attributes attrib)
 {
 
-	float3 brycent=float3(1.0f-attrib.bary.x-attrib.bary.y,attrib.bary.x,attrib.bary.y);
+	float3 brycent = float3(1.0f - attrib.bary.x - attrib.bary.y, attrib.bary.x, attrib.bary.y);
 
-	float3 hitColor=float3(0.6,0.7,0.6);
-	uint iid=InstanceID();
-	
+	float3 hitColor = float3(0.6, 0.7, 0.6);
+	uint iid = InstanceID();
+
 	//if(iid<3){
 	//	hitColor=cA*brycent.x+cB*brycent.y+cC*brycent.z;
 	//}
@@ -111,14 +117,22 @@ void ClosestHit(inout HitInfo payload, Attributes attrib)
 	float3 lightPos = float3(2, 2, -2);
 	lightPos = normalize(lightPos);
 	nV = RotVectorByQuat(nV, cB);
-	float b = saturate(dot(lightPos, nV)+0.5);
-	uint idx = mtlTbl[PrimitiveIndex()] % 14;
+	float b = saturate(dot(lightPos, nV) + 0.8);
+	uint idx = mtlTbl[PrimitiveIndex()].matid;
+	int texIdx = mtlTbl[PrimitiveIndex()].texid;
 	float3 p = materials[idx];
-	//float2 uv = v0.uv * brycent.x + v1.uv * brycent.y + v2.uv * brycent.z;
-	float2 uv = v0.uv + brycent.x * (v1.uv - v0.uv) + brycent.y * (v2.uv - v0.uv);
-	float3 col = float3(0, 0, 0);
-	if (fmod(uv.x + uv.y, 0.08f) < 0.04) {
-		col = float3(0, 0.8, 0.0);
+
+	float2 uv = v0.uv * brycent.x + v1.uv * brycent.y + v2.uv * brycent.z;
+	//float2 uv = v0.uv + attrib.bary.x * (v1.uv - v0.uv) + attrib.bary.y * (v2.uv - v0.uv);
+	//float2 uv = v0.uv + brycent.x * (v1.uv - v0.uv) + brycent.y * (v2.uv - v0.uv);
+	int2 iuv = floor(uv * 256.0f);
+	float3 texcol = float3(1, 1, 1);
+	if (texIdx != 0xff){
+		texcol = textures[texIdx].SampleLevel(smp, uv, 0.0).rgb;
 	}
- 	payload.colorAndDistance = float4(b*p, RayTCurrent());
+	float4 col=float4(0, 0, 0,1);
+	if (fmod(uv.x + uv.y, 0.2f) < 0.1) {
+		col = float4(0, 0.8, 0.0,1);
+	}
+ 	payload.colorAndDistance = float4(b*texcol, RayTCurrent());
 }

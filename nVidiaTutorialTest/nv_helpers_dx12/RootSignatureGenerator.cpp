@@ -165,10 +165,25 @@ ID3D12RootSignature* RootSignatureGenerator::Generate(ID3D12Device* device, bool
       m_parameters[i].DescriptorTable.pDescriptorRanges = m_ranges[m_rangeLocations[i]].data();
     }
   }
+
+  D3D12_STATIC_SAMPLER_DESC samplerDesc = {};
+  samplerDesc.ShaderRegister = 0;
+  samplerDesc.Filter = D3D12_FILTER_ANISOTROPIC;
+  samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+  samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+  samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+  samplerDesc.MaxAnisotropy = 16;
+  samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+  samplerDesc.BorderColor = D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE;
+  samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
+  samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
   // Specify the root signature with its set of parameters
   D3D12_ROOT_SIGNATURE_DESC rootDesc = {};
   rootDesc.NumParameters = static_cast<UINT>(m_parameters.size());
   rootDesc.pParameters = m_parameters.data();
+  rootDesc.NumStaticSamplers = 1;
+  rootDesc.pStaticSamplers = &samplerDesc;
   // Set the flags of the signature. By default root signatures are global, for example for vertex
   // and pixel shaders. For raytracing shaders the root signatures are local.
   rootDesc.Flags =

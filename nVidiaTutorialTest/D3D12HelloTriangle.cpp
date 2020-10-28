@@ -11,6 +11,7 @@
 #include<stdexcept>
 #include<cmath>
 #include<Windows.h>
+#include<DirectXTex.h>
 #include"stdafx.h"
 
 #include"nv_helpers_dx12/TopLevelASGenerator.h"
@@ -38,6 +39,42 @@ namespace {
 	XMVECTOR{0.4f,0.0f,1.0f,1.0f},
 	XMVECTOR{0.7f,0.0f,1.0f,1.0f},
 	};
+
+	///string(マルチバイト文字列)からwstring(ワイド文字列)を得る
+///@param str マルチバイト文字列
+///@return 変換されたワイド文字列
+	std::wstring
+		GetWideStringFromString(const std::string& str) {
+		//呼び出し1回目(文字列数を得る)
+		auto num1 = MultiByteToWideChar(CP_ACP,
+			MB_PRECOMPOSED | MB_ERR_INVALID_CHARS,
+			str.c_str(), -1, nullptr, 0);
+
+		std::wstring wstr;//stringのwchar_t版
+		wstr.resize(num1);//得られた文字列数でリサイズ
+
+		//呼び出し2回目(確保済みのwstrに変換文字列をコピー)
+		auto num2 = MultiByteToWideChar(CP_ACP,
+			MB_PRECOMPOSED | MB_ERR_INVALID_CHARS,
+			str.c_str(), -1, &wstr[0], num1);
+
+		assert(num1 == num2);//一応チェック
+		return wstr;
+	}
+	///モデルのパスとテクスチャのパスから合成パスを得る
+	///@param modelPath アプリケーションから見たpmdモデルのパス
+	///@param texPath PMDモデルから見たテクスチャのパス
+	///@return アプリケーションから見たテクスチャのパス
+	std::string GetTexturePathFromModelAndTexPath(const std::string& modelPath, const std::string& texPath) {
+		//ファイルのフォルダ区切りは\と/の二種類が使用される可能性があり
+		//ともかく末尾の\か/を得られればいいので、双方のrfindをとり比較する
+		//int型に代入しているのは見つからなかった場合はrfindがepos(-1→0xffffffff)を返すため
+		int pathIndex1 = modelPath.rfind('/');
+		int pathIndex2 = modelPath.rfind('\\');
+		auto pathIndex = max(pathIndex1, pathIndex2);
+		auto folderPath = modelPath.substr(0, pathIndex + 1);
+		return folderPath + texPath;
+	}
 }
 
 void 
@@ -86,11 +123,13 @@ D3D12HelloTriangle::CreateHitSignature() {
 	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_CBV, 0);//register(b0)に対応
 	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 3);//register(t3)に対応(MaterialTable)
 	rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 4);//register(t4)に対応(MaterialTable)
+	//rsc.AddRootParameter(D3D12_ROOT_PARAMETER_TYPE_SRV, 5,0);//register(t5)に対応(MaterialTable)
+	
 	rsc.AddHeapRangesParameter({ 
 		{ 2,1,0,
 		D3D12_DESCRIPTOR_RANGE_TYPE_SRV,1 }, //t2
 		});//
-
+	rsc.AddHeapRangesParameter({ { 5,1,0,D3D12_DESCRIPTOR_RANGE_TYPE_SRV,5 } });
 	return rsc.Generate(m_device.Get(), true);
 }
 
@@ -155,12 +194,17 @@ D3D12HelloTriangle::CreateShaderBindingTable() {
 	m_sbtHelper.AddMissProgram(L"Miss", {});
 	m_sbtHelper.AddMissProgram(L"ShadowMiss", {});
 	for (int i = 0; i < 3; ++i) {
-		m_sbtHelper.AddHitGroup(L"HitGroup",{ (void*)(m_vertexBuffer->GetGPUVirtualAddress()),
-			(void*)(m_indexBuffer->GetGPUVirtualAddress()),
-			(void*)(m_perInstanceConstantBuffers[i]->GetGPUVirtualAddress()),
-			(void*)(m_matIdBuffer->GetGPUVirtualAddress()),
-			(void*)(m_materialBuffer->GetGPUVirtualAddress())
-	});
+		std::vector<void*> inputdata = {
+			(void*)(m_vertexBuffer->GetGPUVirtualAddress()),//t0
+			(void*)(m_indexBuffer->GetGPUVirtualAddress()),//t1
+			(void*)(m_perInstanceConstantBuffers[i]->GetGPUVirtualAddress()),//t2
+			(void*)(m_matIdBuffer->GetGPUVirtualAddress()),//t3
+			(void*)(m_materialBuffer->GetGPUVirtualAddress())//t4
+		};
+		for (auto& texbuff : m_textureBuffers) {
+			inputdata.push_back((void*)(texbuff->GetGPUVirtualAddress()));//t5
+		}
+		m_sbtHelper.AddHitGroup(L"HitGroup",inputdata);
 		m_sbtHelper.AddHitGroup(L"ShadowHitGroup", {});
 	}
 	
@@ -204,7 +248,8 @@ D3D12HelloTriangle::CreateRaytracingOutputBuffer() {
 void 
 D3D12HelloTriangle::CreateShaderResourceHeap() {
 	//マテリアルのために3→5へ
-	m_srvUavHeap = nv_helpers_dx12::CreateDescriptorHeap(m_device.Get(), 5, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, true);
+	int numHeapSize = 5 + m_textureBuffers.size();
+	m_srvUavHeap = nv_helpers_dx12::CreateDescriptorHeap(m_device.Get(), numHeapSize, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, true);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle = m_srvUavHeap->GetCPUDescriptorHandleForHeapStart();
 
@@ -235,8 +280,8 @@ D3D12HelloTriangle::CreateShaderResourceHeap() {
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 	srvDesc.Buffer.FirstElement = 0;
-	srvDesc.Buffer.NumElements = m_materialIDs.size();
-	srvDesc.Buffer.StructureByteStride = sizeof(m_materialIDs[0]);
+	srvDesc.Buffer.NumElements = m_matNtexIDs.size();
+	srvDesc.Buffer.StructureByteStride = sizeof(m_matNtexIDs[0]);
 	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	m_device->CreateShaderResourceView(m_matIdBuffer.Get(), &srvDesc, srvHandle);
@@ -253,6 +298,25 @@ D3D12HelloTriangle::CreateShaderResourceHeap() {
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	m_device->CreateShaderResourceView(m_materialBuffer.Get(), &srvDesc, srvHandle);
 
+	//5～
+	
+	
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Buffer.FirstElement = 0;
+	srvDesc.Buffer.NumElements = 0;
+	srvDesc.Buffer.StructureByteStride = 0;
+	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.Texture2D.MipLevels = 1;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.PlaneSlice = 0;
+	srvDesc.Texture2D.ResourceMinLODClamp = 0;
+	for (auto& texbuff : m_textureBuffers) {
+		auto desc=texbuff->GetDesc();
+		srvDesc.Format = desc.Format;
+		srvHandle.ptr += m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+		m_device->CreateShaderResourceView(texbuff.Get(), &srvDesc, srvHandle);
+	}
 }
 
 
@@ -278,6 +342,8 @@ D3D12HelloTriangle::OnInit()
 	CreateAccelerationStructures();
 	ThrowIfFailed(m_commandList->Close());
 	
+	//CreateTextureBuffer();
+
 	CreateRaytracingPipeline();
 	CreateGlobalConstantBuffer();
 	CreatePerInstanceConstantBuffers();
@@ -394,11 +460,64 @@ void D3D12HelloTriangle::LoadPipeline()
 	ThrowIfFailed(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_commandAllocator)));
 }
 
+void 
+D3D12HelloTriangle::CreateTextureBuffer(std::string path,ComPtr<ID3D12Resource>& texBuff) {
+	static size_t no = 0;
+
+	path = GetTexturePathFromModelAndTexPath("model/satori.pmd", path);
+
+	auto wpath = GetWideStringFromString(path);
+	
+	DirectX::TexMetadata metadata;
+	DirectX::ScratchImage scratchImg;
+	auto result = DirectX::LoadFromDDSFile(wpath.c_str(),0, &metadata, scratchImg);
+	ThrowIfFailed(result);
+
+	D3D12_HEAP_PROPERTIES heapprop = {};
+	heapprop.Type = D3D12_HEAP_TYPE_CUSTOM;//テクスチャ用
+	heapprop.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
+	heapprop.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
+	heapprop.CreationNodeMask = 0;
+	heapprop.VisibleNodeMask = 0;
+	D3D12_RESOURCE_DESC resdesc = CD3DX12_RESOURCE_DESC::Tex2D(metadata.format, metadata.width, metadata.height, metadata.arraySize, metadata.mipLevels);
+
+	result = m_device->CreateCommittedResource(&heapprop,
+		D3D12_HEAP_FLAG_NONE,
+		&resdesc,
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+		nullptr,
+		IID_PPV_ARGS(texBuff.ReleaseAndGetAddressOf()));
+	ThrowIfFailed(result);
+	//std::vector<uint8_t> col(4 * 256 * 256);
+	//int idx = 0;
+	//uint8_t c = 0xff;
+	//for (int y = 0; y < 256; ++y) {
+	//	for (int x = 0; x < 256; ++x) {
+	//		if (((x / 32) + (y / 32)) % 2 == 0) {
+	//			c = 0;
+	//		}
+	//		else {
+	//			c= 192;
+	//		}
+	//		auto n = no;
+	//		col[idx+0] = c*((n%2)==0);
+	//		col[idx+1] = c*((n%3)==0);
+	//		col[idx+2] = c*0xff;
+	//		col[idx+3] = 0xff;
+	//		idx += 4;
+	//	}
+	//}
+	auto img = scratchImg.GetImage(0, 0, 0);//生データ抽出
+	result = texBuff->WriteToSubresource(0, nullptr, img->pixels,img->rowPitch, img->slicePitch);
+	ThrowIfFailed(result);
+	++no;
+}
+
 // Load the sample assets.
 void D3D12HelloTriangle::LoadAssets()
 {
-//	LoadPMDFile(L"model/satori.pmd");
-	LoadPMDFile(L"model/miku.pmd");
+	LoadPMDFile(L"model/satori.pmd");
+	//LoadPMDFile(L"model/miku.pmd");
 	// Create an empty root signature.
 	{
 		CD3DX12_ROOT_PARAMETER constantParameter;
@@ -728,22 +847,43 @@ D3D12HelloTriangle::LoadPMDFile(const wchar_t* path) {
 	std::vector<PMDMaterial> materials(materialCount);
 	m_materials.resize(materialCount);
 	_materials.resize(materialCount);
-	m_materialIDs.resize(indicesNum/3);
+	m_matNtexIDs.resize(indicesNum/3);
+
 	fread(materials.data(), sizeof(PMDMaterial), materialCount, fp);
 	UINT idx = 0;
+	UINT texIdx = 0;
 	auto msize = materials.size();
 	for (int i = 0; i < msize; ++i) {
 		_materials[i].diffuse = materials[i].diffuse;
 		_materials[i].power = materials[i].power;
 		_materials[i].specular = materials[i].specular;
 		_materials[i].ambient = materials[i].ambient;
+		std::string strPath = materials[i].texturePath;
+		if (strPath != "") {
+			auto it = texTable_.find(strPath);
+			if (it == texTable_.end()) {
+				texTable_[strPath] = texIdx;
+				ComPtr<ID3D12Resource> tex;
+				CreateTextureBuffer(strPath,tex);
+				m_textureBuffers.push_back(tex);
+				++texIdx;
+			}
+		}
 		for (size_t j = 0; j < materials[i].indexNum/3; ++j) {
-			m_materialIDs[idx]=i;//プリミティブ単位でマテリアル番号を登録
+			m_matNtexIDs[idx].matID=i;//プリミティブ単位でマテリアル番号を登録
+			if (strPath == "") {
+				m_matNtexIDs[idx].texID = 0xff;
+			}
+			else {
+				m_matNtexIDs[idx].texID = texTable_[strPath];
+			}
 			++idx;
+
 		}
 		m_materials[i].x = materials[i].diffuse.x;
 		m_materials[i].y = materials[i].diffuse.y;
 		m_materials[i].z = materials[i].diffuse.z;
+
 	}
 	fclose(fp);
 }
@@ -846,7 +986,7 @@ D3D12HelloTriangle::UpdateCameraBuffer() {
 	static float angle = 0.0f;
 	constexpr float r = 1.5f * 1.4142f;
 
-	XMVECTOR eye = XMVectorSet(r*cos(angle),1.5f , r * sin(angle), 0.0f);
+	XMVECTOR eye = XMVectorSet(r*cos(angle),1.0f , r * sin(angle), 0.0f);
 	//XMVECTOR eye = XMVectorSet(1.5f, 0.5f, 1.5f, 0.0f);
 	XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
@@ -1080,11 +1220,11 @@ void D3D12HelloTriangle::UpdateConstantBuffer(bool first)
 	}
 	if (first) {
 
-		m_matIdBuffer = nv_helpers_dx12::CreateBuffer(m_device.Get(), sizeof(m_materialIDs[0]) * m_materialIDs.size(), D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_GENERIC_READ, nv_helpers_dx12::kUploadHeapProps);
-		auto t = m_materialIDs[0];
+		m_matIdBuffer = nv_helpers_dx12::CreateBuffer(m_device.Get(), sizeof(m_matNtexIDs[0]) * m_matNtexIDs.size(), D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_GENERIC_READ, nv_helpers_dx12::kUploadHeapProps);
+		auto t = m_matNtexIDs[0];
 		decltype(t)* mat;
 		m_matIdBuffer->Map(0, nullptr, (void**)&mat);
-		std::copy(m_materialIDs.begin(), m_materialIDs.end(), mat);
+		std::copy(m_matNtexIDs.begin(), m_matNtexIDs.end(), mat);
 		m_matIdBuffer->Unmap(0, nullptr);
 
 		m_materialBuffer= nv_helpers_dx12::CreateBuffer(m_device.Get(), sizeof(m_materials[0]) * m_materials.size(), D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_GENERIC_READ, nv_helpers_dx12::kUploadHeapProps);

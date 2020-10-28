@@ -14,6 +14,7 @@
 #include "DXSample.h"
 #include<dxcapi.h>
 #include<vector>
+#include<unordered_map>
 
 using namespace DirectX;
 
@@ -161,13 +162,24 @@ private:
 	//	UINT idx;
 	//	float mtl;
 	//};
+	struct MaterialAndTextureID {
+		UINT matID;
+		int texID;
+	};
 	std::vector<UINT> m_pmdIndex;
-	std::vector<UINT> m_materialIDs;//プリミティブごとのマテリアルID
+	std::vector<MaterialAndTextureID> m_matNtexIDs;//プリミティブごとのマテリアルID
+	//std::vector<UINT> m_textureIDs;//プリミティブごとのマテリアルID
+	
+	std::unordered_map<std::string, UINT> texTable_;
 
 	ComPtr<ID3D12Resource> m_matIdBuffer;
 
 	std::vector<XMFLOAT3> m_materials;
 	ComPtr<ID3D12Resource> m_materialBuffer;
+
+	std::vector<ComPtr<ID3D12Resource>> m_textureBuffers;
+	ComPtr<ID3D12Resource> m_texIdBuffer;//プリミティブごとのテクスチャID
+	void CreateTextureBuffer(std::string path,ComPtr<ID3D12Resource>& textBuff);
 
 public:
 	void CheckRaytracingSupport();
