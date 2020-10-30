@@ -175,7 +175,7 @@ D3D12HelloTriangle::CreateRaytracingPipeline() {
 
 	pipeline.SetMaxPayloadSize(sizeof(XMFLOAT4));//ペイロードサイズ(RGB+距離)
 	pipeline.SetMaxAttributeSize(sizeof(XMFLOAT2));//重心UV
-	pipeline.SetMaxRecursionDepth(2);
+	pipeline.SetMaxRecursionDepth(5);
 
 	m_rtStateObject = pipeline.Generate();
 	ThrowIfFailed(m_rtStateObject->QueryInterface(IID_PPV_ARGS(&m_rtStateObjectProps)));

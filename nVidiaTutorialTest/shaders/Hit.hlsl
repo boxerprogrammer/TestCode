@@ -63,7 +63,11 @@ void PlaneClosestHit(inout HitInfo payload, Attributes attrib) {
 	ShadowHitInfo shadowPayload;
 	shadowPayload.isHit=false;
 	
-	TraceRay(SceneBVH,RAY_FLAG_NONE,0xff,1,0,1,ray,shadowPayload);
+	TraceRay(SceneBVH,RAY_FLAG_NONE,0xff,
+		1,//ヒットグループインデックスオフセット
+		0,//ジオメトリ乗算インデックス(もうわからんので0)
+		1,//ミスシェーダのインデックス
+		ray,shadowPayload);
 	
 	float3 rray = reflect(WorldRayDirection(), float3(0, 1, 0));
 	rray = normalize(rray);
@@ -71,7 +75,12 @@ void PlaneClosestHit(inout HitInfo payload, Attributes attrib) {
 	ray.Direction = rray;
 	ray.TMin = 0.01f;
 	ray.TMax = 100000.0f;
-	TraceRay(SceneBVH, RAY_FLAG_NONE, 0xff, 0, 0, 1, ray, payload);
+	TraceRay(SceneBVH, RAY_FLAG_NONE, 0xff, 
+		0,//ヒットグループインデックスオフセット
+		0,//ジオメトリ乗算インデックス(もうわからんので0)
+		1,//ミスシェーダのインデックス
+		ray, 
+		payload);
 	
 	float shadowFactor = shadowPayload.isHit?0.3f:1.0f;
 	
@@ -96,6 +105,23 @@ void PlaneClosestHit(inout HitInfo payload, Attributes attrib) {
 [shader("closesthit")] 
 void ClosestHit(inout HitInfo payload, Attributes attrib)
 {
+	float3 lightPos = float3(2, 2, -2);
+	float3 worldOrigin = WorldRayOrigin() + RayTCurrent() * WorldRayDirection();//平面上の現在の座標
+
+	float3 lightDir = normalize(lightPos - worldOrigin);//その座標から見たライトまでのベクトル
+
+	RayDesc ray;
+	ray.Origin = worldOrigin;
+	ray.Direction = lightDir;
+	ray.TMin = 0.01f;
+	ray.TMax = 100000.0f;
+	bool hit = true;
+
+	ShadowHitInfo shadowPayload;
+	shadowPayload.isHit = false;
+
+	TraceRay(SceneBVH, RAY_FLAG_NONE, 0xff, 1, 0, 1, ray, shadowPayload);
+	float shadowFactor = shadowPayload.isHit ? 0.3f : 1.0f;
 
 	float3 brycent = float3(1.0f - attrib.bary.x - attrib.bary.y, attrib.bary.x, attrib.bary.y);
 
@@ -114,10 +140,9 @@ void ClosestHit(inout HitInfo payload, Attributes attrib)
 		v1.normal * brycent.y +
 		v2.normal * brycent.z;
 
-	float3 lightPos = float3(2, 2, -2);
 	lightPos = normalize(lightPos);
 	nV = RotVectorByQuat(nV, cB);
-	float b = saturate(dot(lightPos, nV) + 0.8);
+	float b = saturate(dot(lightPos, nV) + 0.8)*shadowFactor;
 	uint idx = mtlTbl[PrimitiveIndex()].matid;
 	int texIdx = mtlTbl[PrimitiveIndex()].texid;
 	float3 p = materials[idx];
@@ -134,5 +159,20 @@ void ClosestHit(inout HitInfo payload, Attributes attrib)
 	if (fmod(uv.x + uv.y, 0.2f) < 0.1) {
 		col = float4(0, 0.8, 0.0,1);
 	}
+	//if (texIdx ==8) {
+	//	float3 rray = reflect(WorldRayDirection(), float3(0, 1, 0));
+	//	rray = normalize(rray);
+	//	ray.Origin = worldOrigin;
+	//	ray.Direction = rray;
+	//	ray.TMin = 0.01f;
+	//	ray.TMax = 100000.0f;
+	//	TraceRay(SceneBVH, RAY_FLAG_NONE, 0xff,
+	//		0,//ヒットグループインデックスオフセット
+	//		0,//ジオメトリ乗算インデックス(もうわからんので0)
+	//		1,//ミスシェーダのインデックス
+	//		ray,
+	//		payload);
+	//	texcol *= payload.colorAndDistance.xyz;
+	//}
  	payload.colorAndDistance = float4(b*texcol, RayTCurrent());
 }
