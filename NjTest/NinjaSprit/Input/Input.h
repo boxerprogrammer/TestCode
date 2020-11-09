@@ -81,6 +81,7 @@ private:
 	/// <returns>それが押されたかどうか</returns>
 	bool& CurrentInput(const std::string cmd);
 	bool GetCurrentInput(const std::string cmd)const;
+
 	/// <summary>
 	/// 直前の入力情報への参照を返す
 	/// </summary>
@@ -94,6 +95,7 @@ private:
 	/// <param name="eventname">入力イベント名</param>
 	/// <param name="peri">機器入力情報配列(ベクタ)</param>
 	void RegistAcceptPeripheral(const char* eventname, const std::vector<PeripheralInfo>& peri);
+
 	/// <summary>
 	/// 現在それが押されてるかチェックする
 	/// </summary>
