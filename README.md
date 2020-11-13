@@ -35,4 +35,6 @@ GemeProgrammingGems4の1章10項のSmoothDampを自分なりに解釈して、�
 ## nVidiaTutorialTest
 nVidiaのDXRチュートリアル(HelloTriangleからレイトレーシングをやる)を参考に、モデル表示まで実装中
 ## onefinger
-OneFingerDeathPunch的なものを作ろうとして放置中のプロジェクト
+OneFingerDeathPunch的なものを作ろうとして放置中のプロジェクト。現在タイトル画面のタイトルをラスタスクロールでぐにゃぐにゃ歪ませるテストだけ行っている。
+なお、現状はアセットに「GothicVania Church」を使用しており(https://ansimuz.itch.io/gothicvania-church-pack )からダウンロードして、アセットを適切な所においてほしい。
+
