@@ -1,5 +1,5 @@
 # TestCode
-テストコードorコードの断片です。ほとんどがDxLibを使用しています。なお、動作させるには環境変数にDXLIB_DIRを作って、そこにDxLibの本体を入れておかないと動作しないので注意してください。
+テストコードorコードの断片です。ほとんどがDxLibを使用しています。なお、 *動作させるには環境変数にDXLIB_DIRを作って、そこにDxLibの本体を入れておかないと動作しないので注意してください。* 
 ## CSTest
 ComputeShaderのテストコードです(@koguchit氏のComputeShaderサンプル(https://github.com/kgussan/simpleGpgpu )をDirectX12仕様にしようとしています)
 ## GetClipboardTexts
