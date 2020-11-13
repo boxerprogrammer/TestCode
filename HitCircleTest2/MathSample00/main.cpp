@@ -84,6 +84,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (IsHitCircles(cA, cB)) {
 			color = 0xffaaaa;//ピンク
 			
+			//押し戻しコード
+			//まずはA→Bへのベクトルを計算
+			auto N=cB.center - cA.center;
+			//めり込み量の計算
+			auto overlap = cB.r + cA.r - N.Magnitude();
+			N.Normalize();
+			cA.center -= N * overlap * 0.5f;
+			cB.center += N * overlap * 0.5f;
 
 		}
 

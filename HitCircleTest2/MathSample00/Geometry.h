@@ -1,13 +1,23 @@
 #pragma once
 
 struct Vector2 {
-	int x;
-	int y;
+	float x;
+	float y;
 	Vector2():x(0),y(0){}
-	Vector2(int inx,int iny):x(inx),y(iny){}
+	Vector2(float inx, float iny):x(inx),y(iny){}
+	float Magnitude()const;
+	void Normalize();
+	Vector2 Normalized();
+	void operator+=(const Vector2& val);
+	void operator-=(const Vector2& val);
+	void operator*=(const float scale);
+	void operator/=(const float div);
+
 };
 Vector2 operator+(const Vector2& lval, const Vector2& rval);
 Vector2 operator-(const Vector2& lval, const Vector2& rval);
+Vector2 operator*(const Vector2& lval, const float scale);
+Vector2 operator/(const Vector2& lval, const float div);
 
 typedef Vector2 Position2;
 
