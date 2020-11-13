@@ -1,0 +1,1 @@
+ここにはgothicvania churchのファイルからassets/images/title-screen.pngとpress-enter-text.pngを取得し、配置してください。なお、bgフォルダにも背景データを配置する必要があります。
