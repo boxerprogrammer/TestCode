@@ -11,6 +11,10 @@ using namespace std;
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"d3dcompiler.lib")
 namespace {
+	/// <summary>
+	/// シェーダエラーが起きたときのErrorBlobを出力する
+	/// </summary>
+	/// <param name="errBlob">errBlob</param>
 	void OutputFromErrorBlob(ID3DBlob* errBlob)
 	{
 		if (errBlob != nullptr) {
@@ -23,12 +27,20 @@ namespace {
 		}
 	}
 
-	ID3D12Resource* res_;
-	ID3D12Device* dev_;
-	ID3D12GraphicsCommandList * cmdList_;
+	ID3D12Resource* res_;//計算データ用リソース
+	ID3D12Device* dev_;//デバイスオブジェクト
+	ID3D12GraphicsCommandList * cmdList_;//コマンドリスト
+	ID3D12PipelineState* _pipeline;
 
 }
-std::vector<float> uavdata(4 * 4 * 4);
+std::vector<float> uavdata(4 * 4 * 4);//テストUAVデータ
+
+/// <summary>
+/// UAVバッファを作成する
+/// </summary>
+/// <param name="dev">デバイスオブジェクト</param>
+/// <param name="res">計算リソース(返り値用)</param>
+/// <returns>結果</returns>
 HRESULT CreateUAVBuffer(ID3D12Device* dev,ID3D12Resource*& res) {
 	HRESULT result= S_OK;
 	D3D12_HEAP_PROPERTIES heapProp = {};
@@ -65,6 +77,32 @@ int main() {
 	if (errBlob != nullptr) {
 		OutputFromErrorBlob(errBlob);
 	}
+
+	D3D12_ROOT_SIGNATURE_DESC rootSigDesc = {};
+	rootSigDesc.NumParameters = 0;
+	rootSigDesc.pParameters = nullptr;
+	rootSigDesc.NumStaticSamplers = 0;
+	rootSigDesc.pStaticSamplers = nullptr;
+	rootSigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_STREAM_OUTPUT;
+
+	D3D12_COMPUTE_PIPELINE_STATE_DESC pldesc = {};
+	pldesc.CS.pShaderBytecode = csBlob->GetBufferPointer();
+	pldesc.CS.BytecodeLength = csBlob->GetBufferSize();
+	pldesc.NodeMask = 0;
+
+	pldesc.pRootSignature;
+	dev_->CreateComputePipelineState(&pldesc, IID_PPV_ARGS(&_pipeline));
+
+
+	ID3D12CommandAllocator* cmdAlloc = nullptr;
+	//コマンドアロケータ作成
+	dev_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_COMPUTE, IID_PPV_ARGS(&cmdAlloc));
+	//コマンドリスト作成
+	dev_->CreateCommandList(0,D3D12_COMMAND_LIST_TYPE_COMPUTE, cmdAlloc,nullptr,IID_PPV_ARGS(&cmdList_));
+
+	
+
+
 
 	ID3D12Resource* uavBuffer = nullptr;
 	CreateUAVBuffer(dev_,uavBuffer);
