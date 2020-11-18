@@ -1,8 +1,18 @@
 #include<DxLib.h>
 #include<cmath>
 
+/// <summary>
+/// ‰~‚Ç‚¤‚µ‚Ì“–‚½‚è”»’è‚ğs‚¤
+/// </summary>
+/// <param name="ax">‰~A‚Ì’†SX</param>
+/// <param name="ay">‰~A‚Ì’†SY</param>
+/// <param name="bx">‰~B‚Ì’†SX</param>
+/// <param name="by">‰~A‚Ì’†SY</param>
+/// <param name="ar">‰~A‚Ì”¼ŒaR</param>
+/// <param name="br">‰~B‚Ì”¼ŒaR</param>
+/// <returns>true:“–‚½‚è / false/“–‚½‚Á‚Ä‚È‚¢</returns>
 bool IsHitCircle(int ax, int ay, int bx, int by,float ar,float br) {
-
+	//‰~‚Ç‚¤‚µ‚Ì“–‚½‚è”»’è‚ğ‘‚¢‚Ä‚­‚¾‚³‚¢
 	return false;
 }
 

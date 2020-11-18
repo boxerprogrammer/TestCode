@@ -1,0 +1,1 @@
+ここにはgothicvania churchのファイルからassets/environmentからbackground.pngおよびtileset.pngを取得して配置してください。
