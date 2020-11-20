@@ -264,6 +264,8 @@ int main() {
 	ID3D12Resource* cpyBuffer = nullptr;
 	CreateCopyBuffer(dev_, cpyBuffer);
 
+
+	//ƒoƒŠƒA
 	D3D12_RESOURCE_BARRIER barrier = {};
 	barrier.Transition.pResource = uavBuffer;
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
