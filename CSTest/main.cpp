@@ -198,7 +198,7 @@ void CreateComputePipeline()
 	assert(SUCCEEDED(result));
 }
 
-void CreateDescriptorHeap()
+void CreateUAVDescriptorHeap()
 {
 	HRESULT result = S_OK;
 	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
@@ -243,7 +243,7 @@ int main() {
 
 	rootSignature_ = CreateRootSignatureForComputeShader();
 	CreateComputePipeline();	
-	CreateDescriptorHeap();
+	CreateUAVDescriptorHeap();
 
 	D3D12_COMMAND_QUEUE_DESC queDesc = {};
 	queDesc.NodeMask = 0;
