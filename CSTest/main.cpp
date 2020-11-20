@@ -45,8 +45,15 @@ namespace {
 	UINT64 fenceValue_ = 0;
 }
 
+struct IDs {
+	float grpId;
+	float grpThrdId;
+	float dsptThrdId;
+	unsigned int grpIdx;
+};
+
 //CPU側で管理するUAVデータ
-std::vector<float> uavdata(4 * 4 * 4);//テストUAVデータ
+std::vector<IDs> uavdata(4 * 4 * 4);//テストUAVデータ
 
 /// <summary>
 /// UAV書き込みバッファを作成する
@@ -209,7 +216,7 @@ CreateUAV(ID3D12Resource* res) {
 	uavDesc.Format = DXGI_FORMAT_UNKNOWN;
 	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;//バッファとして
 	uavDesc.Buffer.NumElements = 4 * 4 * 4;//要素の総数
-	uavDesc.Buffer.StructureByteStride = sizeof(float);//1個当たりの大きさ
+	uavDesc.Buffer.StructureByteStride = sizeof(uavdata[0]);//1個当たりの大きさ
 	uavDesc.Buffer.FirstElement = 0;
 	uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_NONE;
 	dev_->CreateUnorderedAccessView(res, nullptr, &uavDesc, descriptorHeap_->GetCPUDescriptorHandleForHeapStart());
@@ -260,7 +267,7 @@ int main() {
 	ID3D12DescriptorHeap* descHeaps[] = { descriptorHeap_ };
 	cmdList_->SetDescriptorHeaps(1, descHeaps);
 	cmdList_->SetComputeRootDescriptorTable(0, descriptorHeap_->GetGPUDescriptorHandleForHeapStart());
-	cmdList_->Dispatch(1, 1, 1);
+	cmdList_->Dispatch(2, 2, 2);
 	ID3D12Resource* cpyBuffer = nullptr;
 	CreateCopyBuffer(dev_, cpyBuffer);
 
@@ -282,7 +289,7 @@ int main() {
 	
 	ExecuteAndWait();
 
-	float* mappedRes = nullptr;
+	IDs* mappedRes = nullptr;
 	D3D12_RANGE rng = {};
 	rng.Begin = 0;
 	rng.End = uavdata.size() * sizeof(float);
@@ -295,7 +302,10 @@ int main() {
 	Terminate();
 
 	for (auto& d : uavdata) {
-		cout << d << endl;
+		cout << "groupId=" << d.grpId << endl;
+		cout << "groupThreadId=" << d.grpThrdId << endl;
+		cout << "dispatchThreadId="<< d.dsptThrdId << endl;
+		cout << "groupIndex=" << d.grpIdx << endl;
 	}
 	return 0;
 }
