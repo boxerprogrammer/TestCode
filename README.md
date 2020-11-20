@@ -2,6 +2,7 @@
 テストコードorコードの断片です。ほとんどがDxLibを使用しています。なお、 **動作させるには環境変数にDXLIB_DIRを作って、そこにDxLibの本体を入れておかないと動作しないので注意してください。** 
 ## CSTest
 ComputeShaderのテストコードです(@koguchit氏のComputeShaderサンプル(https://github.com/kgussan/simpleGpgpu )をDirectX12仕様にしようとしています)
+今のところ、スレッドIDを書き込むだけのサンプルです。
 ## GetClipboardTexts
 職場のイベントで使用した抽選機用のソースコードです
 ## HitCircleTest
