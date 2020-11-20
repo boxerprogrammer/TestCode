@@ -4,6 +4,7 @@ struct Buffer_t {
 
 RWStructuredBuffer< Buffer_t> OutBuff:register(u0);
 
+//id‚ğ‘‚«‚Ş‚¾‚¯‚ÌƒvƒƒOƒ‰ƒ€‚Å‚·
 [numthreads(4, 4, 4)]
 void main( uint3 id : SV_DispatchThreadID )
 {
