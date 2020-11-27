@@ -175,7 +175,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				reel_y += line_height;
 			}
 			for (auto& name : namelist) {
-				DrawString(20 + x, y, name.c_str(), 0x444444);
+				int dw, dh, lc;
+				GetDrawStringSize(&dw, &dh, &lc, name.c_str(), name.length());
+				DrawString(-reel_start_x+(sw-dw)/2, y, name.c_str(), 0x444444);
 				y += name_height;
 				if (y >= reel_height)break;
 			}

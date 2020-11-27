@@ -128,10 +128,10 @@ ID3D12RootSignature* CreateRootSignatureForComputeShader()
 	HRESULT result = S_OK;
 	ID3DBlob* errBlob = nullptr;
 	D3D12_DESCRIPTOR_RANGE range[1] = {};
-	range[0].BaseShaderRegister = 0;
-	range[0].NumDescriptors = 1;
+	range[0].NumDescriptors = 1;//1つ
+	range[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;//u
+	range[0].BaseShaderRegister = 0;//u0
 	range[0].OffsetInDescriptorsFromTableStart = 0;
-	range[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
 	range[0].RegisterSpace = 0;
 
 	D3D12_ROOT_PARAMETER rp[1] = {};
@@ -263,11 +263,13 @@ int main() {
 	CreateUAVBuffer(dev_, uavBuffer);
 	CreateUAV(uavBuffer);
 
-	cmdList_->SetComputeRootSignature(rootSignature_);
+	cmdList_->SetComputeRootSignature(rootSignature_);//ルートシグネチャセット
 	ID3D12DescriptorHeap* descHeaps[] = { descriptorHeap_ };
-	cmdList_->SetDescriptorHeaps(1, descHeaps);
-	cmdList_->SetComputeRootDescriptorTable(0, descriptorHeap_->GetGPUDescriptorHandleForHeapStart());
-	cmdList_->Dispatch(2, 2, 2);
+	cmdList_->SetDescriptorHeaps(1, descHeaps);//ディスクリプタヒープのセット
+	cmdList_->SetComputeRootDescriptorTable(0, 
+		descriptorHeap_->GetGPUDescriptorHandleForHeapStart()
+	);//ルートパラメータのセット
+	cmdList_->Dispatch(2, 2, 2);//ディスパッチ
 	ID3D12Resource* cpyBuffer = nullptr;
 	CreateCopyBuffer(dev_, cpyBuffer);
 
