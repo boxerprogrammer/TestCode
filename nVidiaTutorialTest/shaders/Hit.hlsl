@@ -82,7 +82,7 @@ void PlaneClosestHit(inout HitInfo payload, Attributes attrib) {
 		ray, 
 		payload);
 	
-	float shadowFactor = shadowPayload.isHit?0.3f:1.0f;
+	float shadowFactor = shadowPayload.isHit ? 0.3f : 1.0f;
 	
 	float3 brycent=float3(1.0f-attrib.bary.x-attrib.bary.y,
 		attrib.bary.x,
@@ -92,13 +92,12 @@ void PlaneClosestHit(inout HitInfo payload, Attributes attrib) {
 	STriVertex v1 = BTriVertex[vertId + 1];
 	STriVertex v2 = BTriVertex[vertId + 2];
 	float2 uv = v0.uv * brycent.x + v1.uv * brycent.y+v2.uv*brycent.z;
-	//float2 uv = v0.uv + attrib.bary.x * (v1.uv - v0.uv) + attrib.bary.y * (v2.uv - v0.uv);
 	float3 col = float3(1, 0, 1);
 	if (fmod(saturate(uv.x + uv.y), 0.1f) < 0.05) {
 		col = float3(0, 0.8,0.0);
 	} 
 	col = float3(uv,0);
-	float3 hitColor=col*0.5+payload.colorAndDistance.rgb*0.5;//反射ブレンド
+	float3 hitColor = col *0.5 + payload.colorAndDistance.rgb * 0.5;//反射ブレンド
 	payload.colorAndDistance=float4(hitColor* shadowFactor,RayTCurrent());
 }
 
@@ -120,7 +119,7 @@ void ClosestHit(inout HitInfo payload, Attributes attrib)
 	ShadowHitInfo shadowPayload;
 	shadowPayload.isHit = false;
 
-	TraceRay(SceneBVH, RAY_FLAG_NONE, 0xff, 1, 0, 1, ray, shadowPayload);
+	//TraceRay(SceneBVH, RAY_FLAG_NONE, 0xff, 1, 0, 1, ray, shadowPayload);
 	float shadowFactor = shadowPayload.isHit ? 0.3f : 1.0f;
 
 	float3 brycent = float3(1.0f - attrib.bary.x - attrib.bary.y, attrib.bary.x, attrib.bary.y);
@@ -159,20 +158,5 @@ void ClosestHit(inout HitInfo payload, Attributes attrib)
 	if (fmod(uv.x + uv.y, 0.2f) < 0.1) {
 		col = float4(0, 0.8, 0.0,1);
 	}
-	//if (texIdx ==8) {
-	//	float3 rray = reflect(WorldRayDirection(), float3(0, 1, 0));
-	//	rray = normalize(rray);
-	//	ray.Origin = worldOrigin;
-	//	ray.Direction = rray;
-	//	ray.TMin = 0.01f;
-	//	ray.TMax = 100000.0f;
-	//	TraceRay(SceneBVH, RAY_FLAG_NONE, 0xff,
-	//		0,//ヒットグループインデックスオフセット
-	//		0,//ジオメトリ乗算インデックス(もうわからんので0)
-	//		1,//ミスシェーダのインデックス
-	//		ray,
-	//		payload);
-	//	texcol *= payload.colorAndDistance.xyz;
-	//}
- 	payload.colorAndDistance = float4(b*texcol, RayTCurrent());
+ 	payload.colorAndDistance = float4(b*p*texcol, RayTCurrent());
 }

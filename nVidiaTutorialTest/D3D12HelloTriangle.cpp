@@ -175,7 +175,7 @@ D3D12HelloTriangle::CreateRaytracingPipeline() {
 
 	pipeline.SetMaxPayloadSize(sizeof(XMFLOAT4));//ペイロードサイズ(RGB+距離)
 	pipeline.SetMaxAttributeSize(sizeof(XMFLOAT2));//重心UV
-	pipeline.SetMaxRecursionDepth(5);
+	pipeline.SetMaxRecursionDepth(2);
 
 	m_rtStateObject = pipeline.Generate();
 	ThrowIfFailed(m_rtStateObject->QueryInterface(IID_PPV_ARGS(&m_rtStateObjectProps)));
@@ -324,7 +324,7 @@ D3D12HelloTriangle::CreateShaderResourceHeap() {
 void 
 D3D12HelloTriangle::OnInit()
 {
-	
+	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 	LoadPipeline();
 	LoadAssets();
 	
@@ -470,7 +470,7 @@ D3D12HelloTriangle::CreateTextureBuffer(std::string path,ComPtr<ID3D12Resource>&
 	
 	DirectX::TexMetadata metadata;
 	DirectX::ScratchImage scratchImg;
-	auto result = DirectX::LoadFromDDSFile(wpath.c_str(),0, &metadata, scratchImg);
+	auto result = DirectX::LoadFromWICFile(wpath.c_str(),DirectX::WIC_FLAGS_FILTER_LINEAR, &metadata, scratchImg);
 	ThrowIfFailed(result);
 
 	D3D12_HEAP_PROPERTIES heapprop = {};
@@ -516,7 +516,7 @@ D3D12HelloTriangle::CreateTextureBuffer(std::string path,ComPtr<ID3D12Resource>&
 // Load the sample assets.
 void D3D12HelloTriangle::LoadAssets()
 {
-	LoadPMDFile(L"model/satori.pmd");
+	LoadPMDFile(L"model/初音ミク.pmd");
 	//LoadPMDFile(L"model/miku.pmd");
 	// Create an empty root signature.
 	{
