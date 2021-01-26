@@ -103,7 +103,6 @@ HRESULT
 CreateSRVBuffer(ID3D12Device* dev, ID3D12Resource*& res) {
 	HRESULT result = S_OK;
 	CD3DX12_HEAP_PROPERTIES heapProp(D3D12_HEAP_TYPE_UPLOAD);// = {};
-	//heapProp.Type = D3D12_HEAP_TYPE_UPLOAD;
 	D3D12_RESOURCE_DESC resDesc = {};
 	
 	resDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
@@ -328,11 +327,10 @@ int main() {
 	result = CreateSRVBuffer(dev_, inBuffer);
 	CreateSRV(inBuffer);
 
-	std::random_device seed_gen;
-	std::mt19937 mt(seed_gen());
+	std::random_device seed;
+	std::mt19937 mt(seed());
 	std::uniform_real_distribution<float> distf(0.0, 1.0);
 	std::uniform_int_distribution<unsigned int> disti(1,600);
-
 	for (auto& d : indata) {
 		d.f = distf(mt);
 		d.i = disti(mt);

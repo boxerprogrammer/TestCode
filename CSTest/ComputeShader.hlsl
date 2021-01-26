@@ -24,14 +24,14 @@ void main(uint3 groupId : SV_GroupID,
 	uint3 dispatchThreadId : SV_DispatchThreadID,
 	uint groupIndex : SV_GroupIndex)
 {
-
+	float angle = 3.14f * (float)groupIndex / 32.0f;
 	//‚½‚¾‚½‚¾ID‚ð‘ã“ü
 	outBuff[dispatchThreadId.x * 4 * 4 + dispatchThreadId.y * 4 + dispatchThreadId.z].dspThrdId =
 		dispatchThreadId.x * 4 * 4 + dispatchThreadId.y * 4 + dispatchThreadId.z* inBuff0[groupIndex].f;
 	outBuff[groupId.x * 2 * 2 + groupId.y * 2 + groupId.z].grpId =
 		groupId.x * 2 * 2 + groupId.y * 2 + groupId.z;
 	outBuff[groupThreadId.x * 2 * 2 + groupThreadId.y * 2 + groupThreadId.z].grpThrdId =
-		groupThreadId.x * 2 * 2 + groupThreadId.y * 2 + groupThreadId.z;
+		groupThreadId.x * 2 * 2 + groupThreadId.y * 2 + (float)groupThreadId.z*cos(angle)+sin(angle);
 	outBuff[groupIndex].groupIndex = inBuff0[groupIndex].i*groupIndex;
 
 }
