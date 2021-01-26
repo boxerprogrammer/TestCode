@@ -9,8 +9,12 @@
 #include<d3dcompiler.h>
 #include<cassert>
 #include<vector>
+#include<array>
 #include<string>
 #include<iostream>
+#include<d3dx12.h>
+#include<random>
+#include<algorithm>
 
 using namespace std;
 
@@ -56,7 +60,7 @@ struct IDs {
 std::vector<IDs> uavdata(4 * 4 * 4);//テストUAVデータ
 
 /// <summary>
-/// UAV書き込みバッファを作成する
+/// UAV書き込みバッファを作成する(最終出力先)
 /// </summary>
 /// <param name="dev">デバイスオブジェクト</param>
 /// <param name="res">計算リソース(返り値用)</param>
@@ -76,6 +80,42 @@ HRESULT CreateUAVBuffer(ID3D12Device* dev,ID3D12Resource*& res) {
 	resDesc.SampleDesc.Count = 1;
 	resDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	result = dev->CreateCommittedResource(&heapProp, D3D12_HEAP_FLAG_NONE, &resDesc, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, nullptr,
+		IID_PPV_ARGS(&res));
+	assert(SUCCEEDED(result));
+	return result;
+}
+//CPU側のデータ型と合わせる必要がある。
+struct SimpleBuffer_t
+{
+	int		i;
+	float	f;
+};
+array<SimpleBuffer_t, 64> indata;
+
+
+/// <summary>
+/// 入力用SRVバッファを作成するStructuredBuffer(ReadOnly)
+/// </summary>
+/// <param name="dev">デバイスオブジェクト</param>
+/// <param name="res">入力リソース(ReadOnly)</param>
+/// <returns>result</returns>
+HRESULT
+CreateSRVBuffer(ID3D12Device* dev, ID3D12Resource*& res) {
+	HRESULT result = S_OK;
+	CD3DX12_HEAP_PROPERTIES heapProp(D3D12_HEAP_TYPE_UPLOAD);// = {};
+	//heapProp.Type = D3D12_HEAP_TYPE_UPLOAD;
+	D3D12_RESOURCE_DESC resDesc = {};
+	
+	resDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
+	resDesc.Format = DXGI_FORMAT_UNKNOWN;
+	resDesc.Width = sizeof(indata[0]) * indata.size();//入力サイズを計算
+	resDesc.DepthOrArraySize = 1;
+	resDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resDesc.Height = 1;
+	resDesc.MipLevels = 1;
+	resDesc.SampleDesc.Count = 1;
+	resDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	result = dev->CreateCommittedResource(&heapProp, D3D12_HEAP_FLAG_NONE, &resDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&res));
 	assert(SUCCEEDED(result));
 	return result;
@@ -112,7 +152,7 @@ HRESULT CreateCopyBuffer(ID3D12Device* dev, ID3D12Resource*& res) {
 
 
 /// <summary>
-/// デバッグレイヤーオン
+/// デバッグレイヤーオォン
 /// </summary>
 void EnableDebugLayer()
 {
@@ -127,17 +167,23 @@ ID3D12RootSignature* CreateRootSignatureForComputeShader()
 {
 	HRESULT result = S_OK;
 	ID3DBlob* errBlob = nullptr;
-	D3D12_DESCRIPTOR_RANGE range[1] = {};
+	D3D12_DESCRIPTOR_RANGE range[2] = {};
 	range[0].NumDescriptors = 1;//1つ
 	range[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;//u
 	range[0].BaseShaderRegister = 0;//u0
 	range[0].OffsetInDescriptorsFromTableStart = 0;
 	range[0].RegisterSpace = 0;
 
+	range[1].NumDescriptors = 1;//1つ
+	range[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//t
+	range[1].BaseShaderRegister = 0;//t0
+	range[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	range[1].RegisterSpace = 0;
+
 	D3D12_ROOT_PARAMETER rp[1] = {};
 	rp[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rp[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rp[0].DescriptorTable.NumDescriptorRanges = 1;
+	rp[0].DescriptorTable.NumDescriptorRanges = 2;
 	rp[0].DescriptorTable.pDescriptorRanges = range;
 
 	D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -204,7 +250,7 @@ void CreateUAVDescriptorHeap()
 	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	descHeapDesc.NodeMask = 0;
-	descHeapDesc.NumDescriptors = 1;
+	descHeapDesc.NumDescriptors = 2;//UAV,SRV
 	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	result = dev_->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descriptorHeap_));
 	assert(SUCCEEDED(result));
@@ -220,6 +266,21 @@ CreateUAV(ID3D12Resource* res) {
 	uavDesc.Buffer.FirstElement = 0;
 	uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_NONE;
 	dev_->CreateUnorderedAccessView(res, nullptr, &uavDesc, descriptorHeap_->GetCPUDescriptorHandleForHeapStart());
+}
+
+void
+CreateSRV(ID3D12Resource* res) {
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;//バッファとして
+	srvDesc.Buffer.NumElements =indata.size();//要素の総数
+	srvDesc.Buffer.StructureByteStride = sizeof(indata[0]);//1個当たりの大きさ
+	srvDesc.Buffer.FirstElement = 0;
+	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	auto handle=descriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+	handle.ptr += dev_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	dev_->CreateShaderResourceView(res,  &srvDesc, handle);
 }
 
 void ExecuteAndWait()
@@ -260,8 +321,26 @@ int main() {
 
 	assert(SUCCEEDED(result));
 	ID3D12Resource* uavBuffer = nullptr;
-	CreateUAVBuffer(dev_, uavBuffer);
+	result = CreateUAVBuffer(dev_, uavBuffer);
 	CreateUAV(uavBuffer);
+
+	ID3D12Resource* inBuffer = nullptr;
+	result = CreateSRVBuffer(dev_, inBuffer);
+	CreateSRV(inBuffer);
+
+	std::random_device seed_gen;
+	std::mt19937 mt(seed_gen());
+	std::uniform_real_distribution<float> distf(0.0, 1.0);
+	std::uniform_int_distribution<unsigned int> disti(1,600);
+
+	for (auto& d : indata) {
+		d.f = distf(mt);
+		d.i = disti(mt);
+	}
+	SimpleBuffer_t* cbuff = nullptr;
+	inBuffer->Map(0, nullptr, (void**)&cbuff);
+	copy(indata.begin(), indata.end(), cbuff);
+	inBuffer->Unmap(0,nullptr);
 
 	cmdList_->SetComputeRootSignature(rootSignature_);//ルートシグネチャセット
 	ID3D12DescriptorHeap* descHeaps[] = { descriptorHeap_ };

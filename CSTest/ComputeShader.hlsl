@@ -5,7 +5,17 @@ struct Buffer_t {
 	uint groupIndex;
 };
 
-RWStructuredBuffer< Buffer_t> OutBuff:register(u0);
+//CPU側のデータ型と合わせる必要がある。
+struct SimpleBuffer_t
+{
+	int		i;
+	float	f;
+};
+
+StructuredBuffer<SimpleBuffer_t>	inBuff0 : register(t0);
+StructuredBuffer<SimpleBuffer_t>	inBuff1 : register(t1);
+
+RWStructuredBuffer< Buffer_t> outBuff:register(u0);
 
 //idを書き込むだけのプログラムです
 [numthreads(4, 4, 4)]
@@ -14,12 +24,14 @@ void main(uint3 groupId : SV_GroupID,
 	uint3 dispatchThreadId : SV_DispatchThreadID,
 	uint groupIndex : SV_GroupIndex)
 {
+
 	//ただただIDを代入
-	OutBuff[dispatchThreadId.x * 4 * 4 + dispatchThreadId.y * 4 + dispatchThreadId.z].dspThrdId =
-		dispatchThreadId.x * 4 * 4 + dispatchThreadId.y * 4 + dispatchThreadId.z;
-	OutBuff[groupId.x * 2 * 2 + groupId.y * 2 + groupId.z].grpId =
+	outBuff[dispatchThreadId.x * 4 * 4 + dispatchThreadId.y * 4 + dispatchThreadId.z].dspThrdId =
+		dispatchThreadId.x * 4 * 4 + dispatchThreadId.y * 4 + dispatchThreadId.z* inBuff0[groupIndex].f;
+	outBuff[groupId.x * 2 * 2 + groupId.y * 2 + groupId.z].grpId =
 		groupId.x * 2 * 2 + groupId.y * 2 + groupId.z;
-	OutBuff[groupThreadId.x * 2 * 2 + groupThreadId.y * 2 + groupThreadId.z].grpThrdId =
+	outBuff[groupThreadId.x * 2 * 2 + groupThreadId.y * 2 + groupThreadId.z].grpThrdId =
 		groupThreadId.x * 2 * 2 + groupThreadId.y * 2 + groupThreadId.z;
-	OutBuff[groupIndex].groupIndex = groupIndex;
+	outBuff[groupIndex].groupIndex = inBuff0[groupIndex].i*groupIndex;
+
 }
