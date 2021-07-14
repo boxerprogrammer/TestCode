@@ -1,5 +1,6 @@
 #include<vector>
 #include<list>
+#include<iterator>
 #include<array>
 #include<cassert>
 #include<DxLib.h>
@@ -264,7 +265,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					mp1,
 					p2,
 					10);
-				std::copy(bz.begin(), bz.end(), back_inserter(lazer[idx]));
+				std::copy(bz.begin(), bz.end(), std::back_inserter(lazer[idx]));
 			}
 		}
 			
