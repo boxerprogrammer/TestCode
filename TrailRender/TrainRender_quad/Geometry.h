@@ -33,8 +33,6 @@ struct Vector2 {
 	}
 	static const Vector2 Zero;
 };
-
-
 Vector2 operator+(const Vector2& va, const Vector2 vb);
 Vector2 operator-(const Vector2& va, const Vector2 vb);
 
