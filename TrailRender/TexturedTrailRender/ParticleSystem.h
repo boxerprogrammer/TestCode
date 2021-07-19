@@ -3,6 +3,7 @@
 #include<vector>
 #include"DxLib.h"
 class Particle;
+class Trail;
 class ParticleSystem
 {
 private:
@@ -15,7 +16,7 @@ public:
 	bool IsTerminated()const ;
 	void ClearParticles();
 	void ClearVertices();
-	void AddVertices(const std::vector<VERTEX2D>& vertices, const std::vector<unsigned short>&);
+	void AddTrail(const Trail& trail);
 	void Draw();
 };
 

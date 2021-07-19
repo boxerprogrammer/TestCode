@@ -24,7 +24,7 @@ Particle::Draw() {
 	if (!isActive_)return;
 	pos_ += vel_;
 	vel_.y += 0.12f;
-	DrawCircleAA(pos_.x, pos_.y, 16, 12, 0xfffffff);
+	//DrawCircleAA(pos_.x, pos_.y, 16, 12, 0xfffffff);
 	trail_->Draw();
 	if (pos_.x < -300 || pos_.y < -300 || pos_.x>940 || pos_.y>780) {
 		isActive_ = false;

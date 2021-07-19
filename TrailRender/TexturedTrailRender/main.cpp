@@ -85,10 +85,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 		int ystr = 10;
-		for (auto& pos : trail) {
-			DrawFormatString(10, ystr, 0xffffff, L"x=%02f,y=%02f", pos.x, pos.y);
-			ystr += 20;
-		}
+		//for (auto& pos : trail) {
+		//	DrawFormatString(10, ystr, 0xffffff, L"x=%02f,y=%02f", pos.x, pos.y);
+		//	ystr += 20;
+		//}
 
 		trail.push_front(Position2(mx, my));
 		if (trail.size() >= trail_limit) {
@@ -96,6 +96,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 		ps.Draw();
+
+		auto drawcall = GetDrawCallCount();
+		auto fps = GetFPS();
+
+		DrawFormatString(10, 10, 0xfffffff, L"drawcall=%d", drawcall);
+		DrawFormatString(10, 80, 0xfffffff, L"fps=%f", fps);
 
 		ScreenFlip();
 		lastMouseInput = mouseInput;

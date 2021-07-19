@@ -2,8 +2,10 @@
 #include"Geometry.h"
 #include<list>
 class Particle;
+class ParticleSystem;
 class Trail
 {
+	friend ParticleSystem;
 private:
 	const Particle& particle_;
 	std::list<Position2> history_;
