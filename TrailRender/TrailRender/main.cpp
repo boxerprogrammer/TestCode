@@ -31,7 +31,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (trail.size() >= trail_limit) {
 			trail.pop_back();
 		}
-		ScreenFlip();
+		ScreenFlip(); 
 	}
 
 	DxLib_End();
