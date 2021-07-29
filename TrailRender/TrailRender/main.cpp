@@ -3,7 +3,7 @@
 #include<list>
 
 
-using namespace std;
+using namespace std; 
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
