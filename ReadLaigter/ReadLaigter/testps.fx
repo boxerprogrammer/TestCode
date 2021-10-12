@@ -18,21 +18,27 @@ struct PS_OUTPUT
 SamplerState smp       : register( s0 ) ;
 Texture2D    tex       : register( t0 ) ;
 Texture2D    norm       : register( t1 ) ;
-
+float angle : register( c0 ) ;
 
 // main関数
 PS_OUTPUT main( PS_INPUT PSInput )
 {
 	PS_OUTPUT PSOutput ;
 	
-	float4 nuv=norm.Sample(smp,PSInput.uv);
-	//ノーマルマップの色を取得
-	//ノーマルマップ(rgb)のrgをuvのオフセットとして
-	//扱うことで、ピクセル単位の細かいゆがみを表現できる
-	//どういうことかというと、
-	PSOutput.Output=PSInput.dif*PSInput.dif+
-		tex.Sample( smp, fmod(PSInput.uv+(nuv.rg*2.0-1.0f)/32.0f,float2(1.0,1.0))  );
+	float4 n=norm.Sample(smp,PSInput.uv);
+	n.xyz=n.xyz*2-1;
+	n.y=-n.y;
+	PSOutput.Output=tex.Sample( smp, PSInput.uv)*
+	saturate(saturate(dot(normalize(float3(cos(angle),sin(angle),0)),n.xyz))+0.5);
+	float s=pow(
+	saturate(normalize(
+		reflect(
+				float3(-cos(angle),-sin(angle),0)
+				,n.xyz
+			)
+	).z),
+	10.0);
+	PSOutput.Output+=float4(s,s,s,1);
 	// 関数の戻り値がラスタライザに渡される
-	PSOutput.Output=(1.0-PSOutput.Output);
 	return PSOutput ;
 }

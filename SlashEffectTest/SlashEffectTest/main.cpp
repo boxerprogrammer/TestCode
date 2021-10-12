@@ -222,7 +222,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 	bgH=LoadGraph(L"ss.png");
 	auto charaH = LoadGraph(L"chara.png");
-	normalH= LoadGraph(L"normal.png");
+	normalH =  LoadGraph(L"normal.png");
 	DxLib::SetDrawScreen(DX_SCREEN_BACK);
 
 	Rect rcA = { {0,0},100,100 };
