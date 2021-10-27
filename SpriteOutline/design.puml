@@ -1,0 +1,42 @@
+@startuml
+title クラス図
+
+interface Drawable
+
+interface Drawable{
+	{abstract} Update()
+	{abstract} Draw()
+}
+Drawable <|-- AnimDrawable
+class AnimDrawable{
+}
+
+Drawable <|-- DrawablePS
+class DrawablePS{
+
+}
+
+Drawable <--* DrawList : call
+class DrawList{
+	Update()
+	Draw()
+	Add()
+	Delete()
+}
+
+
+' main --> DrawList : call
+Actor --> Drawable : have
+GameObject <|-- Actor
+class Actor{
+	void Update();
+}
+interface Scene{
+	Update()
+	Draw()
+}
+Scene <-- DrawList
+Scene <|-- TestScene
+
+
+@enduml
