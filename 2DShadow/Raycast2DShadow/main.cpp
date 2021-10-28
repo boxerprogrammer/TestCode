@@ -18,6 +18,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	rects.emplace_back(600, 200, 50, 100);
 	rects.emplace_back(500, 300, 50, 50);
 	rects.emplace_back(150, 300, 150, 100);
+	constexpr float shadow_length = 1000.0f;
 
 
 	while (ProcessMessage() != -1) {
@@ -32,22 +33,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		DrawCircleAA(mx, my, 16, 16, 0xffffaa);
 
 		for (auto& rc : rects) {
-			auto v = rc.Center()-Position2(mx, my);
+			auto v = rc.Center()- mousePos;
 			v.Normalize();
 			DrawLineAA(mx, my, rc.Center().x, rc.Center().y,0xffffff );
 			auto verts = rc.GetPositions();
 			std::sort(verts.begin(), verts.end(), [v, mousePos](const Position2& a, const Position2& b) {
 				return Cross(v, (a-mousePos).Normalized()) > Cross(v, (b-mousePos).Normalized());
-				});
+			});
 
-			auto v1= verts[0] - Position2(mx, my);
-			auto v2 = verts[3] - Position2(mx, my);
+			auto v1= verts.front() - mousePos;
+			auto v2 = verts.back() - mousePos;
 			v1.Normalize();
 			v2.Normalize();
-
 			auto p1 = verts[0];
-			auto p2 = verts[0] + v1*1000.0f;
-			auto p3 = verts[3] + v2*1000.0f;
+			auto p2 = verts[0] + v1* shadow_length;
+			auto p3 = verts[3] + v2* shadow_length;
 			auto p4 = verts[3];
 			DrawQuadrangleAA(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y, 0x000000, true);
 
