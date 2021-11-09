@@ -30,7 +30,6 @@ PS_OUTPUT main( PS_INPUT PSInput )
 	n.y=-n.y;
 
 	float3 lightVec=light.xyz-PSInput.pos.xyz;
-	float intensity=saturate(light.w/dot(lightVec,lightVec));
 	lightVec=normalize(lightVec);
 
 	
@@ -45,8 +44,6 @@ PS_OUTPUT main( PS_INPUT PSInput )
 			)
 	).z),10.0);
 	PSOutput.Output+=float4(s,s,s,0);
-	//光の強さを乗算する
-	PSOutput.Output.rgb*=intensity;
 	// 関数の戻り値がラスタライザに渡される
 	return PSOutput ;
 }

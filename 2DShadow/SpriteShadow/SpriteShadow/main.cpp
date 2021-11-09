@@ -50,6 +50,7 @@ void MyDrawGraph(int x, int y, int graphH,int normH,int shaderH) {
 int WINAPI WinMain(HINSTANCE, HINSTANCE,  LPSTR, int) {
 	SetGraphMode(640, 480, 32);
 	ChangeWindowMode(true);
+	SetWindowText(L"SpriteShadowTest");
 	if (DxLib_Init()==-1) {
 		return -1;
 	}
@@ -79,29 +80,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE,  LPSTR, int) {
 		SetShaderConstantBuffer(cbufferH, DX_SHADERTYPE_PIXEL, 0);
 		SetUseTextureToShader(0, brickH);
 		SetUseTextureToShader(1, brickNormalH);
-		SetUsePixelShader(plpsH);
-		MyDrawGraph(brickH, brickNormalH, plpsH, 0, 0, 640, 480);
+		SetUsePixelShader(psH);
+		MyDrawGraph(brickH, brickNormalH, psH, 0, 0, 640, 480);
 
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA,255);
 
 
-		
-		pLight[0] = mx;//x
-		pLight[1] = my;//y
-		pLight[2] = 0.0f;//z
-		pLight[3] = 40000.0f;//w
-		UpdateShaderConstantBuffer(cbufferH);
-		SetShaderConstantBuffer(cbufferH, DX_SHADERTYPE_PIXEL, 0);
 		SetUseTextureToShader(0, characterH);
 		SetUseTextureToShader(1, characterNormalH);
-		SetUsePixelShader(psH);
+
 		int w, h;
 		GetGraphSize(characterH,&w,&h);
 
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA,255);
-
+		SetUsePixelShader(plpsH);
 		//MyDrawGraph(characterH, characterNormalH, psH, -40, 20, w, h);
-		MyDrawGraph(characterH, characterNormalH, psH, 110, 20, w, h);
+		MyDrawGraph(characterH, characterNormalH, plpsH, 110, 20, w, h);
 		//MyDrawGraph(characterH, characterNormalH, psH, 260, 20, w, h);
 
 

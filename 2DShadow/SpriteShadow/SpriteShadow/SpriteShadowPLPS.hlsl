@@ -20,6 +20,16 @@ Texture2D    tex       : register( t0 ) ;
 Texture2D    norm       : register( t1 ) ;
 float4 light : register( c0 ) ;
 
+float ShadowCheck(float2 uv,float2 lightVec){
+	float maxAlpha = 0.0f;
+	for(uint level=1;level<=8;++level){
+		float2 sampleUV = uv + lightVec* float(level)*0.025;
+		maxAlpha = max(maxAlpha, tex.Sample(smp,sampleUV).a/float(level+0.5f));
+	}
+	return maxAlpha;
+}
+
+
 // main関数
 PS_OUTPUT main( PS_INPUT PSInput )
 {
@@ -34,9 +44,9 @@ PS_OUTPUT main( PS_INPUT PSInput )
 	lightVec=normalize(lightVec);
 
 	
-	PSOutput.Output=tex.Sample( smp, PSInput.uv);
+	float4 col=tex.Sample( smp, PSInput.uv);
 	float d=saturate(saturate(dot(lightVec,n.xyz))+0.5);
-	PSOutput.Output.rgb*=d;
+	col.rgb*=d;
 	float s=pow(
 	saturate(normalize(
 		reflect(
@@ -44,9 +54,15 @@ PS_OUTPUT main( PS_INPUT PSInput )
 				,n.xyz
 			)
 	).z),10.0);
-	PSOutput.Output+=float4(s,s,s,0);
+	col+=float4(s,s,s,0);
 	//光の強さを乗算する
-	PSOutput.Output.rgb*=intensity;
+	col.rgb*=intensity;
+
+	float maxAlpha=ShadowCheck(PSInput.uv,lightVec.xy);
+
+	PSOutput.Output.rgb =lerp(float3(0.0, 0.0, 0.0), col.rgb, col.a);
+	PSOutput.Output.a=max(col.a,maxAlpha);
+
 	// 関数の戻り値がラスタライザに渡される
 	return PSOutput ;
 }
