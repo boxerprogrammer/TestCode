@@ -26,13 +26,13 @@ float2 directions[8] = {float2(1, 0), float2(0, 1), float2(-1, 0), float2(0, -1)
   float2(DIV_SQRT_2, DIV_SQRT_2), float2(-DIV_SQRT_2, DIV_SQRT_2),
   float2(-DIV_SQRT_2, -DIV_SQRT_2), float2(DIV_SQRT_2, -DIV_SQRT_2)};
 	float maxAlpha = 0.0f;
-	for(uint level=1;level<=8;++level){
-		// for(uint index = 0; index<8; index++){
-		// 	float2 sampleUV = uv + directions[index] * float(level)*0.01;
-		// 	maxAlpha = max(maxAlpha, tex.Sample(smp,sampleUV).a/float(level));
-		// }
-		float2 sampleUV = uv + float2(-DIV_SQRT_2, -DIV_SQRT_2)* float(level)*0.008;
-		maxAlpha = max(maxAlpha, tex.Sample(smp,sampleUV).a/float(level));
+	for(uint level=1;level<=1;++level){
+		for(uint index = 0; index<8; index++){
+			float2 sampleUV = uv + directions[index] * float(level)*0.01;
+			maxAlpha = max(maxAlpha, tex.Sample(smp,sampleUV).a/float(level));
+		}
+		// float2 sampleUV = uv + float2(-DIV_SQRT_2, -DIV_SQRT_2)* float(level)*0.008;
+		// maxAlpha = max(maxAlpha, tex.Sample(smp,sampleUV).a/float(level));
 	}
 	return maxAlpha;
 }
