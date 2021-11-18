@@ -68,7 +68,7 @@ VS_OUTPUT main( VS_INPUT VSInput )
 	// 頂点座標変換 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++( 開始 )
 
 	// ローカル座標のセット
-	lLocalPosition.xyz = VSInput.Position;
+	lLocalPosition.xyz = VSInput.Position+ VSInput.Normal*8;
 	lLocalPosition.w = 1.0f ;
 
 	// 座標計算( ローカル→ビュー→プロジェクション )
@@ -88,7 +88,7 @@ VS_OUTPUT main( VS_INPUT VSInput )
 	VSOutput.TexCoords0 =  VSInput.TexCoords0;
 
 	// 出力パラメータセット ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++( 終了 )
-	VSOutput.Diffuse=VSInput.Diffuse*(max(saturate(dot(VSInput.Normal,light)),0.3));
+	VSOutput.Diffuse=float4(1,0.5,0,1);//VSInput.Diffuse*(max(saturate(dot(VSInput.Normal,light)),0.3));
 	VSOutput.Specular= VSInput.Specular;
 
 	// 出力パラメータを返す
