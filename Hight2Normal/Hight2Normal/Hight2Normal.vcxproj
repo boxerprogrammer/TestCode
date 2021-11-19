@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{d16118c3-d842-4f41-913b-3ab4a5f7ea5b}</ProjectGuid>
-    <RootNamespace>SpriteOutline</RootNamespace>
+    <ProjectGuid>{11c700b7-df0a-4f05-949d-d2c633804689}</ProjectGuid>
+    <RootNamespace>Hight2Normal</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -91,12 +91,18 @@
       <AdditionalIncludeDirectories>$(DXLIB_DIR)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(DXLIB_DIR)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>ShaderCompile.bat</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>Hight2Normal.pso</Outputs>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Inputs>Hight2Normal_ps.hlsl</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -121,22 +127,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DXLIB_DIR)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(DXLIB_DIR)</AdditionalLibraryDirectories>
     </Link>
-    <CustomBuildStep>
-      <Command>ShaderCompile.bat</Command>
-    </CustomBuildStep>
-    <CustomBuildStep>
-      <Outputs>spriteoutline.pso</Outputs>
-    </CustomBuildStep>
-    <CustomBuildStep>
-      <Inputs>spriteoutline_ps.hlsl</Inputs>
-    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -155,29 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Drawable.cpp" />
-    <ClCompile Include="DrawablePS.cpp" />
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="TestScene.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Drawable.h" />
-    <ClInclude Include="DrawablePS.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Geometry.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="TestScene.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="SpriteOutline.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
