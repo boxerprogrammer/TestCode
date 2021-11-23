@@ -37,6 +37,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	auto hightH=LoadGraph(L"img/hight.png");
+	//auto hightH = LoadGraph(L"img/square.png");
 
 	auto psH=LoadPixelShader(L"hight2normal.pso");
 
