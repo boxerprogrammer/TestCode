@@ -99,10 +99,10 @@
       <Command>ShaderCompile.bat</Command>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>Hight2Normal.pso</Outputs>
+      <Outputs>Hight2Normal.pso;wave.pso</Outputs>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Inputs>Hight2Normal_ps.hlsl</Inputs>
+      <Inputs>Hight2Normal_ps.hlsl;wave_ps.hsls</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

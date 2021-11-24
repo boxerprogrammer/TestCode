@@ -34,18 +34,40 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ChangeWindowMode(true);
 	SetGraphMode(1024,768,32);
 	DxLib_Init();
-	SetDrawScreen(DX_SCREEN_BACK);
+	//SetDrawScreen(DX_SCREEN_BACK);
+
+	auto offscreen=MakeScreen(512,512,false);
+	auto wavePsH = LoadPixelShader(L"wave.pso");
+	SetDrawScreen(offscreen);
+	ClearDrawScreen();
+	SetUsePixelShader(wavePsH);
+	MyDrawGraph(0, 0, 512, 512);
+	auto cbuffer = CreateShaderConstantBuffer(sizeof(float) * 4);
+	float* gangle = static_cast<float*>(GetBufferShaderConstantBuffer(cbuffer));
+	float angle = 0.0f;
 
 	auto hightH=LoadGraph(L"img/hight.png");
 	//auto hightH = LoadGraph(L"img/square.png");
 
 	auto psH=LoadPixelShader(L"hight2normal.pso");
+	
 
 	while (ProcessMessage() != -1) {
+		angle+=0.01f;
+		gangle[0] = angle;
+		UpdateShaderConstantBuffer(cbuffer);
+		SetShaderConstantBuffer(cbuffer, DX_SHADERTYPE_PIXEL, 0);
+		SetDrawScreen(offscreen);
 		ClearDrawScreen();
-		DrawGraph(0,0, hightH,true);
+		SetUsePixelShader(wavePsH);
+		MyDrawGraph(0, 0, 512, 512);
 
-		SetUseTextureToShader(0, hightH);
+
+		SetDrawScreen(DX_SCREEN_BACK);
+		ClearDrawScreen();
+		DrawGraph(0,0, offscreen,true);
+
+		SetUseTextureToShader(0, offscreen);
 		SetUsePixelShader(psH);
 		MyDrawGraph(512,0,512,512);
 
