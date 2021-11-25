@@ -138,10 +138,10 @@
       <Command>ShaderCompile.bat</Command>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>hight2normal.pso</Outputs>
+      <Outputs>hight2normal.pso;wave.pso;threed.vso;threed.pso</Outputs>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Inputs>hight2normal_ps.hlsl</Inputs>
+      <Inputs>hight2normal_ps.hlsl;wave_ps.hlsl;threed_vs.hlsl;threed_ps.hlsl</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

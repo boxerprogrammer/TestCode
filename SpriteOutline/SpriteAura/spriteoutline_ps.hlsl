@@ -38,32 +38,32 @@ float2 directions[8] = {float2(1, 0), float2(0, 1), float2(-1, 0), float2(0, -1)
 }
 
 
-float SDFLatticeCircle2D(float2 xy, float divider,float r) {
-	return length(fmod(xy, divider) - divider / 2) - r;
-}
-
-
+//float SDFLatticeCircle2D(float2 xy, float divider,float r) {
+//	return length(fmod(xy, divider) - divider / 2) - r;
+//}
+//
+//
 // main関数
-PS_OUTPUT main( PS_INPUT PSInput )
-{
-
-	PS_OUTPUT PSOutput ;
-	
-	float4 col=tex.Sample(smp,PSInput.uv);
-	float maxAlpha=OutlineCheck(PSInput.uv);
-
-
-	float a=SDFLatticeCircle2D(PSInput.uv,maxAlpha,maxAlpha*0.25);
-	if(a<0.0f){
-		a=1.0f;
-	}else{
-		a=0.0f;
-	}
-	PSOutput.Output.rgb = lerp(float3(0.5, 0.75, 1), col.rgb, col.a);
-	PSOutput.Output.a=max(col.a,a);
-	
-	return PSOutput ;
-}
+//PS_OUTPUT main( PS_INPUT PSInput )
+//{
+//
+//	PS_OUTPUT PSOutput ;
+//	
+//	float4 col=tex.Sample(smp,PSInput.uv);
+//	float maxAlpha=OutlineCheck(PSInput.uv);
+//
+//
+//	float a=SDFLatticeCircle2D(PSInput.uv,maxAlpha,maxAlpha*0.25);
+//	if(a<0.0f){
+//		a=1.0f;
+//	}else{
+//		a=0.0f;
+//	}
+//	PSOutput.Output.rgb = lerp(float3(0.5, 0.75, 1), col.rgb, col.a);
+//	PSOutput.Output.a=max(col.a,a);
+//	
+//	return PSOutput ;
+//}
 
 
 
@@ -93,7 +93,7 @@ PS_OUTPUT main( PS_INPUT PSInput )
 	
 	
 	
-/*邪悪	
+//邪悪	
 float sdCircle( float2 p, float r )
 {
 	return length(fmod(p,r)) - r*0.5;
@@ -115,7 +115,7 @@ PS_OUTPUT main( PS_INPUT PSInput )
 	
 	return PSOutput ;
 }
-*/
+
 
 /*しっとり
 // main関数

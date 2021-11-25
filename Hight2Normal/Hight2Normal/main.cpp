@@ -40,23 +40,36 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto wavePsH = LoadPixelShader(L"wave.pso");
 	SetDrawScreen(offscreen);
 	ClearDrawScreen();
-	SetUsePixelShader(wavePsH);
 	MyDrawGraph(0, 0, 512, 512);
 	auto cbuffer = CreateShaderConstantBuffer(sizeof(float) * 4);
 	float* gangle = static_cast<float*>(GetBufferShaderConstantBuffer(cbuffer));
 	float angle = 0.0f;
-
+	SetShaderConstantBuffer(cbuffer, DX_SHADERTYPE_PIXEL, 0);
 	auto hightH=LoadGraph(L"img/hight.png");
 	//auto hightH = LoadGraph(L"img/square.png");
 
 	auto psH=LoadPixelShader(L"hight2normal.pso");
+
+	SetDrawScreen(DX_SCREEN_BACK);
+	auto sphereH=MV1LoadModel(L"model/sphere.mv1");
+	auto hightMap=LoadGraph(L"img/turbulant_n.png");
+	auto sphereTex = LoadGraph(L"img/turbulant_col.png");
+	MV1SetPosition(sphereH, VGet(0, 0, 0));
+	//MV1SetUseOrigShader(true);
+	auto vs3 = LoadVertexShader(L"threed.vso");
+	auto ps3 = LoadPixelShader(L"threed.pso");
 	
+
+	SetUseLighting(true);
+	SetLightDirection(VGet(1, -1, -1));
+	SetGlobalAmbientLight({0.35,0.35,0.35,1});
+	SetUseSpecular(true);
 
 	while (ProcessMessage() != -1) {
 		angle+=0.01f;
 		gangle[0] = angle;
 		UpdateShaderConstantBuffer(cbuffer);
-		SetShaderConstantBuffer(cbuffer, DX_SHADERTYPE_PIXEL, 0);
+		SetShaderConstantBuffer(cbuffer, DX_SHADERTYPE_PIXEL, 3);
 		SetDrawScreen(offscreen);
 		ClearDrawScreen();
 		SetUsePixelShader(wavePsH);
@@ -70,6 +83,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		SetUseTextureToShader(0, offscreen);
 		SetUsePixelShader(psH);
 		MyDrawGraph(512,0,512,512);
+
+		SetCameraPositionAndTarget_UpVecY(VGet(0, 200, -400), VGet(0, 0, 0));
+		MV1SetRotationXYZ(sphereH, VGet(0, angle, 0));
+		auto add=MV1GetTextureSampleFilterMode(sphereH,0);
+		SetUseVertexShader(vs3);
+		SetUsePixelShader(ps3);
+		SetUseTextureToShader(0, sphereTex);
+		SetUseTextureToShader(1,hightMap);
+		//SetUseTextureToShader(0, sphereTex);
+		
+		MV1DrawModel(sphereH);
 
 		ScreenFlip();
 	}
