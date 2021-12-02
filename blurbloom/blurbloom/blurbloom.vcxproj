@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{f0943e78-dfc7-492c-ba48-6c13bec543a3}</ProjectGuid>
-    <RootNamespace>My3DOutline</RootNamespace>
+    <ProjectGuid>{3fc00a09-5ccb-47fc-a572-a629467e1752}</ProjectGuid>
+    <RootNamespace>blurbloom</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -123,18 +123,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(DXLIB_DIR)</AdditionalLibraryDirectories>
     </Link>
-    <CustomBuildStep>
-      <Command>ShaderCompile.bat</Command>
-    </CustomBuildStep>
-    <CustomBuildStep>
-      <Message>シェーダコンパイル中</Message>
-    </CustomBuildStep>
-    <CustomBuildStep>
-      <Outputs>threed_outline.vso;threed_outline.pso;noise.pso</Outputs>
-    </CustomBuildStep>
-    <CustomBuildStep>
-      <Inputs>threed_outline_vs.hlsl;threed_outline_ps.hlsl;noise_ps.hlsl</Inputs>
-    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
