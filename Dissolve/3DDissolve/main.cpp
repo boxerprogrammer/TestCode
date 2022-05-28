@@ -85,10 +85,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		GetHitKeyStateAll(keystate);
 		if (keystate[KEY_INPUT_UP]) {
-			params[id_cut] = std::clamp(params[id_cut] + 1, -200.0f, 250.0f);
+			params[id_cut] = std::clamp(params[id_cut] + 4, -200.0f, 250.0f);
 		}
 		if(keystate[KEY_INPUT_DOWN]){
-			params[id_cut] = std::clamp(params[id_cut] - 1, -200.0f, 250.0f);
+			params[id_cut] = std::clamp(params[id_cut] - 4, -200.0f, 250.0f);
 		}
 
 		SetDrawScreen(offscreen);

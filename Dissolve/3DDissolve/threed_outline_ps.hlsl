@@ -53,13 +53,13 @@ PS_OUTPUT main( PS_INPUT PSInput )
 	float4 TextureDiffuseColor ;
 	float b = pattern.Sample(g_DiffuseMapSampler, PSInput.TexCoords0);
 	float  alp = (PSInput.Position.y - threshold) / 200.0;
-	float alb=alp + b;
+	float alb = alp +b * (1.0 - alp) * 0.1;
 
 	if (alb > 0.0) {
 		discard;
 	}
 	alb=saturate(1.0 - abs(alb));
-	float bloom=pow(alb+(1-alb)*b, 20)*2;
+	float bloom=pow(alb, 20)*2;
 
 
 
