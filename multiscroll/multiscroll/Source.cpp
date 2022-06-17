@@ -132,7 +132,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//RAM上のメモリでシミュレートしてる
 	float* cbuffer = static_cast<float*>(DxLib::GetBufferShaderConstantBuffer(cbuff));
 	float tekito = 0.0f;
-	float angle = 0.0f;
+	float time = 0.0f;
 	SetTextureAddressModeUV(DX_TEXADDRESS_WRAP, DX_TEXADDRESS_WRAP);
 	int scroll = 0;
 	auto houseX = 384;
@@ -146,6 +146,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	constexpr int ground_line = 288 - 50;
 	float y = ground_line;
 	bool jumping = false;
+
+	auto rt = MakeScreen(640, 480);
+
+	int frame = 0;//フレーム
+	float amplitude = 0.0f;//振幅
 	while (ProcessMessage() == 0) {
 		SetDrawScreen(scrH);
 		ClearDrawScreen();
@@ -192,6 +197,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				PlaySoundMem(jumpS, DX_PLAYTYPE_BACK);
 			}
 		}
+
+		if (keystate[KEY_INPUT_SPACE]) {
+			amplitude = 10.0f;
+		}
+
 		vy += 0.5;
 		y += vy;
 		if (y > ground_line) {
@@ -199,15 +209,32 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			vy = 0.0f;
 			jumping = false;
 		}
-		angle += 0.025f;
-		cbuffer[1] = angle;
+		time += 0.025f;
+		cbuffer[1] = time;
 		UpdateShaderConstantBuffer(cbuff);
 		SetShaderConstantBuffer(cbuff, DX_SHADERTYPE_PIXEL, 0);
 
-		SetDrawScreen(DX_SCREEN_BACK);
-		MyDrawExtendGraph(0, 480+32, 640, 480 + y_offset-16, scrH, normalH, -1, ps);
+		SetDrawScreen(rt);
+		ClearDrawScreen();
+		//MyDrawExtendGraph(0, 480+32, 640, 480 + y_offset-16, scrH, normalH, -1, ps);
+		//↓元の絵
 		DrawExtendGraph(0, y_offset, 640, y_offset+480, scrH, false);
-		
+		//水面の絵
+		MyDrawExtendGraph(0, 480 + 32, 640, 480 + y_offset - 16, scrH, normalH, -1, ps);
+
+		SetDrawScreen(DX_SCREEN_BACK);
+		ClearDrawScreen();
+		int dx = 0, dy = 0;
+		if (amplitude > 0.0f) {
+			dx = ((frame % 3) - 1) * amplitude;
+			dy = (((frame+rand()) % 3) - 1) * amplitude;
+		}
+		DrawGraph(dx, dy, rt, false);
+		amplitude *= 0.9f;
+		if (amplitude < 1.0f) {
+			amplitude = 0.0f;
+		}
+		++frame;
 		ScreenFlip();
 	}
 	DxLib_End();

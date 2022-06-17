@@ -31,7 +31,7 @@ PS_OUTPUT main( PS_INPUT PSInput )
 
 	float len=length(PSInput.uv-0.5);
 	
-	PSOutput.Output.rgb =(sin(len*level - angle)+1)/2;
+	PSOutput.Output.rgb =10.0/len*(sin(len*level - angle)+1)/2;
 	PSOutput.Output.a=1;
 	
 	return PSOutput ;

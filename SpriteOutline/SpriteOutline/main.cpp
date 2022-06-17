@@ -1,7 +1,7 @@
 #include<DxLib.h>
 #include<array>
 #include<vector>
-#include"resource1.h"
+//#include"resource1.h"
 
 using namespace std;
 
@@ -49,7 +49,7 @@ void MyDrawGraph(int x, int y, int graphH, int normH, int shaderH) {
 }
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-	DxLib::SetWindowIconID(IDI_ICON1);
+	//DxLib::SetWindowIconID(IDI_ICON1);
 	SetGraphMode(640, 480, 32);
 	ChangeWindowMode(true);
 	if (DxLib_Init() == -1) {
