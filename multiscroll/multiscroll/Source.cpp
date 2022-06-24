@@ -175,8 +175,43 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			houseIdx = rand() % 3;
 			rightX = scroll + 384;
 		}
+		int pw, ph;
+		float a = -1.5;//åXÇ´
+		
+		GetGraphSize(playerH[scroll / 4 % 6], &pw, &ph);
+		int shadowLen = ph *0.75;
+		DxLib::SetDrawBright(0, 0, 0);
 
+		int diffY = ground_line - y;
+		int diffY2 = diffY / 2;
+		int shadowY = ground_line - diffY2+24;
+		int shadowX = diffY * a;
+		int toWall = 12;
+		int sign = turn ? -1 : 1;
+		//âeá@
+		DrawRectModiGraph(
+			//180-pw/2+ shadowLen*a, y+24-shadowLen,//ç∂è„
+			//180 + pw / 2 + shadowLen * a, y + 24 - shadowLen,//âEè„
+			shadowX +180 + toWall * a  - sign*pw / 2, shadowY- toWall,//ç∂è„
+			shadowX + 180 + toWall * a + sign * pw / 2, shadowY- toWall,//âEè„
+			shadowX + 180 + sign * pw / 2 , shadowY,//âEâ∫
+			shadowX + 180 - sign * pw / 2 , shadowY,//ç∂â∫
+			0, ph / 2,pw,ph/2,
+			playerH[scroll / 4 % 6], true);
+		//âe2
+		DrawRectModiGraph(
+			toWall * a + 180 + shadowX - sign * pw / 2, shadowY-toWall-24,//ç∂è„
+			toWall * a + 180 + shadowX + sign * pw / 2, shadowY - toWall - 24,//âEè„
+			toWall * a + 180 + shadowX + sign * pw / 2, shadowY - toWall,//âEâ∫
+			toWall * a + 180 + shadowX - sign * pw / 2, shadowY - toWall,//ç∂â∫
+			0, 0, pw, ph / 2,
+			playerH[scroll / 4 % 6], true);
+		DxLib::SetDrawBright(0xff, 0, 0);
+
+
+		//ÉLÉÉÉâï`âÊ
 		DrawRotaGraph(180, y, 1.0,0.0,playerH[scroll / 4 % 6] ,true,turn);
+		DxLib::SetDrawBright(0xff, 0xff, 0xff);
 		if (keystate[KEY_INPUT_RIGHT]) {
 			++scroll;
 			cbuffer[0] += 0.001;
