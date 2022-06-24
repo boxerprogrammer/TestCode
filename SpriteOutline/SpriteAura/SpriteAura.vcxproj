@@ -171,6 +171,12 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="TestScene.h" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="spriteoutline_ps.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

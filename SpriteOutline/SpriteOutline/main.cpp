@@ -62,7 +62,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto cbuffer = CreateShaderConstantBuffer(sizeof(float) * 4);
 	float* gangle = static_cast<float*>(GetBufferShaderConstantBuffer(cbuffer));
 	float angle = 0.0f;
+
+	int BaseH = MakeScreen(640, 480,true);
+	int OutlineH = MakeScreen(640, 480, true);
+
 	while (ProcessMessage() != -1) {
+		SetDrawScreen(BaseH);
+		SetRenderTargetToShader(0, BaseH);
+		SetRenderTargetToShader(1, OutlineH);
 		ClearDrawScreen();
 		angle += 0.01f;
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
@@ -77,6 +84,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		int w, h;
 		GetGraphSize(ashuraH, &w, &h);
 		MyDrawGraph(ashuraH, ashuraNormalH, pshandle, 150, 50, w, h);
+		SetRenderTargetToShader(0, -1);
+		SetRenderTargetToShader(1, -1);
+		SetDrawScreen(DX_SCREEN_BACK);
+		ClearDrawScreen();
+		DrawGraph(0, 0, BaseH, true);//Œ³‚ÌŠG
+		
+		GraphFilter(OutlineH, DX_GRAPH_FILTER_GAUSS, 32, 1600);
+		SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+		DrawGraph(0, 0, OutlineH,true);
+		DrawGraph(0, 0, OutlineH, true);
+		DrawGraph(0, 0, OutlineH, true);
+		DrawGraph(0, 0, OutlineH, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		ScreenFlip();
 	}
 	return 0;
