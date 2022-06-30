@@ -7,11 +7,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		return -1;
 	}
 	SetDrawScreen(DX_SCREEN_BACK);
+	auto cameraPos = VGet(0, 200, -300);
 	DxLib::SetCameraNearFar(1.0, 500.0f);
-	DxLib::SetCameraPositionAndTargetAndUpVec(VGet(0, 0, -300), VGet(0, 0, 0), VGet(0, 1, 0));
+	DxLib::SetCameraPositionAndTargetAndUpVec(cameraPos, VGet(0, 0, 0), VGet(0, 1, 0));
 	int model=MV1LoadModel(L"model/bodyeater.mv1");
-	int sphere = MV1LoadModel(L"pbrmodel/sphere.mv1");
-	int rough = LoadGraph(L"pbrmodel/roughness.png");
+	int sphere = MV1LoadModel(L"pbrmodel/roundbox.mv1");
+	int rough = LoadGraph(L"pbrmodel/steel/roughness.png");
+	int metallic = LoadGraph(L"pbrmodel/steel/metallic.png");
 	int sphmap = LoadGraph(L"pbrmodel/sph.png");
 	int pso = LoadPixelShader(L"ps.pso");
 	int vso = LoadVertexShader(L"vs.vso");
@@ -34,10 +36,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float amplitude = 0.0f;
 	int frame=0;
 	char keystate[256];
+	
+	auto cbufferH = CreateShaderConstantBuffer(sizeof(float) * (4+16));
+	float* cpos = static_cast<float*>(GetBufferShaderConstantBuffer(cbufferH));
+	
 	while (ProcessMessage() != -1) {
 		SetDrawScreen(rt);
 		DxLib::SetCameraNearFar(1.0, 500.0f);
-		DxLib::SetCameraPositionAndTargetAndUpVec(VGet(0, 0, -300), VGet(0, 0, 0), VGet(0, 1, 0));
+		DxLib::SetCameraPositionAndTargetAndUpVec(cameraPos, VGet(0, 0, 0), VGet(0, 1, 0));
+		auto vmat=GetCameraViewMatrix();
+		cpos[0] = cameraPos.x;
+		cpos[1] = cameraPos.y;
+		cpos[2] = cameraPos.z;
+		int idx = 4;
+		for (int j = 0; j < 4; ++j) {
+			for (int i = 0; i < 4; ++i) {
+				cpos[idx] = vmat.m[i][j];
+				++idx;
+			}
+		}
+
+		UpdateShaderConstantBuffer(cbufferH);
+		SetShaderConstantBuffer(cbufferH, DX_SHADERTYPE_PIXEL, 0);
 
 		ClearDrawScreen();
 		GetHitKeyStateAll(keystate);
@@ -64,9 +84,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		DxLib::SetUseVertexShader(vso);
 		DxLib::SetUsePixelShader(pso);
 		DxLib::SetUseTextureToShader(2, rough);
-		DxLib::SetUseTextureToShader(3, sphmap);
+		DxLib::SetUseTextureToShader(3, metallic);
+		DxLib::SetUseTextureToShader(4, sphmap);
 		//MV1SetScale(model, VGet(10,10,10));
-		MV1SetRotationXYZ(sphere, VGet(0, angle, 0));
+		MV1SetRotationXYZ(sphere, VGet(0, angle, angle/2));
 		MV1SetScale(sphere, VGet(1.0,1.0,1.0));
 		MV1SetPosition(sphere, VGet(0, -50.0, 0));
 		MV1DrawModel(sphere);

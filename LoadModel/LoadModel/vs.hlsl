@@ -36,7 +36,7 @@ cbuffer BaseCBuffer : register(b1) {
 
 struct VSOutput {
 	float4 svpos:SV_POSITION;
-	float3 pos:POSITION;
+	float3 pos:POSITION0;
 	float3 norm:NORMAL;
 	float3 tan:TANGENT;
 	float3 bin:BINORMAL;
@@ -49,6 +49,7 @@ VSOutput main(VertexInput input)
 	VSOutput ret;
 	float4 pos = float4(input.pos,1);
 	pos.xyz = mul(pos, LocalM);//ワールド
+	ret.pos = pos;
 	pos.xyz = mul(pos, ViewM);//ビュー
 	pos = mul(pos, ProjectionM);//プロジェクション
 
@@ -58,7 +59,7 @@ VSOutput main(VertexInput input)
 	float3 bin = mul(input.binormal, LocalM);
 	
 	ret.svpos = pos;
-	ret.pos = input.pos;
+	
 	ret.uv = input.uv0.xy;
 	ret.norm = normalize(norm);
 	ret.tan = normalize(tan);
