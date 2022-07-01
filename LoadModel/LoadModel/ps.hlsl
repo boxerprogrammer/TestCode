@@ -59,7 +59,6 @@ float4 main(PSInput input) : SV_TARGET
 	float fresnel = 1 - saturate(dot(-ray, n));
 
 	float b = saturate(dot(n, -light));
-	b = max(b, 0.25);
 
 	float3 ref=reflect(light, n);
 	float spec=pow(saturate(dot(-ray, ref)),20);
@@ -73,15 +72,13 @@ float4 main(PSInput input) : SV_TARGET
 	float3 col = tex.Sample(sam,input.uv);
 	//col *= input.col;
 	//rgh *= fresnel;
-
 	float met = metallic.Sample(sam, input.uv);
-	
+	//rgh = lerp(1, rgh, spec);
+	float3 rgb = lerp(spec,col * b, rgh);
 
-	float3 rgb = lerp(col * b,spec, rgh);
+	//rgh *= (1 - fresnel);
 
-	rgh *= (1 - fresnel);
+	float3 refCol = lerp(lerp(1,spCol.rgb,met)*col, 0, rgh);
 
-	float3 refCol = lerp(spCol.rgb, rgb, rgh);
-
-	return float4(rgb*refCol , 1.0f);
+	return float4(rgb+refCol , 1.0f);
 }
