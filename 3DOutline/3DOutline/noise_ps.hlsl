@@ -37,12 +37,12 @@ PS_OUTPUT main(PS_INPUT PSInput)
 	PS_OUTPUT PSOutput;
 	float2 offset= norm.Sample(smp, PSInput.uv).rg;
 	offset=(offset*2)-1;
-	float2 uv= PSInput.uv+ offset*0.15;
+	float2 uv = PSInput.uv +offset * 0.15;
 	float t= rand1dTo1d(time);
 	float t2 = rand1dTo1d(time+0.001);
 	float rand= rand2dTo1d(uv+t);
 	float rnd= rand2dTo1d(uv - fmod(uv, 0.02) + float2(t, time))*0.55;
 	float4 texcol= tex.Sample(smp, uv);
-	PSOutput.Output=1-step(lerp(texcol.gbra,texcol,step(rnd,0.5) ),rand);
+	PSOutput.Output = texcol;// 1 - step(lerp(texcol.gbra, texcol, step(rnd, 0.5)), rand);
 	return PSOutput;
 }

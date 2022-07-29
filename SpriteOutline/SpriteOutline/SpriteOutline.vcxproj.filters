@@ -64,13 +64,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="SpriteOutline.rc">
-      <Filter>リソース ファイル</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Icon1.ico">
-      <Filter>リソース ファイル</Filter>
-    </Image>
+    <FxCompile Include="spriteoutline_ps.hlsl" />
   </ItemGroup>
 </Project>

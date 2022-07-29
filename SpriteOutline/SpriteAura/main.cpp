@@ -54,14 +54,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		return -1;
 	}
 	SetDrawScreen(DX_SCREEN_BACK);
-	auto ashuraH = LoadGraph(L"img/hotoke_asyura.png");
-	auto auraH = LoadGraph(L"img/aura.png");
+	auto ashuraH = LoadGraph(L"img/brook.png");
+	auto auraH = LoadGraph(L"img/sky.png");
 	auto pshandle = LoadPixelShader(L"spriteoutline.pso");
 	auto cbuffer = CreateShaderConstantBuffer(sizeof(float) * 4);
 	float* gangle = static_cast<float*>(GetBufferShaderConstantBuffer(cbuffer));
 	float angle = 0.0f;
 	SetTextureAddressModeUV(DX_TEXADDRESS_WRAP, DX_TEXADDRESS_WRAP);
+	int baseH = MakeScreen(640, 480, true);
+	int bubbleH = MakeScreen(640, 480, true);
+
 	while (ProcessMessage() != -1) {
+		SetDrawScreen(baseH);
+		SetRenderTargetToShader(0, baseH);
+		SetRenderTargetToShader(1, bubbleH);
 		ClearDrawScreen();
 		angle += 0.001f;
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
@@ -76,6 +82,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		int w, h;
 		GetGraphSize(ashuraH, &w, &h);
 		MyDrawGraph(ashuraH, auraH, pshandle, 150, 50, w, h);
+
+
+		SetRenderTargetToShader(0, -1);
+		SetRenderTargetToShader(1, -1);
+		SetDrawScreen(DX_SCREEN_BACK);
+		ClearDrawScreen();
+		DrawGraph(0, 0, baseH, true);
+		SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+		DrawGraph(0, 0, bubbleH, true);
+		GraphFilter(bubbleH, DX_GRAPH_FILTER_GAUSS, 8, 1600);
+		DrawGraph(0, 0, bubbleH, true);
+		DrawGraph(0, 0, bubbleH, true);
+		DrawGraph(0, 0, bubbleH, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		ScreenFlip();
 	}
 	return 0;

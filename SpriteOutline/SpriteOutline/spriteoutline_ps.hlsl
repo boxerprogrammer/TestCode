@@ -9,7 +9,8 @@ struct PS_INPUT
 // ピクセルシェーダーの出力
 struct PS_OUTPUT
 {
-	float4 Output      : SV_TARGET0 ;
+	float4 Base      : SV_TARGET0 ;//通常
+	float4 Outline   : SV_TARGET1;//輪郭線
 } ;
 
 // C++ 側で設定する定数の定義
@@ -22,7 +23,8 @@ Texture2D    norm       : register( t1 ) ;
 
 float OutlineCheck(float2 uv){
 		#define DIV_SQRT_2 0.70710678118
-float2 directions[8] = {float2(1, 0), float2(0, 1), float2(-1, 0), float2(0, -1),
+float2 directions[8] = {
+	float2(1, 0), float2(0, 1), float2(-1, 0), float2(0, -1),
   float2(DIV_SQRT_2, DIV_SQRT_2), float2(-DIV_SQRT_2, DIV_SQRT_2),
   float2(-DIV_SQRT_2, -DIV_SQRT_2), float2(DIV_SQRT_2, -DIV_SQRT_2)};
 	float maxAlpha = 0.0f;
@@ -46,8 +48,11 @@ PS_OUTPUT main( PS_INPUT PSInput )
 	float4 col=tex.Sample(smp,PSInput.uv);
 	float maxAlpha=OutlineCheck(PSInput.uv);
 
-	PSOutput.Output.rgb = lerp(float3(0.5, 0.5, 1), col.rgb, col.a);
-	PSOutput.Output.a=max(col.a,maxAlpha);
+	PSOutput.Base.rgb =  lerp(float3(0.5, 0.5, 1), col.rgb, col.a);
+	PSOutput.Base.a = max(col.a, maxAlpha);
+
+	PSOutput.Outline.rgb =  lerp(float3(0.5, 0.5, 1), float3(0, 0, 0), col.a);
+	PSOutput.Outline.a =  maxAlpha;
 	
 	return PSOutput ;
 }
