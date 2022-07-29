@@ -1,5 +1,7 @@
 #include<DxLib.h>
 #include<array>
+#include<list>
+#include<vector>
 
 using namespace std;
 
@@ -49,6 +51,36 @@ void MyDrawGraph(int x, int y, int width, int height) {
 	DrawPrimitive2DToShader(verts.data(), verts.size(), DX_PRIMTYPE_TRIANGLESTRIP);
 }
 
+
+struct Position {
+	float x, y;
+};
+std::vector<VERTEX2D> CreateVertices(const Position& center, const list<Position>& positions) {
+	std::vector<VERTEX2D> ret(2*positions.size());
+	float dC = 255.0f / static_cast<float>(positions.size());
+	float alpha = 255.0f;
+	auto it = positions.begin();
+	for (int i = 0; i < positions.size(); ++i) {
+		ret[i * 2 + 0].dif = GetColorU8(255, 255, 255, alpha);
+		ret[i * 2 + 0].pos.x = center.x;
+		ret[i * 2 + 0].pos.y = center.y;
+		ret[i * 2 + 0].rhw = 1.0f;
+		ret[i * 2 + 0].u = 0;
+		ret[i * 2 + 0].v = 0;
+
+		ret[i * 2 + 1].dif = GetColorU8(255, 255, 255, alpha);
+		ret[i * 2 + 1].pos.x = center.x+it->x;
+		ret[i * 2 + 1].pos.y = center.y+it->y;
+		ret[i * 2 + 1].rhw = 1.0f;
+		ret[i * 2 + 1].u = 0;
+		ret[i * 2 + 1].v = 0;
+
+		++it;
+		alpha -= dC;
+	}
+	return ret;
+}
+
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ChangeWindowMode(true);
 	DxLib_Init();
@@ -71,6 +103,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto cbufferH = CreateShaderConstantBuffer(sizeof(float) * 4);
 	float* time = static_cast<float*>(GetBufferShaderConstantBuffer(cbufferH));
 	time[0]=0;
+
+	float slashAngle = 0.0f;
+	list<Position> positions;
 	while (ProcessMessage() != -1) {
 		time[0]+=0.01f;
 
@@ -103,6 +138,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		SetUseTextureToShader(0, offscreen);
 		SetUseTextureToShader(1,normalH);
 		MyDrawGraph(0,0,640,480);
+
+		//DrawPrimitive2D();
+		float sx = cos(slashAngle)*200;
+		float sy = sin(slashAngle)*200;
+		DrawLineAA(320, 240, 320 + sx, 240 + sy, 0xffffff,5.0f);
+		positions.push_front({ sx,sy });
+		if (positions.size() >= 16) {
+			positions.pop_back();
+		}
+		auto verts=CreateVertices({ 320,240 }, positions);
+
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+		DrawPrimitive2D(verts.data(), verts.size(), DX_PRIMTYPE_TRIANGLESTRIP, DX_NONE_GRAPH,true);
+		slashAngle += 0.1f;
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+
+
 		DrawFormatString(10,10,0xffffffff,L"FPS=%f",GetFPS());
 		ScreenFlip();
 	}

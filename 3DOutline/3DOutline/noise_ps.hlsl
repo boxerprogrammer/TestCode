@@ -43,6 +43,6 @@ PS_OUTPUT main(PS_INPUT PSInput)
 	float rand= rand2dTo1d(uv+t);
 	float rnd= rand2dTo1d(uv - fmod(uv, 0.02) + float2(t, time))*0.55;
 	float4 texcol= tex.Sample(smp, uv);
-	PSOutput.Output = texcol;// 1 - step(lerp(texcol.gbra, texcol, step(rnd, 0.5)), rand);
+	PSOutput.Output = 1 - step(lerp(texcol.gbra, texcol, step(rnd, 0.5)), rand);
 	return PSOutput;
 }
