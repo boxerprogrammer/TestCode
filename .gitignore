@@ -143,8 +143,6 @@ props-sliced
 /gradiusv/.vs/gradiusv/v15/ipch/AutoPCH/1115a07bb33b8817/SOURCE.ipch
 x64
 /onefinger/OneFingerMonkPunch/Log.txt
-*
-*.png
 /SlashEffectTest/SlashEffectTest/Log.txt
 /SlashEffectTest/SlashEffectTest/SlashEffectTest.vcxproj.user
 /SlashEffectTest/SlashEffectTest/testps.pso

@@ -53,10 +53,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	SetDrawScreen(DX_SCREEN_BACK);
 	auto imgH = LoadGraph(L"img/img.png");
-	auto sphereH=MV1LoadModel(L"model/sphere.mv1");
+	//auto sphereH=MV1LoadModel(L"model/sphere.mv1");
 	auto hightMap=LoadGraph(L"img/turbulant_n.png");
 	auto sphereTex = LoadGraph(L"img/turbulant_col.png");
-	MV1SetPosition(sphereH, VGet(0, 0, 0));
+	//MV1SetPosition(sphereH, VGet(0, 0, 0));
 	//MV1SetUseOrigShader(true);
 	//auto vs3 = LoadVertexShader(L"threed.vso");
 	auto ps3 = LoadPixelShader(L"ps.pso");
@@ -68,7 +68,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	SetUseSpecular(true);
 
 	while (ProcessMessage() != -1) {
-		angle+=0.01f;
+		angle+=0.005f;
 		gangle[0] = sin(angle);
 		UpdateShaderConstantBuffer(cbuffer);
 		SetShaderConstantBuffer(cbuffer, DX_SHADERTYPE_PIXEL, 3);
@@ -88,9 +88,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		DrawGraph(512, 0, offscreen2, true);
 		
 
-		SetCameraPositionAndTarget_UpVecY(VGet(0, 200, -400), VGet(0, 0, 0));
-		MV1SetRotationXYZ(sphereH, VGet(0, angle, 0));
-		auto add=MV1GetTextureSampleFilterMode(sphereH,0);
+		//SetCameraPositionAndTarget_UpVecY(VGet(0, 200, -400), VGet(0, 0, 0));
+		//MV1SetRotationXYZ(sphereH, VGet(0, angle, 0));
+		//auto add=MV1GetTextureSampleFilterMode(sphereH,0);
 		//SetUseVertexShader(vs3);
 		SetUsePixelShader(ps3);
 		SetUseTextureToShader(0, imgH);

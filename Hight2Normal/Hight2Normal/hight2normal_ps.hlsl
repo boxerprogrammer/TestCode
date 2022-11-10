@@ -25,7 +25,7 @@ PS_OUTPUT main( PS_INPUT PSInput )
 	PS_OUTPUT PSOutput ;
 	
 	const float level = 2.5;
-	const float eps=1.0f/480.0;
+	const float eps=1.0/256.0;
 	float2 xeps= float2(eps, 0);
 	float2 yeps = float2(0, eps);
 
