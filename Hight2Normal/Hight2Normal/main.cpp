@@ -37,6 +37,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//SetDrawScreen(DX_SCREEN_BACK);
 
 	auto offscreen=MakeScreen(512,512,false);
+	auto offscreen2 = MakeScreen(512, 512, false);
 	auto wavePsH = LoadPixelShader(L"wave.pso");
 	SetDrawScreen(offscreen);
 	ClearDrawScreen();
@@ -51,13 +52,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto psH=LoadPixelShader(L"hight2normal.pso");
 
 	SetDrawScreen(DX_SCREEN_BACK);
+	auto imgH = LoadGraph(L"img/img.png");
 	auto sphereH=MV1LoadModel(L"model/sphere.mv1");
 	auto hightMap=LoadGraph(L"img/turbulant_n.png");
 	auto sphereTex = LoadGraph(L"img/turbulant_col.png");
 	MV1SetPosition(sphereH, VGet(0, 0, 0));
 	//MV1SetUseOrigShader(true);
-	auto vs3 = LoadVertexShader(L"threed.vso");
-	auto ps3 = LoadPixelShader(L"threed.pso");
+	//auto vs3 = LoadVertexShader(L"threed.vso");
+	auto ps3 = LoadPixelShader(L"ps.pso");
 	
 
 	SetUseLighting(true);
@@ -67,7 +69,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	while (ProcessMessage() != -1) {
 		angle+=0.01f;
-		gangle[0] = angle;
+		gangle[0] = sin(angle);
 		UpdateShaderConstantBuffer(cbuffer);
 		SetShaderConstantBuffer(cbuffer, DX_SHADERTYPE_PIXEL, 3);
 		SetDrawScreen(offscreen);
@@ -75,25 +77,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		SetUsePixelShader(wavePsH);
 		MyDrawGraph(0, 0, 512, 512);
 
+		SetDrawScreen(offscreen2);
+		SetUseTextureToShader(0, offscreen);
+		SetUsePixelShader(psH);
+		MyDrawGraph(0, 0, 512, 512);
 
 		SetDrawScreen(DX_SCREEN_BACK);
 		ClearDrawScreen();
 		DrawGraph(0,0, offscreen,true);
-
-		SetUseTextureToShader(0, offscreen);
-		SetUsePixelShader(psH);
-		MyDrawGraph(512,0,512,512);
+		DrawGraph(512, 0, offscreen2, true);
+		
 
 		SetCameraPositionAndTarget_UpVecY(VGet(0, 200, -400), VGet(0, 0, 0));
 		MV1SetRotationXYZ(sphereH, VGet(0, angle, 0));
 		auto add=MV1GetTextureSampleFilterMode(sphereH,0);
-		SetUseVertexShader(vs3);
+		//SetUseVertexShader(vs3);
 		SetUsePixelShader(ps3);
-		SetUseTextureToShader(0, sphereTex);
-		SetUseTextureToShader(1,hightMap);
+		SetUseTextureToShader(0, imgH);
+		SetUseTextureToShader(1, offscreen2);
+		MyDrawGraph(300, 300, 512, 512);
 		//SetUseTextureToShader(0, sphereTex);
 		
-		MV1DrawModel(sphereH);
+		//MV1DrawModel(sphereH);
 
 		ScreenFlip();
 	}

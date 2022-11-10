@@ -102,7 +102,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	auto cbufferH = CreateShaderConstantBuffer(sizeof(float) * 4);
 	float* time = static_cast<float*>(GetBufferShaderConstantBuffer(cbufferH));
-	time[0]=0;
+	time[0]=0.0f;
 
 	float slashAngle = 0.0f;
 	list<Position> positions;
@@ -133,7 +133,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		SetDrawScreen(DX_SCREEN_BACK);
 		ClearDrawScreen();
 		UpdateShaderConstantBuffer(cbufferH);
-		SetShaderConstantBuffer(cbufferH, DX_SHADERTYPE_PIXEL, 0);
+		SetShaderConstantBuffer(cbufferH, DX_SHADERTYPE_PIXEL, 3);
 		SetUsePixelShader(noiseps);
 		SetUseTextureToShader(0, offscreen);
 		SetUseTextureToShader(1,normalH);

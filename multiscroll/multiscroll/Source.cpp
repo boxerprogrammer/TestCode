@@ -126,6 +126,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	houseH[1] = LoadGraph("img/props-sliced/house-b.png");
 	houseH[2] = LoadGraph("img/props-sliced/house-c.png");
 
+	int bloodDrop = LoadGraph("img/bloodDrop.png");
+
 	//①定数バッファの確保(VRAM上)
 	int cbuff = DxLib::CreateShaderConstantBuffer(sizeof(float) * 4);
 	//グラボのメモリは実は直接いじれない。
@@ -151,7 +153,40 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int frame = 0;//フレーム
 	float amplitude = 0.0f;//振幅
+	struct Vector2 {
+		float x, y;
+	};
+	using Position2 = Vector2;
+	struct Blood {
+		Position2 pos = {};
+		float g = 1.0f;
+		float crate = 1.0f;
+		float r = 8.0f;
+	};
+	array<Blood, 48> bloodPoints;
+	auto bloodRT = MakeScreen(640, 480,1);
+	for (auto& b : bloodPoints) {
+		b.pos.y -= (rand() % 100);
+		b.pos.x	=(float)(rand() % 640);
+		b.g = 0.5f + (float)(rand() % 10) / 10.0f;
+		b.crate = 0.6f + (float)(rand() % 10) / 10.0f;
+		b.r = 16.0f*b.crate;
+	}
 	while (ProcessMessage() == 0) {
+		SetDrawScreen(bloodRT);
+		SetUsePixelShader(-1);
+		SetUseTextureToShader(0, -1);
+		SetUseTextureToShader(1, -1);
+		SetUseTextureToShader(2, -1);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+		for (auto& b : bloodPoints) {
+			b.pos.y += b.g;
+			b.r = std::max(b.r-0.05f,0.1f);
+			DrawCircleAA(b.pos.x, b.pos.y, b.r, 16, 0xaa0000, true);
+		}
+		
+
+
 		SetDrawScreen(scrH);
 		ClearDrawScreen();
 
@@ -206,7 +241,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			toWall * a + 180 + shadowX - sign * pw / 2, shadowY - toWall,//左下
 			0, 0, pw, ph / 2,
 			playerH[scroll / 4 % 6], true);
-		DxLib::SetDrawBright(0xff, 0, 0);
+		DxLib::SetDrawBright(0xff, 0xaa, 0xaa);
 
 
 		//キャラ描画
@@ -256,6 +291,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		DrawExtendGraph(0, y_offset, 640, y_offset+480, scrH, false);
 		//水面の絵
 		MyDrawExtendGraph(0, 480 + 32, 640, 480 + y_offset - 16, scrH, normalH, -1, ps);
+		
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+		DrawGraph(0, 0, bloodRT, true);
+		for (auto& b : bloodPoints) {
+			b.pos.y += b.g;
+			b.crate *= 0.998f;
+			//DrawCircleAA(b.pos.x, b.pos.y, 12*b.crate, 16, 0xaa0000, true);
+			DrawRotaGraph(b.pos.x, b.pos.y, b.crate*0.35f, 0, bloodDrop, true);
+		}
+
 
 		SetDrawScreen(DX_SCREEN_BACK);
 		ClearDrawScreen();

@@ -16,7 +16,7 @@ struct PS_OUTPUT
 
 // 描画するテクスチャ
 
-cbuffer Consrtant : register(b3) {
+cbuffer Constant : register(b3) {
 	float angle;
 }
 
@@ -31,7 +31,7 @@ PS_OUTPUT main( PS_INPUT PSInput )
 
 	float len=length(PSInput.uv-0.5);
 	
-	PSOutput.Output.rgb =10.0/len*(sin(len*level - angle)+1)/2;
+	PSOutput.Output.rgb = saturate((len-angle));// pow(pow(0.9, 1.0f - (len - angle)), angle);// pow(1.0f - (abs(len - angle)), 2);// 10.0 / len * (sin(len * level - angle) + 1) / 2;
 	PSOutput.Output.a=1;
 	
 	return PSOutput ;
