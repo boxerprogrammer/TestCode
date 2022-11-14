@@ -141,7 +141,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto rightX = 384;
 	auto houseIdx = rand() % 3;
 	constexpr int y_offset = -96;
-	char keystate[256];
+	struct InputState {
+		char key[256];
+	};
+	InputState currentInput = {};
+	InputState lastInput = {};
 	bool turn = false;
 	float vy=0.0f;
 	
@@ -165,13 +169,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 	array<Blood, 48> bloodPoints;
 	auto bloodRT = MakeScreen(640, 480,1);
-	for (auto& b : bloodPoints) {
-		b.pos.y -= (rand() % 100);
-		b.pos.x	=(float)(rand() % 640);
-		b.g = 0.5f + (float)(rand() % 10) / 10.0f;
-		b.crate = 0.6f + (float)(rand() % 10) / 10.0f;
-		b.r = 16.0f*b.crate;
-	}
+
+	bool bloodRain = false;
 	while (ProcessMessage() == 0) {
 		SetDrawScreen(bloodRT);
 		SetUsePixelShader(-1);
@@ -179,10 +178,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		SetUseTextureToShader(1, -1);
 		SetUseTextureToShader(2, -1);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-		for (auto& b : bloodPoints) {
-			b.pos.y += b.g;
-			b.r = std::max(b.r-0.05f,0.1f);
-			DrawCircleAA(b.pos.x, b.pos.y, b.r, 16, 0xaa0000, true);
+		if (bloodRain) {
+			for (auto& b : bloodPoints) {
+				b.pos.y += b.g;
+				b.r = std::max(b.r - 0.05f, 0.1f);
+				DrawCircleAA(b.pos.x, b.pos.y, b.r, 16, 0xaa0000, true);
+			}
 		}
 		
 
@@ -190,7 +191,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		SetDrawScreen(scrH);
 		ClearDrawScreen();
 
-		GetHitKeyStateAll(keystate);
+		GetHitKeyStateAll(currentInput.key);
 
 		DrawGraph(-(scroll/3%384), 0, farBgH,false);
 		DrawGraph(-(scroll/3%384)+384, 0, farBgH, false);
@@ -247,12 +248,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//ƒLƒƒƒ‰•`‰æ
 		DrawRotaGraph(180, y, 1.0,0.0,playerH[scroll / 4 % 6] ,true,turn);
 		DxLib::SetDrawBright(0xff, 0xff, 0xff);
-		if (keystate[KEY_INPUT_RIGHT]) {
+		if (currentInput.key[KEY_INPUT_RIGHT]) {
 			++scroll;
 			cbuffer[0] += 0.001;
 			turn = false;
 		}
-		if (keystate[KEY_INPUT_LEFT]) {
+		if (currentInput.key[KEY_INPUT_LEFT]) {
 			--scroll;
 			cbuffer[0] -= 0.001;
 			turn = true;
@@ -260,7 +261,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (scroll < 0) {
 			scroll += 384;
 		}
-		if (keystate[KEY_INPUT_Z]) {
+		if (currentInput.key[KEY_INPUT_Z]) {
 			if (!jumping) {
 				vy = -10;
 				jumping = true;
@@ -268,10 +269,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 
-		if (keystate[KEY_INPUT_SPACE]) {
+		if (currentInput.key[KEY_INPUT_SPACE]) {
 			amplitude = 10.0f;
 		}
 
+		if (currentInput.key[KEY_INPUT_B] && !lastInput.key[KEY_INPUT_B]) {
+			bloodRain = !bloodRain;
+			if (bloodRain) {
+				bloodPoints = {};
+				for (auto& b : bloodPoints) {
+					b.pos.y -= (rand() % 100);
+					b.pos.x = (float)(rand() % 640);
+					b.g = 0.5f + (float)(rand() % 10) / 10.0f;
+					b.crate = 0.6f + (float)(rand() % 10) / 10.0f;
+					b.r = 16.0f * b.crate;
+				}
+				SetDrawScreen(bloodRT);
+				ClearDrawScreen();
+			}
+		}
 		vy += 0.5;
 		y += vy;
 		if (y > ground_line) {
@@ -293,12 +309,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		MyDrawExtendGraph(0, 480 + 32, 640, 480 + y_offset - 16, scrH, normalH, -1, ps);
 		
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-		DrawGraph(0, 0, bloodRT, true);
-		for (auto& b : bloodPoints) {
-			b.pos.y += b.g;
-			b.crate *= 0.998f;
-			//DrawCircleAA(b.pos.x, b.pos.y, 12*b.crate, 16, 0xaa0000, true);
-			DrawRotaGraph(b.pos.x, b.pos.y, b.crate*0.35f, 0, bloodDrop, true);
+		if (bloodRain) {
+			DrawGraph(0, 0, bloodRT, true);
+			for (auto& b : bloodPoints) {
+				b.pos.y += b.g;
+				b.crate *= 0.998f;
+				
+				DrawRotaGraph(b.pos.x, b.pos.y, b.crate * 0.35f, 0, bloodDrop, true);
+			}
 		}
 
 
@@ -316,6 +334,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		++frame;
 		ScreenFlip();
+		lastInput = currentInput;
 	}
 	DxLib_End();
 }
