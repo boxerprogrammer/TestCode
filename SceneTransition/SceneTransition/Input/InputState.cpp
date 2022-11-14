@@ -9,7 +9,6 @@ InputState::Update() {
 	copy(begin(keyState), end(keyState), begin(lastKeyState));
 	GetHitKeyStateAll(keyState);
 
-	ginput[static_cast<int>(GameInputValue::decide)] = 
-		keyState[KEY_INPUT_ENTER];
+	ginput.input[static_cast<int>(GameInputValue::decide)]= keyState[KEY_INPUT_RETURN];
 
 }

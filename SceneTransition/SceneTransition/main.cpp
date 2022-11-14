@@ -10,30 +10,13 @@ using namespace std;
 
 
 
-
-
-
-//class StageClearScene : public Scene {
-//public:
-//	virtual void Update(const InputState& input)override {
-//	}
-//	virtual void Draw()override {
-//		DrawString(200, 300, L"ステージクリア", 0xffffff);
-//	}
-//};
-
-
-
-
-
-
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR,_In_ int) {
 	ChangeWindowMode(true);
 	SetGraphMode(800, 600, 32);
 	DxLib_Init();
 	SetDrawScreen(DX_SCREEN_BACK);
-	SceneManager sceneManager;
-	sceneManager.ChangeScene(new TitleScene(sceneManager));
+	SceneManager sceneManager;//シーン管理クラス
+	sceneManager.ChangeScene(new TitleScene(sceneManager));//最初のシーンの作成＆マネージャに登録
 	InputState input;
 	while(ProcessMessage() != -1) {
 		ClearDrawScreen();
