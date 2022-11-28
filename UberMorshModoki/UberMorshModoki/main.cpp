@@ -13,7 +13,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int bloodH[5] = {};
 	wchar_t path[64];
 	for (int i = 1; i <= 5; ++i) {
-		wsprintf(path, L"./blood%d.png", i);
+		wsprintf(path, L"./Asset/img/Blood/blood%d.png", i);
 		bloodH[i-1] = LoadGraph(path);
 		assert(bloodH[i-1] >= 0);
 	}
