@@ -23,7 +23,7 @@ Input::Update() {
 	for (const auto& info : inputMap_) {
 		auto& code = gameInput.input[static_cast<int>(info.first)];
 		for (const auto& state : info.second) {
-			state.category
+			//state.category
 		}
 	}
 

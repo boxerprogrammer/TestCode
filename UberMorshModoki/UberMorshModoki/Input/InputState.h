@@ -44,7 +44,7 @@ class Input{
 	GameInput gameInput;
 	GameInput lastInput;
 	std::map<GameInputCode, std::vector<InputState>> inputMap_;
-	std::array<std::function<bool > [static_cast<int>(GameInputCode::none)]
+	std::array < std::function<bool(void)> ,static_cast<int>(GameInputCode::none)> checkFunctions_;
 	void RegisterCode(GameInputCode code, const std::vector<Input>& input);
 public:
 	Input();
