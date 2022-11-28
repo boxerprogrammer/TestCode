@@ -92,9 +92,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	DxLib::SetCameraPositionAndTarget_UpVecY(VGet(0, 200, -400), VGet(0, 0, 0));
 	MV1SetPosition(model[1],VGet(-205,0,0));
 	MV1SetPosition(model[2], VGet(205, 0, 0));
-	auto vs = LoadVertexShader(L"threed_outline.vso");
-	auto ps = LoadPixelShader(L"threed_outline.pso");
-	auto noiseps=LoadPixelShader(L"noise.pso");
+	auto vs = LoadVertexShader(L"threed_outline_vs.vso");
+	auto ps = LoadPixelShader(L"threed_outline_ps.pso");
+	auto noiseps=LoadPixelShader(L"noise_ps.pso");
 	auto normalH=LoadGraph(L"normalmap.png");
 	auto brickH = LoadGraph(L"brick.png");
 	float angle=0.0f;

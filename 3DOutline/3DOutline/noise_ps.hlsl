@@ -59,7 +59,7 @@ SamplerState smp2
 
 Texture2D    tex       : register(t0);
 Texture2D    norm       : register(t1);
-cbuffer ConstantBuffer : register(b3) {
+cbuffer cb : register(b3) {
 	float time;// : register(b3);
 };
 

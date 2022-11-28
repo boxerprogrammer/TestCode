@@ -19,4 +19,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="noise_ps.hlsl" />
+    <FxCompile Include="threed_outline_ps.hlsl" />
+    <FxCompile Include="threed_outline_vs.hlsl" />
+  </ItemGroup>
 </Project>
