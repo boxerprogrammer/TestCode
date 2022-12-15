@@ -38,7 +38,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	auto offscreen=MakeScreen(512,512,false);
 	auto offscreen2 = MakeScreen(512, 512, false);
-	auto wavePsH = LoadPixelShader(L"wave.pso");
+	auto wavePsH = LoadPixelShader(L"wave_ps.pso");
 	SetDrawScreen(offscreen);
 	ClearDrawScreen();
 	MyDrawGraph(0, 0, 512, 512);
@@ -49,10 +49,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto hightH=LoadGraph(L"img/hight.png");
 	//auto hightH = LoadGraph(L"img/square.png");
 
-	auto psH=LoadPixelShader(L"hight2normal.pso");
+	auto psH=LoadPixelShader(L"hight2normal_ps.pso");
 
 	SetDrawScreen(DX_SCREEN_BACK);
-	auto imgH = LoadGraph(L"img/img.png");
+	auto imgH = LoadGraph(L"img/strong.jpg");
 	//auto sphereH=MV1LoadModel(L"model/sphere.mv1");
 	auto hightMap=LoadGraph(L"img/turbulant_n.png");
 	auto sphereTex = LoadGraph(L"img/turbulant_col.png");
@@ -69,7 +69,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	while (ProcessMessage() != -1) {
 		angle+=0.005f;
-		gangle[0] = sin(angle);
+		gangle[0] = angle;// sin(angle);
 		UpdateShaderConstantBuffer(cbuffer);
 		SetShaderConstantBuffer(cbuffer, DX_SHADERTYPE_PIXEL, 3);
 		SetDrawScreen(offscreen);

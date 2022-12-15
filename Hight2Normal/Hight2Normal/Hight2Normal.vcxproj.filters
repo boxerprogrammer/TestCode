@@ -19,4 +19,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="wave_ps.hlsl" />
+    <FxCompile Include="ps.hlsl" />
+    <FxCompile Include="hight2normal_ps.hlsl" />
+  </ItemGroup>
 </Project>

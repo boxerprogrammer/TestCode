@@ -34,70 +34,72 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_  LPSTR, _In_ int) {
 	int beat_count = 0;
 	VERTEX3D ver = { { -1,0,10},{0,1,0},{255,255,255,255},{0,0,0,0},0,0,0,0 };
 	VERTEX3D verts[4] = {
-		{{ -10,0,10},{0,1,0},{255,255,255,255},{0,0,0,0},0,0,0,0},
-		{{ 10,0,10},{0,1,0},{255,255,255,255},{0,0,0,0},0,0,0,0},
-		{{ -10,0,0},{0,1,0},{255,255,255,255},{0,0,0,0},0,0,0,0},
-		{{ 10,0,0},{0,1,0},{255,255,255,255},{0,0,0,0},0,0,0,0}
+		{{ -100,0,100},{0,1,0},{255,255,255,255},{0,0,0,0},0,0,0,0},
+		{{ 100,0,100},{0,1,0},{255,255,255,255},{0,0,0,0},1,0,1,0},
+		{{ -100,0,0},{0,1,0},{255,255,255,255},{0,0,0,0},0,1,0,1},
+		{{ 100,0,0},{0,1,0},{255,255,255,255},{0,0,0,0},1,1,1,0}
 	};
-	DxLib::SetCameraPositionAndTargetAndUpVec(VGet(0, 2, 0), VGet(0, 0, 10), VGet(0, 1, 0));
-	SetCameraNearFarD(0.5, 50.0f);
+	DxLib::SetCameraPositionAndTargetAndUpVec(VGet(0, 2, -10), VGet(0, 0, 10), VGet(0, 1, 0));
+	SetCameraNearFar(0.5, 150.0f);
+	DxLib::SetupCamera_Perspective(3.14f / 4.0f);
 	unsigned short int indices[6] = { 0,1,2,1,3,2 };
 	
 
 	while (ProcessMessage() != -1) {
-		//SetDrawScreen(rt);
-		//ClearDrawScreen();
+		SetDrawScreen(rt);
+		ClearDrawScreen();
 
-		//if (++beat_count % beat_interval == 0) {
-		//	for (int i = 0; i < note_num; ++i) {
-		//		if (rand() % 4 == 0) {
-		//			auto it = std::find_if(notes.begin(), notes.end(), [](const Note& n) {
-		//				return !n.isEnable;
-		//				});
-		//			it->isEnable = true;
-		//			it->y= -note_height;
-		//			it->x = note_min_x + i * note_width;
+		if (++beat_count % beat_interval == 0) {
+			for (int i = 0; i < note_num; ++i) {
+				if (rand() % 4 == 0) {
+					auto it = std::find_if(notes.begin(), notes.end(), [](const Note& n) {
+						return !n.isEnable;
+						});
+					it->isEnable = true;
+					it->y= -note_height;
+					it->x = note_min_x + i * note_width;
 
-		//			
-		//		}
-		//	}
-		//}
+					
+				}
+			}
+		}
 
-		//for (auto& n : notes) {
-		//	if (n.isEnable) {
-		//		float lerp = static_cast<float>(n.y) / 450.0f;
-		//		DrawBox(n.x, n.y,
-		//			n.x + note_width,
-		//			n.y + note_height*lerp, 0xaaccff,true);
-		//		n.y += note_speed;
-		//		if (n.y > note_line_bottom) {
-		//			n.isEnable = false;
-		//		}
-		//	}
-		//}
-		//
-		//DrawBox(note_min_x, check_bar_y,
-		//	note_min_x + note_num * note_width, check_bar_y + note_height,
-		//	0xffaaaa, true);
+		for (auto& n : notes) {
+			if (n.isEnable) {
+				float lerp = static_cast<float>(n.y) / 450.0f;
+				DrawBox(n.x, n.y,
+					n.x + note_width,
+					n.y + note_height*lerp, 0xaaccff,true);
+				n.y += note_speed;
+				if (n.y > note_line_bottom) {
+					n.isEnable = false;
+				}
+			}
+		}
+		
+		DrawBox(note_min_x, check_bar_y,
+			note_min_x + note_num * note_width, check_bar_y + note_height,
+			0xffaaaa, true);
 
-		//for (int i = 0; i < note_num+1; ++i) {
-		//	DrawLine(note_min_x + i * note_width,
-		//		note_line_top,
-		//		note_min_x + i * note_width,
-		//		note_line_bottom,
-		//		0xffffff, 3);
-		//}
-		//
-		//SetDrawBlendMode(DX_BLENDMODE_MULA, 255);
-		//DrawModiGraph(0, 0, 
-		//	note_width* note_num + 20, 0,
-		//	note_width* note_num + 20,note_line_bottom, 
-		//	0, note_line_bottom, grad, false);
-		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+		for (int i = 0; i < note_num+1; ++i) {
+			DrawLine(note_min_x + i * note_width,
+				note_line_top,
+				note_min_x + i * note_width,
+				note_line_bottom,
+				0xffffff, 3);
+		}
+		
+		SetDrawBlendMode(DX_BLENDMODE_MULA, 255);
+		DrawModiGraph(0, 0, 
+			note_width* note_num + 20, 0,
+			note_width* note_num + 20,note_line_bottom, 
+			0, note_line_bottom, grad, false);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 
 		SetDrawScreen(DX_SCREEN_BACK);
-		//ClearDrawScreen();
+		ClearDrawScreen();
+		DrawBox(0, 0, 640, 480, 0x888800, true);
 		//DrawModiGraph(320 - 20, 50,
 		//	320 + 20, 50,
 		//	320 + 220, 450,
@@ -118,9 +120,17 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_  LPSTR, _In_ int) {
 		//	320 + 20, 50,
 		//	320 + 220, 450,
 		//	320 - 220, 450, rt, false);
-		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-		//DrawPolygonIndexed3D(verts, 4, indices, 2, rt, true);
-		DrawCube3D(VGet(-5, 0, 0), VGet(5, -10, 10), 0xffaaaa, 0xffffff, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+		
+		
+		// Ｚバッファを有効にする
+		SetUseZBuffer3D(TRUE);
+
+		// Ｚバッファへの書き込みを有効にする
+		SetWriteZBuffer3D(TRUE);
+
+		DrawPolygonIndexed3D(verts, 4, indices, 2, rt, true);
+		DrawSphere3D(VGet(320, 200, 0), 10.0f, 32, 0xff0000, 0xffffff, true);
 		ScreenFlip();
 	}
 	DxLib_End();
