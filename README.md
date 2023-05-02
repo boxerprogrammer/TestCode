@@ -2,6 +2,21 @@
 テストコードorコードの断片です。ほとんどがDxLibを使用しています。
 なお、 **動作させるには環境変数にDXLIB_DIRを作って、そこにDxLibの本体を入れておかないと動作しないので注意してください。** 
 また、作った時の年代でVS2019だったりVS2022だったりするので適度にコンバートしてください。
+## 2DShadow
+なかにRaycastShadowとSpriteShadowというソリューションがあり、それぞれ
+### RaycastShadow
+これは、光と障害物の当たり判定を想定して、どこまで光が届くのかをシミュレートしています。ステルスゲーとかに使えるかなと思います。
+
+![image](https://user-images.githubusercontent.com/8528629/235663808-eefab72e-b1f5-43d6-aab8-31d332b7a2c8.png)
+
+### Sprite2DShadow
+こいつは2Dで陰影をつけるテストコードです。なお、２D画像から陰影をつけるツールとしてはLaigterというのを使っています。
+https://azagaya.itch.io/laigter
+
+![image](https://user-images.githubusercontent.com/8528629/235664271-1f6940d3-9613-4571-be4e-663ce981452c.png)
+
+実行するとマウスで点光源を動かすことができます。
+
 ## atan2test
 授業用のatan2のテストコードです
 ## CSTest
@@ -17,6 +32,9 @@ DxLibに対してクリップボードから、コピペをするときの参考
 ## gradiusV
 所謂、某社のグラディ〇ス5における自機のぐにゃぐにゃレーザーを実装。
 **見た目だけなので当たり判定が必要ですが未実装です。**
+
+![image](https://user-images.githubusercontent.com/8528629/235663125-2d2b9a52-1a19-46a4-b756-0c47dff61b3b.png)
+
 ## HitCircleTest
 1年生の数学の授業用のソースコードです。円と円の当たり判定を行います。
 **なお、コメントを書いておりますがこのコメント通りにコードを追加しないと当たり判定を行いません(教育用なので)**
@@ -29,7 +47,9 @@ HitCircleTestの実装済みのやつです
 
 ## multiscroll
 多重スクロールのテストコード(授業用)
+
 ![image](https://user-images.githubusercontent.com/8528629/235661640-5397380e-b284-4473-9cbd-82953117bfb2.png)
+
 なお多重スクロールと言いつつ、手前に流れる川に結構な工夫がしてあります(シェーダコード)
 また、実行中にBを押すと画面手前に血の雨が降ります(笑)
 
@@ -61,9 +81,24 @@ DxLibを使用したパッド状態の出力サンプル。パッド差して何
 ## SlashEffectTest
 斬撃エフェクト(兼背景歪ませ)のためのテストコード。
 ZとXで斬撃の角度調整。カーソルキーで斬撃を移動できます。スト５のナッシュの技に触発されて作りました。
+
 ![image](https://user-images.githubusercontent.com/8528629/235660434-af53633f-9493-4eb4-a2e6-28257ef66c86.png)
+
 ## SmoothDamp
 GemeProgrammingGems4の1章10項のSmoothDampを自分なりに解釈して、イージングに利用してみました。
+
+## SpriteOutline
+なかにSpriteOutlineとSpriteAuraというのが入っています。
+### SpriteOutline
+これは、普通の画像に対して輪郭線を付けるものです。大したことをしてないように見えますがちょっとテクが必要です。
+
+![image](https://user-images.githubusercontent.com/8528629/235664735-bdcbc0bc-f6ce-4ea7-b85b-b0a41a9979ee.png)
+
+### SpriteAura
+SpriteOutlineを応用し、時間経過でアニメーションさせて色んな効果を出すことができます。
+
+![image](https://user-images.githubusercontent.com/8528629/235665293-a09d6c86-9c1b-4b15-b588-6f4aa4541625.png)
+
 
 
 
