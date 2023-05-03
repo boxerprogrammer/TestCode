@@ -70,6 +70,12 @@ HitCircleTestの実装済みのやつです
 扇形と円の当たり判定です。
 サーチライト判定とかに使えるんじゃないでしょうか。
 
+## masktest
+DxLibのマスクを使って某ゲームの「ブチッ！」を再現しようとしました。オサレ。
+
+![image](https://user-images.githubusercontent.com/8528629/235958826-94246765-6548-43ba-9417-58a3e34407c3.png)
+
+
 ## multiscroll
 多重スクロールのテストコード(授業用)
 
