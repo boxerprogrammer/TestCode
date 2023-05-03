@@ -18,10 +18,34 @@ https://azagaya.itch.io/laigter
 
 ## atan2test
 授業用のatan2のテストコードです
+
+## blurbloom
+DxLibにおいてシェーダを用いないで、ブルーム(グレア…光ってる)を表現するサンプルです。
+
+![image](https://user-images.githubusercontent.com/8528629/235820941-86a15d32-90c8-4b63-a7b5-4b8a23778925.png)
+
+## BoxingIK
+グローブの位置と向き(手首の向き)で肘の位置を調整するサンプルです。自分の研究用なので見づらいかも。
+
+## CaptureMesh
+画面のスクショをメッシュ化して割るっていうやつですが、なんか先祖返りしてるのでそのうち修正します。
+
 ## CSTest
 ComputeShaderのテストコードです(@koguchit氏のComputeShaderサンプル(https://github.com/kgussan/simpleGpgpu )をDirectX12仕様にしようとしています)
 今のところ、スレッドIDを書き込むだけのサンプルです。
 **ComputeShaderに興味がない人はここは読まなくて大丈夫です(非DxLib)**
+
+## Dissolve
+オブジェクトがモヤモヤっ、と消えるエフェクトです
+### 2DDissolve
+
+![image](https://user-images.githubusercontent.com/8528629/235821924-fe73af35-8c0b-4173-9a6e-5734e1f9a485.png)
+
+### 3DDissolve
+
+![image](https://user-images.githubusercontent.com/8528629/235821986-94fc58f9-8c30-449e-b8e7-a3258ad3c7de.png)
+
+
 ## edgedataloader
 ドット絵ソフトEdgeのアニメーションデータコンバート用テストコード
 **未完成です**
@@ -61,6 +85,10 @@ https://cedec.cesa.or.jp/2020/session/detail/s5e7df23196221.html
 に触発されて作りました。
 ## NjTest
 IREMの「最後の忍道」的なゲームをC++＆DxLibで作ったサンプルです。
+
+![image](https://user-images.githubusercontent.com/8528629/235820678-c6f31ed4-d45d-462a-a407-5ce9db48dacb.png)
+
+
 ゲームまるまる入っていますが **著作権の関係上、素材は抜いてます。** 遊びたい場合はReadMeに必要な素材が書いてるので
 itch.ioあたりからダウンロードして、適切なフォルダに配置して遊びましょう。
 
