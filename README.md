@@ -33,7 +33,7 @@ DxLibに対してクリップボードから、コピペをするときの参考
 所謂、某社のグラディ〇ス5における自機のぐにゃぐにゃレーザーを実装。
 **見た目だけなので当たり判定が必要ですが未実装です。**
 
-![image](https://user-images.githubusercontent.com/8528629/235663125-2d2b9a52-1a19-46a4-b756-0c47dff61b3b.png)
+![image](https://user-images.githubusercontent.com/8528629/235819785-a254cc47-543e-4ce7-b0fe-cbb2f386fb8b.png)
 
 ## HitCircleTest
 1年生の数学の授業用のソースコードです。円と円の当たり判定を行います。
