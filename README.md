@@ -8,7 +8,6 @@
 これは、光と障害物の当たり判定を想定して、どこまで光が届くのかをシミュレートしています。ステルスゲーとかに使えるかなと思います。
 
 ![image](https://user-images.githubusercontent.com/8528629/235663808-eefab72e-b1f5-43d6-aab8-31d332b7a2c8.png)
-
 ### Sprite2DShadow
 こいつは2Dで陰影をつけるテストコードです。なお、２D画像から陰影をつけるツールとしてはLaigterというのを使っています。
 https://azagaya.itch.io/laigter
@@ -34,6 +33,8 @@ DxLibに対してクリップボードから、コピペをするときの参考
 **見た目だけなので当たり判定が必要ですが未実装です。**
 
 ![image](https://user-images.githubusercontent.com/8528629/235819785-a254cc47-543e-4ce7-b0fe-cbb2f386fb8b.png)
+
+キーボードのカーソルキーで移動、ZとXでレーザーを回転します
 
 ## HitCircleTest
 1年生の数学の授業用のソースコードです。円と円の当たり判定を行います。
@@ -98,6 +99,7 @@ GemeProgrammingGems4の1章10項のSmoothDampを自分なりに解釈して、�
 SpriteOutlineを応用し、時間経過でアニメーションさせて色んな効果を出すことができます。
 
 ![image](https://user-images.githubusercontent.com/8528629/235665293-a09d6c86-9c1b-4b15-b588-6f4aa4541625.png)
+
 
 
 
