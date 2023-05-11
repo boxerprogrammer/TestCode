@@ -24,15 +24,15 @@ PS_OUTPUT main( PS_INPUT PSInput )
 
 	PS_OUTPUT PSOutput ;
 	
-	const float level = 2.5;
-	const float eps=1.0/256.0;
+	const float level = 4.0;
+	const float eps=1.0/64.0;
 	float2 xeps= float2(eps, 0);
 	float2 yeps = float2(0, eps);
 
 	 float3 N=normalize(float3(
-					tex.Sample(smp, PSInput.uv + xeps).r - tex.Sample(smp, PSInput.uv - xeps).r,
-	 				tex.Sample(smp, PSInput.uv + yeps).r - tex.Sample(smp, PSInput.uv - yeps).r,
-	 				eps*level));
+					(tex.Sample(smp, PSInput.uv + xeps).r - tex.Sample(smp, PSInput.uv - xeps).r)/(2*eps),
+	 				(tex.Sample(smp, PSInput.uv + yeps).r - tex.Sample(smp, PSInput.uv - yeps).r)/(2*eps),
+	 				level));
 
 	 N = normalize(N + float3(0, 0, sqrt(1 - N.x * N.x - N.y * N.y)));
 

@@ -10,7 +10,7 @@ TitleScene::Update(const InputState& input) {
 		manager_.ChangeScene(new GamePlayingScene(manager_));
 	}
 }
- void 
-	 TitleScene::Draw() {
+void 
+TitleScene::Draw() {
 	DrawString(200, 300, L"タイトルシーン", 0xffffff);
 }

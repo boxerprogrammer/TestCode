@@ -1,41 +1,140 @@
 # TestCode
-テストコードorコードの断片です。ほとんどがDxLibを使用しています。なお、 **動作させるには環境変数にDXLIB_DIRを作って、そこにDxLibの本体を入れておかないと動作しないので注意してください。** 
+テストコードorコードの断片です。ほとんどがDxLibを使用しています。
+なお、 **動作させるには環境変数にDXLIB_DIRを作って、そこにDxLibの本体を入れておかないと動作しないので注意してください。** 
+また、作った時の年代でVS2019だったりVS2022だったりするので適度にコンバートしてください。
+## 2DShadow
+なかにRaycastShadowとSpriteShadowというソリューションがあり、それぞれ
+### RaycastShadow
+これは、光と障害物の当たり判定を想定して、どこまで光が届くのかをシミュレートしています。ステルスゲーとかに使えるかなと思います。
+
+![image](https://user-images.githubusercontent.com/8528629/235663808-eefab72e-b1f5-43d6-aab8-31d332b7a2c8.png)
+### Sprite2DShadow
+こいつは2Dで陰影をつけるテストコードです。なお、２D画像から陰影をつけるツールとしてはLaigterというのを使っています。
+https://azagaya.itch.io/laigter
+
+![image](https://user-images.githubusercontent.com/8528629/235664271-1f6940d3-9613-4571-be4e-663ce981452c.png)
+
+実行するとマウスで点光源を動かすことができます。
+
+## atan2test
+授業用のatan2のテストコードです
+
+## blurbloom
+DxLibにおいてシェーダを用いないで、ブルーム(グレア…光ってる)を表現するサンプルです。
+
+![image](https://user-images.githubusercontent.com/8528629/235820941-86a15d32-90c8-4b63-a7b5-4b8a23778925.png)
+
+## BoxingIK
+グローブの位置と向き(手首の向き)で肘の位置を調整するサンプルです。自分の研究用なので見づらいかも。
+
+## CaptureMesh
+画面のスクショをメッシュ化して割るっていうやつですが、なんか先祖返りしてるのでそのうち修正します。
+
 ## CSTest
 ComputeShaderのテストコードです(@koguchit氏のComputeShaderサンプル(https://github.com/kgussan/simpleGpgpu )をDirectX12仕様にしようとしています)
 今のところ、スレッドIDを書き込むだけのサンプルです。
-## GetClipboardTexts
-職場のイベントで使用した抽選機用のソースコードです
-## HitCircleTest
-1年生の数学の授業用のソースコードです。円と円の当たり判定を行います。なお、コメントを書いておりますがこのコメント通りにコードを追加しないと当たり判定を行いません(教育用なので)
-## HitCircleTest2
-HitCircleTestの実装版
-## HitFanTest
-扇形と円の当たり判定
-## NetWork
-C++側でログをTCP/IPで送信し、C#側で受信して表示するサンプル
-## NjTest
-IREMの「最後の忍道」的なゲームをC++DxLibで作ったサンプル
-## PadState
-DxLibを使用したパッド状態の出力サンプル
-## RankViewer
-職場のイベントで使用したランキング可視化のソースコードです
-## RectTest
-矩形の当たり判定のテスト
-## SlashEffectTest
-斬撃エフェクト(背景歪ませ)のためのテストコード
-## SmoothDamp
-GemeProgrammingGems4の1章10項のSmoothDampを自分なりに解釈して、イージングに利用してみた。
-## atan2test
-授業用のatan2のテストコード
+**ComputeShaderに興味がない人はここは読まなくて大丈夫です(非DxLib)**
+
+## Dissolve
+オブジェクトがモヤモヤっ、と消えるエフェクトです
+### 2DDissolve
+
+![image](https://user-images.githubusercontent.com/8528629/235821924-fe73af35-8c0b-4173-9a6e-5734e1f9a485.png)
+
+### 3DDissolve
+
+![image](https://user-images.githubusercontent.com/8528629/235821986-94fc58f9-8c30-449e-b8e7-a3258ad3c7de.png)
+
+
 ## edgedataloader
 ドット絵ソフトEdgeのアニメーションデータコンバート用テストコード
+**未完成です**
+## GetClipboardTexts
+職場のイベントで使用した抽選機用のソースコードです。
+DxLibに対してクリップボードから、コピペをするときの参考にはなるかもしれません。
 ## gradiusV
-所謂、某社のグラディ〇ス5における自機のぐにゃぐにゃレーザーを実装。見た目だけなのでTodo当たり判定
+所謂、某社のグラディ〇ス5における自機のぐにゃぐにゃレーザーを実装。
+**見た目だけなので当たり判定が必要ですが未実装です。**
+
+![image](https://user-images.githubusercontent.com/8528629/235819785-a254cc47-543e-4ce7-b0fe-cbb2f386fb8b.png)
+
+キーボードのカーソルキーで移動、ZとXでレーザーを回転します
+
+## HitCircleTest
+1年生の数学の授業用のソースコードです。円と円の当たり判定を行います。
+**なお、コメントを書いておりますがこのコメント通りにコードを追加しないと当たり判定を行いません(教育用なので)**
+そんなに難しくないので大丈夫でしょう。
+## HitCircleTest2
+HitCircleTestの実装済みのやつです
+## HitFanTest
+扇形と円の当たり判定です。
+サーチライト判定とかに使えるんじゃないでしょうか。
+
+## masktest
+DxLibのマスクを使って某ゲームの「ブチッ！」を再現しようとしました。オサレ。
+
+![image](https://user-images.githubusercontent.com/8528629/235958826-94246765-6548-43ba-9417-58a3e34407c3.png)
+
+
 ## multiscroll
 多重スクロールのテストコード(授業用)
+
+![image](https://user-images.githubusercontent.com/8528629/235661640-5397380e-b284-4473-9cbd-82953117bfb2.png)
+
+なお多重スクロールと言いつつ、手前に流れる川に結構な工夫がしてあります(シェーダコード)
+また、実行中にBを押すと画面手前に血の雨が降ります(笑)
+
+## NetWork
+C++側でログをTCP/IPで送信し、C#側で受信して表示するサンプル
+これは完全に趣味と言うか実験ですね。CEDEC2020のニンテンドーの講演
+https://cedec.cesa.or.jp/2020/session/detail/s5e7df23196221.html
+に触発されて作りました。
+## NjTest
+IREMの「最後の忍道」的なゲームをC++＆DxLibで作ったサンプルです。
+
+![image](https://user-images.githubusercontent.com/8528629/235820678-c6f31ed4-d45d-462a-a407-5ce9db48dacb.png)
+
+
+ゲームまるまる入っていますが **著作権の関係上、素材は抜いてます。** 遊びたい場合はReadMeに必要な素材が書いてるので
+itch.ioあたりからダウンロードして、適切なフォルダに配置して遊びましょう。
+
 ## nVidiaTutorialTest
 nVidiaのDXRチュートリアル(HelloTriangleからレイトレーシングをやる)を参考に、モデル表示まで実装中
+
 ## onefinger
 OneFingerDeathPunch的なものを作ろうとして放置中のプロジェクト。現在タイトル画面のタイトルをラスタスクロールでぐにゃぐにゃ歪ませるテストだけ行っている。
 なお、現状はアセットに「GothicVania Church」を使用しており(https://ansimuz.itch.io/gothicvania-church-pack )からダウンロードして、アセットを適切な所においてほしい。
+**もちろん未完成**
+
+## PadState
+DxLibを使用したパッド状態の出力サンプル。パッド差して何かを押すとそのコードが見れます。
+## RankViewer
+職場のイベントで使用したランキング可視化のソースコードです(データがないと意味がないので見ても無駄です)
+## RectTest
+矩形の当たり判定のテストです。矩形の中に侵入できないような作りになっています。
+ゲームを作る際の当たり判定や、地形との当たり判定に使えるかもしれません。
+## SlashEffectTest
+斬撃エフェクト(兼背景歪ませ)のためのテストコード。
+ZとXで斬撃の角度調整。カーソルキーで斬撃を移動できます。スト５のナッシュの技に触発されて作りました。
+
+![image](https://user-images.githubusercontent.com/8528629/235660434-af53633f-9493-4eb4-a2e6-28257ef66c86.png)
+
+## SmoothDamp
+GemeProgrammingGems4の1章10項のSmoothDampを自分なりに解釈して、イージングに利用してみました。
+
+## SpriteOutline
+なかにSpriteOutlineとSpriteAuraというのが入っています。
+### SpriteOutline
+これは、普通の画像に対して輪郭線を付けるものです。大したことをしてないように見えますがちょっとテクが必要です。
+
+![image](https://user-images.githubusercontent.com/8528629/235664735-bdcbc0bc-f6ce-4ea7-b85b-b0a41a9979ee.png)
+
+### SpriteAura
+SpriteOutlineを応用し、時間経過でアニメーションさせて色んな効果を出すことができます。
+
+![image](https://user-images.githubusercontent.com/8528629/235665293-a09d6c86-9c1b-4b15-b588-6f4aa4541625.png)
+
+
+
+
 

@@ -7,6 +7,19 @@
 #include"Geometry.h"
 using namespace std;
 
+
+void MyDrawGraph(float x, float y, int handle, bool trans) {
+	DrawGraph(static_cast<int>(x), static_cast<int>(y), handle, trans);
+}
+
+void MyDrawRotaGraph(float x, float y, float ext,float angle , int handle, bool trans) {
+	DrawRotaGraph(static_cast<int>(x), static_cast<int>(y),ext,angle, handle, trans);
+}
+
+void MyDrawRectRotaGraph(float x, float y, int srcX,int srcY , int w, int h ,float ext, float angle, int handle, bool trans) {
+	DrawRectRotaGraph(static_cast<int>(x), static_cast<int>(y),srcX,srcY,w,h, ext, angle, handle, trans);
+}
+
 struct BendLazerPos {
 	Position2f pos=Position2f(100,100);
 	Vector2f vel = Vector2f(0, 0);
@@ -23,7 +36,7 @@ struct ControlPoint {
 	ControlPoint(const Position2f& p) :pos(p) {}
 	ControlPoint(const Position2f& p, const Vector2f& v) :pos(p), vel(v) {}
 	void Update() { life--; }
-	bool isDead() { life >= 0; }
+	bool isDead() { return life >= 0; }
 };
 
 vector<BendLazerPos> CalculateCubicBezier(const Position2f& pos1,
@@ -34,7 +47,7 @@ vector<BendLazerPos> CalculateCubicBezier(const Position2f& pos1,
 	assert(div > 4);
 	vector<BendLazerPos> ret;
 	ret.reserve(div);
-	for (int i = 0; i < div; ++i) {
+	for (unsigned int i = 0; i < div; ++i) {
 		auto t = static_cast<float>(i) / static_cast<float>(div);
 		auto r = 1.0f - t;
 		auto a = r * r*r;
@@ -64,7 +77,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	DxLib_Init();
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	auto vicviperH=LoadGraph("img/vicviper.png");
+	auto vicviperH=LoadGraph("img/player.png");
 	auto optionH = LoadGraph("img/option.png");
 
 	
@@ -115,6 +128,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int frame = 0;
 	int drawframe = 0;
 	const float maxoptdistance = 80.0f;
+	constexpr float speed = 4.0f;
 	while (ProcessMessage()==0) {
 		ClearDrawScreen();
 
@@ -122,21 +136,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 		bool isChanged = false;
 		auto& pos = poss[0];
+		Vector2f vel = {};
 		if (keystate[KEY_INPUT_UP]) {
-			pos.y -= 4;
+			vel.y = -1.0f;
 			isChanged = true;
 		}
 		if (keystate[KEY_INPUT_DOWN]) {
-			pos.y += 4;
+			vel.y = 1.0f;
 			isChanged = true;
 		}
 		if (keystate[KEY_INPUT_RIGHT]) {
-			pos.x += 4;
+			vel.x = 1.0f;
 			isChanged = true;
 		}
 		if (keystate[KEY_INPUT_LEFT]) {
-			pos.x -= 4;
+			vel.x = -1.0f;
 			isChanged = true;
+		}
+		if (isChanged) {
+			pos+=vel.Normalized()*speed;
 		}
 
 		if (keystate[KEY_INPUT_Z]) {
@@ -195,8 +213,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		for (auto& cps : ctrlPnts) {
 			//不必要なコントロールポイントを削除
 			cps.erase(std::remove_if(cps.begin(), cps.end(), [](const ControlPoint& pred) {
-				int x = pred.pos.x;
-				int y = pred.pos.y;
+				int x = static_cast<int>(pred.pos.x);
+				int y = static_cast<int>(pred.pos.y);
 				return x < -200 || x>840 || y < -200 || y>680 || pred.life < 0;
 				}), cps.end());
 		}
@@ -284,12 +302,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				const auto& prep = *it2;
 				if (prep.pos.x > 0 && prep.pos.x <= 640 && p.pos.x > 0 && p.pos.x <= 640 &&
 					prep.pos.y > 0 && prep.pos.y <= 480 && p.pos.y > 0 && p.pos.y <= 480) {
-					DrawLine(prep.pos.x, prep.pos.y, p.pos.x, p.pos.y, 0x88aaff, 3);
+					DrawLine(
+						static_cast<int>(prep.pos.x),
+						static_cast<int>(prep.pos.y),
+						static_cast<int>(p.pos.x),
+						static_cast<int>(p.pos.y)
+						, 0x88aaff, 3);
 				}
 			}
 
 			////
-			DrawLine(poss[i].x, poss[i].y, lazer[i].back().pos.x, lazer[i].back().pos.y, 0x88aaff, 3);
+			DrawLine(static_cast<int>(poss[i].x), 
+				static_cast<int>(poss[i].y),
+				static_cast<int>(lazer[i].back().pos.x),
+				static_cast<int>(lazer[i].back().pos.y),
+				0x88aaff, 3);
 		}
 		SetDrawScreen(DX_SCREEN_BACK);
 		DrawGraph(0, 0, screenH[drawframe], true);
@@ -304,10 +331,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 		for (int i = 1; i < poss.size();++i) {
 			auto& o = poss[i];
-			DrawRotaGraph(o.x, o.y, 2.0f, 0.0f, optionH, true);
+			MyDrawRotaGraph(o.x, o.y, 2.0f, 0.0f, optionH, true);
 		}
 
-		DrawRotaGraph(pos.x, pos.y, 2.0f, 0.0f, vicviperH, true);
+		int srcX = 0;
+		if (vel.y > 0.0f) {
+			srcX = 26;
+		}
+		else if (vel.y < 0.0f) {
+			srcX = 26*2;
+		}
+		MyDrawRectRotaGraph(pos.x, pos.y,
+			srcX,0,
+			26,21,
+			2.0f, 0.0f, vicviperH, true);
 
 		lastangle = angle;
 
