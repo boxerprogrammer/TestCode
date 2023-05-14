@@ -139,7 +139,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		DrawGraph(0, 0, overPP, false);
 		DrawGraph(0, 0, overPP, false);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-		//MyDrawGraph(0, 0, overPP, crackNorm, -1, psPP);
+		//MyDrawGraph(0, 0, 640,480,overPP, crackNorm, -1,psPP);
 		ScreenFlip();
 	}
 	DxLib_End();
