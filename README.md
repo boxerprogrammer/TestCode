@@ -2,6 +2,17 @@
 テストコードorコードの断片です。ほとんどがDxLibを使用しています。
 なお、 **動作させるには環境変数にDXLIB_DIRを作って、そこにDxLibの本体を入れておかないと動作しないので注意してください。** 
 また、作った時の年代でVS2019だったりVS2022だったりするので適度にコンバートしてください。
+
+## 2DFire
+2Dにおける比の表現。ピクセルシェーダと、DxLibの暈し表現を併用している。
+チョットこの後は背景を歪ませるのもやりたいと思う。
+
+![image](https://github.com/boxerprogrammer/TestCode/assets/8528629/479060f0-dabe-47b4-a626-ba1a953eefb4)
+
+動画↓
+https://twitter.com/CTsuchinoko/status/1657570050596020224
+
+
 ## 2DShadow
 なかにRaycastShadowとSpriteShadowというソリューションがあり、それぞれ
 ### RaycastShadow
