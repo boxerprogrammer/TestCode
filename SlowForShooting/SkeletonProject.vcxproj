@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{7c04d424-0243-483a-9a2e-2a01aa0e163a}</ProjectGuid>
+    <RootNamespace>SkeletonProject</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>SlowForShooting</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NOMINMAX;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(DXLIB_DIR)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NOMINMAX;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(DXLIB_DIR)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Game\Force.cpp" />
+    <ClCompile Include="Game\Bringer.cpp" />
+    <ClCompile Include="Game\Event.cpp" />
+    <ClCompile Include="Game\BulletFactory.cpp" />
+    <ClCompile Include="Game\Bullet.cpp" />
+    <ClCompile Include="Game\EnemyFactory.cpp" />
+    <ClCompile Include="Game\ChargeShot.cpp" />
+    <ClCompile Include="DrawFunctions.cpp" />
+    <ClCompile Include="Game\Enemy.cpp" />
+    <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="Game\Patapata.cpp" />
+    <ClCompile Include="Game\OnetimeSpawner.cpp" />
+    <ClCompile Include="Game\InfiniteSpawner.cpp" />
+    <ClCompile Include="Game\Insect.cpp" />
+    <ClCompile Include="Game\Rock.cpp" />
+    <ClCompile Include="Game\PointInfiniteSpawner.cpp" />
+    <ClCompile Include="Game\ItemFactory.cpp" />
+    <ClCompile Include="Game\Item.cpp" />
+    <ClCompile Include="Game\Missile.cpp" />
+    <ClCompile Include="Scene\KeyConfigScene.cpp" />
+    <ClCompile Include="Scene\PauseScene.cpp" />
+    <ClCompile Include="Scene\GameoverScene.cpp" />
+    <ClCompile Include="Scene\GameplayingScene.cpp" />
+    <ClCompile Include="InputState.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scene\OptionScene.cpp" />
+    <ClCompile Include="Game\Player.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="Game\Shot.cpp" />
+    <ClCompile Include="Game\ZakoBullet.cpp" />
+    <ClCompile Include="Game\Stage.cpp" />
+    <ClCompile Include="Game\Spawner.cpp" />
+    <ClCompile Include="Game\TeamSpawner.cpp" />
+    <ClCompile Include="Game\VolcanicRock.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="Scene\SoundSettingScene.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game\Force.h" />
+    <ClInclude Include="Game\Bringer.h" />
+    <ClInclude Include="data.h" />
+    <ClInclude Include="Game\Event.h" />
+    <ClInclude Include="Game\BulletFactory.h" />
+    <ClInclude Include="Game\Bullet.h" />
+    <ClInclude Include="Game\EnemyFactory.h" />
+    <ClInclude Include="Game\ChargeShot.h" />
+    <ClInclude Include="DrawFunctions.h" />
+    <ClInclude Include="Game\Enemy.h" />
+    <ClInclude Include="Game\EnemyType.h" />
+    <ClInclude Include="Geometry.h" />
+    <ClInclude Include="Game\Patapata.h" />
+    <ClInclude Include="Game\OnetimeSpawner.h" />
+    <ClInclude Include="Game\InfiniteSpawner.h" />
+    <ClInclude Include="Game\Insect.h" />
+    <ClInclude Include="Game\Rock.h" />
+    <ClInclude Include="Game\PointInfiniteSpawner.h" />
+    <ClInclude Include="Game\ItemFactory.h" />
+    <ClInclude Include="Game\Item.h" />
+    <ClInclude Include="Game\ItemType.h" />
+    <ClInclude Include="Game\Missile.h" />
+    <ClInclude Include="Scene\KeyConfigScene.h" />
+    <ClInclude Include="Scene\PauseScene.h" />
+    <ClInclude Include="Scene\GameoverScene.h" />
+    <ClInclude Include="Scene\GameplayingScene.h" />
+    <ClInclude Include="InputState.h" />
+    <ClInclude Include="Scene\OptionScene.h" />
+    <ClInclude Include="Game\Player.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Scene\TitleScene.h" />
+    <ClInclude Include="Game\Shot.h" />
+    <ClInclude Include="Game\ZakoBullet.h" />
+    <ClInclude Include="Game\Stage.h" />
+    <ClInclude Include="Game\Spawner.h" />
+    <ClInclude Include="Game\TeamSpawner.h" />
+    <ClInclude Include="Game\VolcanicRock.h" />
+    <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="Scene\SoundSettingScene.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

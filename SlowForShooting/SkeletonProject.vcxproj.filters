@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{f5de22e2-8047-4b15-9e4e-ce404da7fad5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{f0289920-c93f-46fd-b53a-7d70b2ee9cac}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="InputState.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameoverScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameplayingScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\OptionScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\TitleScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawFunctions.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\PauseScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\KeyConfigScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Geometry.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Shot.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ChargeShot.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EnemyFactory.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Patapata.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Bullet.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ZakoBullet.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BulletFactory.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Stage.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Spawner.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\OnetimeSpawner.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\TeamSpawner.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\InfiniteSpawner.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Insect.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Rock.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Event.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\VolcanicRock.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\PointInfiniteSpawner.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SoundSettingScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Bringer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ItemFactory.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Item.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Force.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Missile.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="InputState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawFunctions.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\TitleScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\OptionScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameplayingScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameoverScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\PauseScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\KeyConfigScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometry.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Shot.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ChargeShot.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EnemyFactory.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Patapata.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Bullet.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ZakoBullet.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BulletFactory.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Stage.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Spawner.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\OnetimeSpawner.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="data.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\TeamSpawner.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\InfiniteSpawner.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Insect.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EnemyType.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Rock.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Event.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\VolcanicRock.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\PointInfiniteSpawner.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SoundSettingScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ItemType.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Item.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ItemFactory.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Bringer.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Force.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Missile.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

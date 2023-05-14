@@ -9,7 +9,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int cutinH = LoadGraph("img/cutin.png");
 
-	int yajuH = LoadGraph("img/yaju.png");
+	int yajuH = LoadGraph("img/aztek_tile.jpg");
 
 	int maskH = LoadMask("img/cutin_msk.png");
 

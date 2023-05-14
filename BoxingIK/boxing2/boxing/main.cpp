@@ -208,10 +208,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (keystate[KEY_INPUT_E] || padState.Buttons[XINPUT_BUTTON_DPAD_LEFT]) {
 			fistRollL -= roll_speed;
 		}
-		if (padState.Buttons[XINPUT_BUTTON_DPAD_UP]) {
+		if (keystate[KEY_INPUT_Z] || padState.Buttons[XINPUT_BUTTON_DPAD_UP]) {
 			fistPitchL += roll_speed;
 		}
-		if (padState.Buttons[XINPUT_BUTTON_DPAD_DOWN]) {
+		if (keystate[KEY_INPUT_X] || padState.Buttons[XINPUT_BUTTON_DPAD_DOWN]) {
 			fistPitchL -= roll_speed;
 		}
 

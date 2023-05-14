@@ -54,8 +54,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		return -1;
 	}
 	SetDrawScreen(DX_SCREEN_BACK);
-	auto ashuraH = LoadGraph(L"img/brook.png");
-	auto auraH = LoadGraph(L"img/sky.png");
+	auto ashuraH = LoadGraph(L"img/hotoke_asyura.png");
+	auto auraH = LoadGraph(L"img/aura.png");
 	auto pshandle = LoadPixelShader(L"spriteoutline.pso");
 	auto cbuffer = CreateShaderConstantBuffer(sizeof(float) * 4);
 	float* gangle = static_cast<float*>(GetBufferShaderConstantBuffer(cbuffer));

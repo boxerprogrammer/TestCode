@@ -90,13 +90,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ClearDrawScreen();
 		DrawGraph(0, 0, BaseH, true);//Œ³‚ÌŠG
 		
-		GraphFilter(OutlineH, DX_GRAPH_FILTER_GAUSS, 32, 1600);
-		SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
-		DrawGraph(0, 0, OutlineH,true);
-		DrawGraph(0, 0, OutlineH, true);
-		DrawGraph(0, 0, OutlineH, true);
-		DrawGraph(0, 0, OutlineH, true);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+		//GraphFilter(OutlineH, DX_GRAPH_FILTER_GAUSS, 32, 1600);
+		//SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+		//DrawGraph(0, 0, OutlineH,true);
+		//DrawGraph(0, 0, OutlineH, true);
+		//DrawGraph(0, 0, OutlineH, true);
+		//DrawGraph(0, 0, OutlineH, true);
+		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		ScreenFlip();
 	}
 	return 0;
