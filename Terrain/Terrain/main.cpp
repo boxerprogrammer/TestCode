@@ -56,37 +56,120 @@ void MyDrawGraph(int x, int y, int width, int height) {
 struct Position {
 	float x, y;
 };
-std::vector<VERTEX2D> CreateVertices(const Position& center, const list<Position>& positions) {
-	std::vector<VERTEX2D> ret(2*positions.size());
-	float dC = 255.0f / static_cast<float>(positions.size());
-	float alpha = 255.0f;
-	auto it = positions.begin();
-	for (int i = 0; i < positions.size(); ++i) {
-		ret[i * 2 + 0].dif = GetColorU8(255, 255, 255, alpha);
-		ret[i * 2 + 0].pos.x = center.x;
-		ret[i * 2 + 0].pos.y = center.y;
-		ret[i * 2 + 0].rhw = 1.0f;
-		ret[i * 2 + 0].u = 0;
-		ret[i * 2 + 0].v = 0;
 
-		ret[i * 2 + 1].dif = GetColorU8(255, 255, 255, alpha);
-		ret[i * 2 + 1].pos.x = center.x+it->x;
-		ret[i * 2 + 1].pos.y = center.y+it->y;
-		ret[i * 2 + 1].rhw = 1.0f;
-		ret[i * 2 + 1].u = 0;
-		ret[i * 2 + 1].v = 0;
 
-		++it;
-		alpha -= dC;
+constexpr int game_width = 640;
+constexpr int game_height = 480;
+
+constexpr int terrain_width = 512;
+constexpr int terrain_height = 512;
+
+
+using Vertices_t = vector<VERTEX3D>;
+using Indices_t = vector<unsigned short>;
+
+void CreateBaseVertices(Vertices_t& vertices,int m,int n) {
+	vertices.resize(m * n);
+	const float stride_x = 512.0f/static_cast<float>(m);
+	const float stride_y = 512.0f/static_cast<float>(n);
+	const float stride_u = 1.0f / static_cast<float>(m);
+	const float stride_v = 1.0f / static_cast<float>(n);
+	for (int j = 0; j < n; ++j) {
+		for (int i = 0; i < m; ++i) {
+			auto& v = vertices[i + j * m];
+			v.pos = { (float)i*stride_x - 256.0f,0,256.0f- (float)j*stride_y };
+			v.norm = { 0.0f,1.0f,0.0f };
+			v.dif = GetColorU8(255, 255, 255, 255);
+			v.u = (float)i * stride_u;
+			v.v = (float)j * stride_v;
+		}
 	}
-	return ret;
+	return;
+}
+
+void CreateLineIndices(Indices_t& indices,int m, int n) {
+	//LINELISTの場合、インデックスの数は、点の数をm,nとすると
+	//((m-1)*n*2)+(m*(n-1)*2)である。
+	//まず、横方向に点がm個ある場合、線の数はm-1個。インデックス自体は(m-1)*2個必要で
+	//それがn段あるわけだから、(m-1)*n*2である。これが縦方向だとmとnが逆転する。
+
+	indices.resize(((m - 1) * n * 2) + (m * (n - 1) * 2));
+
+	//横方向
+	int idx = 0;
+	for (int j = 0; j < n; ++j) {
+		for (int i = 0; i < m - 1; ++i) {
+			indices[idx] = i + j*m;
+			++idx;
+			indices[idx] = (i + 1) + j * m;
+			++idx;
+		}
+	}
+	//縦方向
+	for (int i = 0; i < m; ++i) {
+		for (int j = 0; j < n-1; ++j) {
+			indices[idx] = i + j * m;
+			++idx;
+			indices[idx] = i + (j+1) * m;
+			++idx;
+		}
+	}
+}
+void CreateTriangleIndices(Indices_t& indices, int m, int n) {
+	//まず、ひとつのクアッドのためにインデックスが6つ必要。
+	//で、それが(m-1)*(m-1)存在する
+	indices.resize((m - 1) * (n - 1) * 6);
+	int idx = 0;
+	for (int i = 0; i < m-1; ++i) {
+		for (int j = 0; j < n - 1; ++j) {
+			//とりあえず三角形は時計回り
+			//左上三角形
+			indices[idx] = i + j * m;//左上
+			++idx;
+			indices[idx] = (i+1) + j * m;//右上
+			++idx;
+			indices[idx] = i + (j+1) * m;//左下
+			++idx;
+			//右下三角形
+			indices[idx] = (i+1) + j * m;//右上
+			++idx;
+			indices[idx] = (i + 1) + (j+1) * m;//右下
+			++idx;
+			indices[idx] = i + (j + 1) * m;//左下
+			++idx;
+
+		}
+	}
+}
+
+
+
+
+
+void CalculateHeightFromHeightMap( Vertices_t& vertices, int heightH,int m, int n) {
+	const float stride_x = 512.0f / static_cast<float>(m);
+	const float stride_y = 512.0f / static_cast<float>(n);
+	for (int j = 0; j < n; ++j) {
+		for (int i = 0; i < m; ++i) {
+			auto& v = vertices[i + j * m];
+			float r, g, b, a;
+			GetPixelSoftImageF(heightH, i*stride_x, j*stride_y, &r, &g, &b, &a);
+
+			v.pos.y = r * 100.0f;
+		}
+	}
 }
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ChangeWindowMode(true);
+
+	const int height = std::max(terrain_height, game_height);
+
 	SetWindowSize(1280, 720);
+	//SetWindowSize(game_width + terrain_width, height);
 	
 	DxLib_Init();
+	//int res = SetGraphMode(game_width+ terrain_width, height, 32);
 	int res = SetGraphMode(1280, 720, 32);
 	
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -100,7 +183,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto heightH = LoadSoftImage(L"cloud.png");
 	auto brushH = LoadSoftImage(L"brush.png");
 	float angle=0.0f;
-	auto offscreen=MakeScreen(640,480);
+	auto offscreen=MakeScreen(game_width,game_height);
 
 	auto cbufferH = CreateShaderConstantBuffer(sizeof(float) * 4);
 	float* time = static_cast<float*>(GetBufferShaderConstantBuffer(cbufferH));
@@ -112,18 +195,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int sfw, sfh;
 	GetSoftImageSize(heightH, &sfw, &sfh);
 	
-	vector<VERTEX3D> vertices(512 * 512);
-	for (int j = 0; j < 512; ++j) {
-		for (int i = 0; i < 512; ++i) {
-			auto& v = vertices[i + j * 512];
-			float r, g, b, a;
-			GetPixelSoftImageF(heightH, i, j, &r, &g, &b, &a);
+	constexpr int lattice_num_x = 256;
+	constexpr int lattice_num_y = 256;
 
-			v.pos = { (float)i-256.0f,r*100.0f,256.0f-(float)j };
-			v.norm = {0.0f,1.0f,0.0f};
-			v.dif = GetColorU8(255, 255, 255,255);
-		}
-	}
+	Vertices_t vertices;
+	CreateBaseVertices(vertices,lattice_num_x,lattice_num_y);
+	Indices_t indices;
+	//CreateLineIndices(indices, lattice_num_x, lattice_num_y);
+	CreateTriangleIndices(indices, lattice_num_x, lattice_num_y);
+	CalculateHeightFromHeightMap(vertices, heightH, lattice_num_x, lattice_num_y);
+
 
 	int lx, ly;
 	GetMousePoint(&lx, &ly);
@@ -141,7 +222,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			int mx, my;
 			GetMousePoint(&mx, &my);
 			if (!(fabsf(mx - lx) < 5 && fabsf(my - ly)<5 && mlast == minput)) {
-				BltSoftImageWithAlphaBlend(0, 0, 32, 32, brushH, mx - 640 - 16, my - 16, heightH, 64);
+				BltSoftImageWithAlphaBlend(0, 0, 32, 32, brushH, mx - 640 - 16, my - 16, heightH, 32);
 				lx = mx;
 				ly = my;
 			}
@@ -149,18 +230,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		mlast = minput;
 		
-		for (int j = 0; j < 512; ++j) {
-			for (int i = 0; i < 512; ++i) {
-				auto& v = vertices[i + j * 512];
-				float r, g, b, a;
-				GetPixelSoftImageF(heightH, i, j, &r, &g, &b, &a);
-
-				v.pos = { (float)i - 256.0f,r * 64.0f,256.0f - (float)j };
-				v.norm = { 0.0f,1.0f,0.0f };
-				v.dif = GetColorU8(255, 255, 255, 255);
-			}
-		}
-		DrawPrimitive3D(vertices.data(), vertices.size(), DX_PRIMTYPE_POINTLIST, brickH, false);
+		CalculateHeightFromHeightMap(vertices, heightH, lattice_num_x, lattice_num_y);
+		//DrawPrimitive3D(vertices.data(), vertices.size(), DX_PRIMTYPE_POINTLIST, brickH, false);
+		DrawPrimitiveIndexed3D(vertices.data(), vertices.size(),indices.data(),indices.size(), DX_PRIMTYPE_TRIANGLELIST, brickH, false);
 		SetDrawScreen(DX_SCREEN_BACK);
 		//SetGraphMode(640*2, 480, 32);
 		DrawGraph(0, 0, offscreen, false);
