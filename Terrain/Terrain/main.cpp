@@ -65,7 +65,7 @@ constexpr int terrain_width = 512;
 constexpr int terrain_height = 512;
 
 
-using Vertices_t = vector<VERTEX3D>;
+using Vertices_t = vector<VERTEX3DSHADER>;
 using Indices_t = vector<unsigned short>;
 
 void CreateBaseVertices(Vertices_t& vertices,int m,int n) {
@@ -117,18 +117,18 @@ void CreateLineIndices(Indices_t& indices,int m, int n) {
 }
 void CreateTriangleIndices(Indices_t& indices, int m, int n) {
 	//まず、ひとつのクアッドのためにインデックスが6つ必要。
-	//で、それが(m-1)*(m-1)存在する
+	//で、それが(m-1)*(n-1)存在する
 	indices.resize((m - 1) * (n - 1) * 6);
 	int idx = 0;
-	for (int i = 0; i < m-1; ++i) {
-		for (int j = 0; j < n - 1; ++j) {
+	for (int j = 0; j < n - 1; ++j) {
+		for (int i = 0; i < m-1; ++i) {
 			//とりあえず三角形は時計回り
 			//左上三角形
-			indices[idx] = i + j * m;//左上
+			indices[idx] = i + j * m;//左上0
 			++idx;
-			indices[idx] = (i+1) + j * m;//右上
+			indices[idx] = (i+1) + j * m;//右上1
 			++idx;
-			indices[idx] = i + (j+1) * m;//左下
+			indices[idx] = i + (j+1) * m;//左下n
 			++idx;
 			//右下三角形
 			indices[idx] = (i+1) + j * m;//右上
@@ -165,13 +165,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	const int height = std::max(terrain_height, game_height);
 
-	SetWindowSize(1280, 720);
-	//SetWindowSize(game_width + terrain_width, height);
+	//SetWindowSize(1280, 720);
+	SetWindowSize(game_width + terrain_width, height);
 	
 	DxLib_Init();
-	//int res = SetGraphMode(game_width+ terrain_width, height, 32);
-	int res = SetGraphMode(1280, 720, 32);
-	
+	int res = SetGraphMode(game_width+ terrain_width, height, 32);
+	//int res = SetGraphMode(1280, 720, 32);
+	res=SetCreateGraphColorBitDepth(32);
 	SetDrawScreen(DX_SCREEN_BACK);
 	int model[3]={};
 	DxLib::SetCameraPositionAndTarget_UpVecY(VGet(0, 200, -400), VGet(0, 0, 0));
@@ -180,8 +180,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	auto noiseps=LoadPixelShader(L"noise_ps.pso");
 	auto normalH=LoadGraph(L"normalmap.png");
 	auto brickH = LoadGraph(L"brick.png");
-	auto heightH = LoadSoftImage(L"cloud.png");
+	auto heightH = LoadSoftImage(L"height.png");
 	auto brushH = LoadSoftImage(L"brush.png");
+	auto nbrushH = LoadSoftImage(L"nbrush.png");
+	auto splatH = LoadSoftImage(L"splat.png");
 	float angle=0.0f;
 	auto offscreen=MakeScreen(game_width,game_height);
 
@@ -217,22 +219,32 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		DxLib::SetCameraPositionAndTarget_UpVecY(VGet(0, 200, -400), VGet(0, 0, 0));
 		ClearDrawScreen();
 
-		auto minput=GetMouseInput();
-		if (minput & MOUSE_INPUT_LEFT) {
+		auto minput = GetMouseInput();
+		if (minput & MOUSE_INPUT_LEFT || minput & MOUSE_INPUT_RIGHT) {
 			int mx, my;
+			int bH = splatH;
+			if (minput & MOUSE_INPUT_RIGHT) {
+				bH = nbrushH;
+			}
 			GetMousePoint(&mx, &my);
-			if (!(fabsf(mx - lx) < 5 && fabsf(my - ly)<5 && mlast == minput)) {
-				BltSoftImageWithAlphaBlend(0, 0, 32, 32, brushH, mx - 640 - 16, my - 16, heightH, 32);
+			if (!(fabsf(mx - lx) < 5 && fabsf(my - ly) < 5 && mlast == minput)) {
+				BltSoftImageWithAlphaBlend(
+					0, 0, 64, 64, bH,//ブラシデータ
+					mx - 640 - 32, my - 32, heightH, //書き込み先
+					64);//α
 				lx = mx;
 				ly = my;
 			}
-			
+
 		}
 		mlast = minput;
 		
 		CalculateHeightFromHeightMap(vertices, heightH, lattice_num_x, lattice_num_y);
 		//DrawPrimitive3D(vertices.data(), vertices.size(), DX_PRIMTYPE_POINTLIST, brickH, false);
-		DrawPrimitiveIndexed3D(vertices.data(), vertices.size(),indices.data(),indices.size(), DX_PRIMTYPE_TRIANGLELIST, brickH, false);
+		DrawPrimitiveIndexed3DToShader(
+			vertices.data(), vertices.size(),
+			indices.data(),indices.size(), 
+			DX_PRIMTYPE_TRIANGLELIST);
 		SetDrawScreen(DX_SCREEN_BACK);
 		//SetGraphMode(640*2, 480, 32);
 		DrawGraph(0, 0, offscreen, false);
