@@ -20,7 +20,7 @@ https://twitter.com/CTsuchinoko/status/1657570050596020224
 
 ![image](https://user-images.githubusercontent.com/8528629/235663808-eefab72e-b1f5-43d6-aab8-31d332b7a2c8.png)
 ### Sprite2DShadow
-こいつは2Dで陰影をつけるテストコードです。なお、２D画像から陰影をつけるツールとしてはLaigterというのを使っています。
+こいつは2Dで陰影をつけるテストコードです。なお、２D画像から法線マップを作るツールとしてはLaigterというのを使っています。
 https://azagaya.itch.io/laigter
 
 ![image](https://user-images.githubusercontent.com/8528629/235664271-1f6940d3-9613-4571-be4e-663ce981452c.png)
@@ -70,6 +70,13 @@ DxLibに対してクリップボードから、コピペをするときの参考
 ![image](https://user-images.githubusercontent.com/8528629/235819785-a254cc47-543e-4ce7-b0fe-cbb2f386fb8b.png)
 
 キーボードのカーソルキーで移動、ZとXでレーザーを回転します
+
+## Hight2Normal
+HightはHeightのスペルミスです。高さ情報を法線情報に変換します。左上にプロシージャルな波のモノクロ画像を生成し、それを法線情報に変換して右上に出力しています。
+真ん中の下はその法線情報を用いて画像を歪ませたものです。
+
+![image](https://github.com/boxerprogrammer/TestCode/assets/8528629/5a5c119f-3856-4962-90f4-93547527d85f)
+
 
 ## HitCircleTest
 1年生の数学の授業用のソースコードです。円と円の当たり判定を行います。
