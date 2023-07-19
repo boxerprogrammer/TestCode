@@ -33,8 +33,13 @@ PS_OUTPUT main( PS_INPUT PSInput )
 					(tex.Sample(smp, PSInput.uv + xeps).r - tex.Sample(smp, PSInput.uv - xeps).r)/(2*eps),
 	 				(tex.Sample(smp, PSInput.uv + yeps).r - tex.Sample(smp, PSInput.uv - yeps).r)/(2*eps),
 	 				level));
+	//以下の方法でも法線を計算することは可能だが、解像度が低くモアレが発生する
+	//float val=tex.Sample(smp, PSInput.uv);
+	//float dx = ddx_fine(val);
+	//float dy = ddy_fine(val);
+	//float3 N = normalize(cross(float3(eps,0,-dx),float3(0,eps,-dy)));
 
-	 N = normalize(N + float3(0, 0, sqrt(1 - N.x * N.x - N.y * N.y)));
+	// N = normalize(N + float3(0, 0, sqrt(1 - N.x * N.x - N.y * N.y)));
 
 	//float3 NX=normalize(float3(eps,0,(tex.Sample(smp, PSInput.uv + xeps).r - tex.Sample(smp, PSInput.uv -xeps).r))/2);
 	//float3 NY=normalize(float3(0,eps,(tex.Sample(smp, PSInput.uv + yeps).r - tex.Sample(smp, PSInput.uv - yeps).r))/2);
