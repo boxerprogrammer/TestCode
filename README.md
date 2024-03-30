@@ -27,6 +27,12 @@ https://azagaya.itch.io/laigter
 
 実行するとマウスで点光源を動かすことができます。
 
+## 3DOutline
+色々と混ざってますが、選択中のオブジェクトにだけ輪郭を付与するものです
+
+## AnimationFrame
+特定の枠線をくるくると光らせるものです。選択中の選択肢などに使用するといいと思います
+
 ## atan2test
 授業用のatan2のテストコードです
 
@@ -60,6 +66,10 @@ ComputeShaderのテストコードです(@koguchit氏のComputeShaderサンプ�
 ## edgedataloader
 ドット絵ソフトEdgeのアニメーションデータコンバート用テストコード
 **未完成です**
+
+## FScanF
+テキストからfscanfでデータを読み取って、それを3Dの向きに反映させるためだけのプログラム
+
 ## GetClipboardTexts
 職場のイベントで使用した抽選機用のソースコードです。
 DxLibに対してクリップボードから、コピペをするときの参考にはなるかもしれません。
@@ -87,6 +97,12 @@ HitCircleTestの実装済みのやつです
 ## HitFanTest
 扇形と円の当たり判定です。
 サーチライト判定とかに使えるんじゃないでしょうか。
+
+## Index2Index
+何のために作ったコードか不明 **あとで消す**
+
+## LoadModel
+ただモデルをロードするだけじゃなくて、シェーダでPBRっぽくしている
 
 ## masktest
 DxLibのマスクを使って某ゲームの「ブチッ！」を再現しようとしました。オサレ。
@@ -126,8 +142,16 @@ OneFingerDeathPunch的なものを作ろうとして放置中のプロジェク�
 
 ## PadState
 DxLibを使用したパッド状態の出力サンプル。パッド差して何かを押すとそのコードが見れます。
+
+##PeterShirley
+Raytracing One Weekendやろうとしてるやつ
+
+
+
 ## RankViewer
 職場のイベントで使用したランキング可視化のソースコードです(データがないと意味がないので見ても無駄です)
+
+
 
 ## Raymarching
 3DのSDFを用いたレイマーチングのサンプル
