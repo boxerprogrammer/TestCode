@@ -28,13 +28,22 @@ https://azagaya.itch.io/laigter
 実行するとマウスで点光源を動かすことができます。
 
 ## 3DOutline
-色々と混ざってますが、選択中のオブジェクトにだけ輪郭を付与するものです
+ノイズのテストだの色々と混ざってますが、選択中のオブジェクトにだけ輪郭を付与するテストコードです
+なお、輪郭は「背面法」により生成したものです
+![image](https://github.com/user-attachments/assets/f4e9c11f-ac3f-41d0-9a50-701210b27189)
+
+
 
 ## AnimationFrame
 特定の枠線をくるくると光らせるものです。選択中の選択肢などに使用するといいと思います
+DxLibにおけるDrawMaskのテストです
+![image](https://github.com/user-attachments/assets/20bba275-db00-4f4d-99a7-f9eb1a67d7b9)
+
 
 ## atan2test
-授業用のatan2のテストコードです
+授業用のatan2のテストコードです。現在マウスがいる位置を、デカいカーソルが指し示します
+![image](https://github.com/user-attachments/assets/34484cd4-eef4-4c1b-bdce-e64efef65a9d)
+
 
 ## blurbloom
 DxLibにおいてシェーダを用いないで、ブルーム(グレア…光ってる)を表現するサンプルです。
@@ -42,10 +51,15 @@ DxLibにおいてシェーダを用いないで、ブルーム(グレア…光�
 ![image](https://user-images.githubusercontent.com/8528629/235820941-86a15d32-90c8-4b63-a7b5-4b8a23778925.png)
 
 ## BoxingIK
-グローブの位置と向き(手首の向き)で肘の位置を調整するサンプルです。自分の研究用なので見づらいかも。
+グローブの位置と向き(手首の向き)で肘の位置を調整するサンプルです。自分の研究用なのでソースコードが見づらいかも。
+EキーとRキーでグローブの向きが変わります
+![image](https://github.com/user-attachments/assets/c3a4a046-0a51-4d78-bb93-3c84e509549d)
+
 
 ## CaptureMesh
 画面のスクショをメッシュ化して割るっていうやつですが、なんか先祖返りしてるのでそのうち修正します。
+![image](https://github.com/user-attachments/assets/5aebfc1a-36ef-436b-b1a2-78a2a49c5f54)
+
 
 ## CSTest
 ComputeShaderのテストコードです(@koguchit氏のComputeShaderサンプル(https://github.com/kgussan/simpleGpgpu )をDirectX12仕様にしようとしています)
@@ -97,12 +111,16 @@ HitCircleTestの実装済みのやつです
 ## HitFanTest
 扇形と円の当たり判定です。
 サーチライト判定とかに使えるんじゃないでしょうか。
+![image](https://github.com/user-attachments/assets/285afe61-fabd-472f-92a1-88786850d3a6)
+
 
 ## Index2Index
 何のために作ったコードか不明 **あとで消す**
 
 ## LoadModel
 ただモデルをロードするだけじゃなくて、シェーダでPBRっぽくしている
+![image](https://github.com/user-attachments/assets/af45c199-0f0a-410a-9e36-2b16281f5c57)
+
 
 ## masktest
 DxLibのマスクを使って某ゲームの「ブチッ！」を再現しようとしました。オサレ。
