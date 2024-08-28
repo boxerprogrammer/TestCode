@@ -169,14 +169,17 @@ Raytracing One Weekendやろうとしてるやつ
 ## RankViewer
 職場のイベントで使用したランキング可視化のソースコードです(データがないと意味がないので見ても無駄です)
 
-
+## RaycastBoxTest
+画面上の点から奥行き方向に向かう線と**回転する直方体**の交差判定。DxLibの関数を使わず数学的に判定を行っている。
+![image](https://github.com/user-attachments/assets/1c681792-1a88-4c3f-bf11-efdbb0ab6bdf)
+https://x.com/CTsuchinoko/status/1828764083027333592
 
 ## Raymarching
 3DのSDFを用いたレイマーチングのサンプル
 
 ![image](https://github.com/boxerprogrammer/TestCode/assets/8528629/8e9d49b6-84d2-4077-a983-0ca2056a7b31)
 
-
+## ReadLaigter
 ## RectTest
 矩形の当たり判定のテストです。矩形の中に侵入できないような作りになっています。
 ゲームを作る際の当たり判定や、地形との当たり判定に使えるかもしれません。
