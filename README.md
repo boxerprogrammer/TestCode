@@ -19,6 +19,8 @@ https://twitter.com/CTsuchinoko/status/1657570050596020224
 これは、光と障害物の当たり判定を想定して、どこまで光が届くのかをシミュレートしています。ステルスゲーとかに使えるかなと思います。
 
 ![image](https://user-images.githubusercontent.com/8528629/235663808-eefab72e-b1f5-43d6-aab8-31d332b7a2c8.png)
+https://x.com/CTsuchinoko/status/1450440169706852356
+
 ### Sprite2DShadow
 こいつは2Dで陰影をつけるテストコードです。なお、２D画像から法線マップを作るツールとしてはLaigterというのを使っています。
 https://azagaya.itch.io/laigter
@@ -152,6 +154,7 @@ itch.ioあたりからダウンロードして、適切なフォルダに配置�
 
 ## nVidiaTutorialTest
 nVidiaのDXRチュートリアル(HelloTriangleからレイトレーシングをやる)を参考に、モデル表示まで実装中
+https://x.com/CTsuchinoko/status/1827547690680393850
 
 ## onefinger
 OneFingerDeathPunch的なものを作ろうとして放置中のプロジェクト。現在タイトル画面のタイトルをラスタスクロールでぐにゃぐにゃ歪ませるテストだけ行っている。
@@ -164,6 +167,9 @@ DxLibを使用したパッド状態の出力サンプル。パッド差して何
 ##PeterShirley
 Raytracing One Weekendやろうとしてるやつ
 
+## RandomTexture
+プロシージャルランダムテクスチャ実験
+![image](https://github.com/user-attachments/assets/a07aa34d-20a2-414b-9a08-4ca854b8aaff)
 
 
 ## RankViewer
@@ -180,6 +186,11 @@ https://x.com/CTsuchinoko/status/1828764083027333592
 ![image](https://github.com/boxerprogrammer/TestCode/assets/8528629/8e9d49b6-84d2-4077-a983-0ca2056a7b31)
 
 ## ReadLaigter
+Laigter( https://azagaya.itch.io/laigter )を用いて出力したノーマルマップ画像から2Dで立体感を出すテスト
+![image](https://github.com/user-attachments/assets/5d56fea9-b6d0-4fee-a730-67dcfe5c4985)
+![image](https://github.com/user-attachments/assets/f8464e72-08bc-4c36-9612-a851f709ff1b)
+
+
 ## RectTest
 矩形の当たり判定のテストです。矩形の中に侵入できないような作りになっています。
 ゲームを作る際の当たり判定や、地形との当たり判定に使えるかもしれません。
@@ -189,8 +200,37 @@ ZとXで斬撃の角度調整。カーソルキーで斬撃を移動できます
 
 ![image](https://user-images.githubusercontent.com/8528629/235660434-af53633f-9493-4eb4-a2e6-28257ef66c86.png)
 
+##  Salamanda_Title
+ファミコンの沙羅曼蛇のタイトル画面をやろうとしたものです
+![image](https://github.com/user-attachments/assets/75227849-7b92-4fc8-9648-430335cc6255)
+
+## SlashEffectTest
+斬撃により背景が歪むテスト
+![image](https://github.com/user-attachments/assets/9032f205-ef5e-40bd-b028-2e768ddb5119)
+
+## SlowForShooting
+シューティングゲームサンプル
+![image](https://github.com/user-attachments/assets/fc6c30ec-15bf-487d-b982-c755b0983f47)
+
 ## SmoothDamp
+SmoothDamp式を利用して、特定の点にぬるっと追従する点を表現
 GemeProgrammingGems4の1章10項のSmoothDampを自分なりに解釈して、イージングに利用してみました。
+```C++
+Vector2f SmoothDamp(const Vector2f& from, const Vector2f& to, Vector2f& vel, float smoothTime, float deltaTime) {
+	float omega = 2.0f / smoothTime;
+	float x = omega * deltaTime;
+	float exp = 1.0f/(1.0f + x + 0.48f * x * x + 0.235f * x * x * x);//テイラー展開
+	auto change = from - to;
+	auto temp = (vel + change*omega) * deltaTime;
+	vel = (vel - temp*omega) * exp;
+	return to + (change + temp) * exp;
+}
+```
+
+## SpriteEffect
+ドット絵のアニメーションに合わせて光の粒が流れます
+![image](https://github.com/user-attachments/assets/b341ce09-122d-47fe-be74-14ee0fc4e2c5)
+
 
 ## SpriteOutline
 なかにSpriteOutlineとSpriteAuraというのが入っています。
@@ -204,6 +244,19 @@ SpriteOutlineを応用し、時間経過でアニメーションさせて色ん�
 
 ![image](https://user-images.githubusercontent.com/8528629/235665293-a09d6c86-9c1b-4b15-b588-6f4aa4541625.png)
 
+
+## Terrain
+ハイトマップによるTerrainテスト。高さマップじたいはシェーダを使っておらず、画像をLoadSoftImageで読み込んでおり、それをハイトマップとして利用している。
+また、この元のマップ画像は左クリックで加算、右クリックで減算することで、リアルタイムに高低差を作る事ができるサンプル
+![image](https://github.com/user-attachments/assets/07b5cba5-0d7f-4780-ad4d-259824de0c2a)
+
+## TrailRenderer
+動きによって尾を引くような画像を生成するテスト
+画像だが、ベクトルの変化によっては曲線を描くように画像を歪ませている
+![image](https://github.com/user-attachments/assets/55bd12f5-5303-42a5-8299-6be45650a7d9)
+
+## UnityToDxLib
+Unityの3D空間上の配置データをスクリプトでバイナリ出力し、そのバイナリをDxLibで読み取り、Unityと同じ位置にオブジェクトを表示するサンプル
 
 
 
