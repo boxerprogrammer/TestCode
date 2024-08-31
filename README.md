@@ -46,6 +46,10 @@ DxLibにおけるDrawMaskのテストです
 授業用のatan2のテストコードです。現在マウスがいる位置を、デカいカーソルが指し示します
 ![image](https://github.com/user-attachments/assets/34484cd4-eef4-4c1b-bdce-e64efef65a9d)
 
+## BeatGameTemplate
+音ゲーを作るテンプレート ※未完成※
+![image](https://github.com/user-attachments/assets/f0e7ba33-f6ea-44cd-9bc8-4d56a0826d27)
+
 
 ## blurbloom
 DxLibにおいてシェーダを用いないで、ブルーム(グレア…光ってる)を表現するサンプルです。
