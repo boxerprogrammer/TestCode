@@ -7,6 +7,7 @@
 using namespace std;
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+	SetWindowText(L"Raycast2DShadow");
 	ChangeWindowMode(true);
 	if (DxLib::DxLib_Init() == -1) {
 		return -1;
