@@ -32,6 +32,7 @@ https://azagaya.itch.io/laigter
 ## 3DOutline
 ノイズのテストだの色々と混ざってますが、選択中のオブジェクトにだけ輪郭を付与するテストコードです
 なお、輪郭は「背面法」により生成したものです
+
 ![image](https://github.com/user-attachments/assets/f4e9c11f-ac3f-41d0-9a50-701210b27189)
 
 
@@ -39,12 +40,19 @@ https://azagaya.itch.io/laigter
 ## AnimationFrame
 特定の枠線をくるくると光らせるものです。選択中の選択肢などに使用するといいと思います
 DxLibにおけるDrawMaskのテストです
+
 ![image](https://github.com/user-attachments/assets/20bba275-db00-4f4d-99a7-f9eb1a67d7b9)
 
 
 ## atan2test
 授業用のatan2のテストコードです。現在マウスがいる位置を、デカいカーソルが指し示します
+
 ![image](https://github.com/user-attachments/assets/34484cd4-eef4-4c1b-bdce-e64efef65a9d)
+
+## BeatGameTemplate
+音ゲーを作るテンプレート ※未完成※
+
+![image](https://github.com/user-attachments/assets/f0e7ba33-f6ea-44cd-9bc8-4d56a0826d27)
 
 
 ## blurbloom
