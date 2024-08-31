@@ -5,6 +5,7 @@
 using namespace std;
 
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_  LPSTR, _In_ int) {
+	SetWindowText(L"BeatGameTemplate");
 	ChangeWindowMode(true);
 	if (DxLib_Init() == -1) {
 		return -1;
@@ -26,22 +27,24 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_  LPSTR, _In_ int) {
 		int y = -note_height;
 		int x = 0;
 		bool isEnable = false;
+		struct Note() {}
 	};
 
 	std::array<Note,64> notes = {};
 
 	const int beat_interval = 15;
 	int beat_count = 0;
-	VERTEX3D ver = { { -1,0,10},{0,1,0},{255,255,255,255},{0,0,0,0},0,0,0,0 };
-	VERTEX3D verts[4] = {
-		{{ -100,0,100},{0,1,0},{255,255,255,255},{0,0,0,0},0,0,0,0},
-		{{ 100,0,100},{0,1,0},{255,255,255,255},{0,0,0,0},1,0,1,0},
-		{{ -100,0,0},{0,1,0},{255,255,255,255},{0,0,0,0},0,1,0,1},
-		{{ 100,0,0},{0,1,0},{255,255,255,255},{0,0,0,0},1,1,1,0}
-	};
-	DxLib::SetCameraPositionAndTargetAndUpVec(VGet(0, 2, -10), VGet(0, 0, 10), VGet(0, 1, 0));
-	SetCameraNearFar(0.5, 150.0f);
-	DxLib::SetupCamera_Perspective(3.14f / 4.0f);
+	//3D実験用コード
+	//VERTEX3D ver = { { -1,0,10},{0,1,0},{255,255,255,255},{0,0,0,0},0,0,0,0 };
+	//VERTEX3D verts[4] = {
+	//	{{ -100,0,100},{0,1,0},{255,255,255,255},{0,0,0,0},0,0,0,0},
+	//	{{ 100,0,100},{0,1,0},{255,255,255,255},{0,0,0,0},1,0,1,0},
+	//	{{ -100,0,0},{0,1,0},{255,255,255,255},{0,0,0,0},0,1,0,1},
+	//	{{ 100,0,0},{0,1,0},{255,255,255,255},{0,0,0,0},1,1,1,0}
+	//};
+	//DxLib::SetCameraPositionAndTargetAndUpVec(VGet(0, 2, -10), VGet(0, 0, 10), VGet(0, 1, 0));
+	//SetCameraNearFar(0.5, 150.0f);
+	//DxLib::SetupCamera_Perspective(3.14f / 4.0f);
 	unsigned short int indices[6] = { 0,1,2,1,3,2 };
 	
 
@@ -69,7 +72,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_  LPSTR, _In_ int) {
 				float lerp = static_cast<float>(n.y) / 450.0f;
 				DrawBox(n.x, n.y,
 					n.x + note_width,
-					n.y + note_height*lerp, 0xaaccff,true);
+					static_cast<int>(n.y + note_height*lerp), 0xaaccff,true);
 				n.y += note_speed;
 				if (n.y > note_line_bottom) {
 					n.isEnable = false;
@@ -99,38 +102,38 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_  LPSTR, _In_ int) {
 
 		SetDrawScreen(DX_SCREEN_BACK);
 		ClearDrawScreen();
-		DrawBox(0, 0, 640, 480, 0x888800, true);
-		//DrawModiGraph(320 - 20, 50,
-		//	320 + 20, 50,
-		//	320 + 220, 450,
-		//	320 - 220, 450, rt, false);
-		//GraphFilter(rt, DX_GRAPH_FILTER_GAUSS, 8, 800);
-		//SetDrawBlendMode(DX_BLENDMODE_ADD, 168);
-		//DrawModiGraph(320 - 20, 50,
-		//	320 + 20, 50,
-		//	320 + 220, 450,
-		//	320 - 220, 450, rt, false);
-		//GraphFilter(rt, DX_GRAPH_FILTER_GAUSS, 16, 800);
-		//DrawModiGraph(320 - 20, 50,
-		//	320 + 20, 50,
-		//	320 + 220, 450,
-		//	320 - 220, 450, rt, false);
-		//GraphFilter(rt, DX_GRAPH_FILTER_GAUSS, 32, 1600);
-		//DrawModiGraph(320 - 20, 50,
-		//	320 + 20, 50,
-		//	320 + 220, 450,
-		//	320 - 220, 450, rt, false);
+		//DrawBox(0, 0, 640, 480, 0x888800, true);
+		DrawModiGraph(320 - 20, 50,
+			320 + 20, 50,
+			320 + 220, 450,
+			320 - 220, 450, rt, false);
+		GraphFilter(rt, DX_GRAPH_FILTER_GAUSS, 8, 800);
+		SetDrawBlendMode(DX_BLENDMODE_ADD, 168);
+		DrawModiGraph(320 - 20, 50,
+			320 + 20, 50,
+			320 + 220, 450,
+			320 - 220, 450, rt, false);
+		GraphFilter(rt, DX_GRAPH_FILTER_GAUSS, 16, 800);
+		DrawModiGraph(320 - 20, 50,
+			320 + 20, 50,
+			320 + 220, 450,
+			320 - 220, 450, rt, false);
+		GraphFilter(rt, DX_GRAPH_FILTER_GAUSS, 32, 1600);
+		DrawModiGraph(320 - 20, 50,
+			320 + 20, 50,
+			320 + 220, 450,
+			320 - 220, 450, rt, false);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		
-		
-		// Ｚバッファを有効にする
-		SetUseZBuffer3D(TRUE);
+		//3D実験用コード
+		//// Ｚバッファを有効にする
+		//SetUseZBuffer3D(TRUE);
 
-		// Ｚバッファへの書き込みを有効にする
-		SetWriteZBuffer3D(TRUE);
+		//// Ｚバッファへの書き込みを有効にする
+		//SetWriteZBuffer3D(TRUE);
 
-		DrawPolygonIndexed3D(verts, 4, indices, 2, rt, true);
-		DrawSphere3D(VGet(320, 200, 0), 10.0f, 32, 0xff0000, 0xffffff, true);
+		//DrawPolygonIndexed3D(verts, 4, indices, 2, rt, true);
+		//DrawSphere3D(VGet(320, 200, 0), 10.0f, 32, 0xff0000, 0xffffff, true);
 		ScreenFlip();
 	}
 	DxLib_End();
