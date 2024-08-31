@@ -2,6 +2,7 @@
 
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+	SetWindowText(L"BlurBloom");
 	ChangeWindowMode(true);
 	DxLib_Init();
 	SetDrawScreen(DX_SCREEN_BACK);
