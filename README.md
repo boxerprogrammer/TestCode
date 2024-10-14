@@ -256,12 +256,20 @@ SpriteOutlineを応用し、時間経過でアニメーションさせて色ん�
 ## Terrain
 ハイトマップによるTerrainテスト。高さマップじたいはシェーダを使っておらず、画像をLoadSoftImageで読み込んでおり、それをハイトマップとして利用している。
 また、この元のマップ画像は左クリックで加算、右クリックで減算することで、リアルタイムに高低差を作る事ができるサンプル
+
 ![image](https://github.com/user-attachments/assets/07b5cba5-0d7f-4780-ad4d-259824de0c2a)
 
 ## TrailRenderer
 動きによって尾を引くような画像を生成するテスト
 画像だが、ベクトルの変化によっては曲線を描くように画像を歪ませている
+
 ![image](https://github.com/user-attachments/assets/55bd12f5-5303-42a5-8299-6be45650a7d9)
+
+## Transition
+様々な画面の画面遷移(トランジション)を設計
+詳しい解説はQiita
+https://qiita.com/tsuchinokoman/items/b6d7f500ab0d05478a2c
+を参考にしてください
 
 ## UnityToDxLib
 Unityの3D空間上の配置データをスクリプトでバイナリ出力し、そのバイナリをDxLibで読み取り、Unityと同じ位置にオブジェクトを表示するサンプル
