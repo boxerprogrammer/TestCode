@@ -268,8 +268,15 @@ SpriteOutlineを応用し、時間経過でアニメーションさせて色ん�
 ## Transition
 様々な画面の画面遷移(トランジション)を設計
 詳しい解説はQiita
+
 https://qiita.com/tsuchinokoman/items/b6d7f500ab0d05478a2c
-を参考にしてください
+
+を参考にしてください。(画像はアイリスアウト)
+
+![image](https://github.com/user-attachments/assets/c93c25dc-4e33-4958-b96c-ca46116a02ac)
+
+
+
 
 ## UnityToDxLib
 Unityの3D空間上の配置データをスクリプトでバイナリ出力し、そのバイナリをDxLibで読み取り、Unityと同じ位置にオブジェクトを表示するサンプル
