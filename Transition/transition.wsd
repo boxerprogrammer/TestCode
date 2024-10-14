@@ -1,0 +1,25 @@
+@startuml
+class Transitor
+{
+	- int interval_;//切り替え時間
+	- int frame_=0;//切り替え中のフレーム数
+	- int oldRT_=0;//切り替え前の画面
+	- int newRT_=0;//切り替え後の画面
+
+	+ Transitor(int interval = 60) : interval_(interval) {}
+	+ virtual ~Transitor();
+	+ void Start();
+	+ virtual bool IsEnd()const;
+	+ virtual void Update()=0;
+	+ virtual void Draw()=0;
+}
+
+FadeTransitor -|> Transitor
+Transitor <|-- WipeTransitor
+Transitor <|-- StripTransitor
+Transitor <|-- TileTransitor
+Transitor <|-- FallTileTransitor
+Transitor <|- IrisTransitor
+Transitor <|-- PushTransitor
+
+@enduml

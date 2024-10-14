@@ -13,10 +13,219 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{1bec52d1-9fe0-49a8-8926-1c9a22e061bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Transition">
+      <UniqueIdentifier>{20b9f2bb-19a8-448c-bd12-5f0ef7adfa46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File">
+      <UniqueIdentifier>{da123009-4f45-4a87-b290-3703caee47a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemy">
+      <UniqueIdentifier>{aa21351b-8409-48dd-b158-a3787167a868}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Background">
+      <UniqueIdentifier>{b3c5d3a8-d05f-47ab-a3a3-9a8f957428c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Geometry.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="MimicFile.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="StringUtility.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\TitleScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\ContinueScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameoverScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\KeyconfigScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\PauseScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Transition\PushTransitor.cpp">
+      <Filter>Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Transition\StripTransitor.cpp">
+      <Filter>Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Transition\TileTransitor.cpp">
+      <Filter>Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Transition\Transitor.cpp">
+      <Filter>Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Transition\WipeTransitor.cpp">
+      <Filter>Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Transition\FadeTransitor.cpp">
+      <Filter>Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Transition\FallTileTransitor.cpp">
+      <Filter>Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Transition\FragmentTransitor.cpp">
+      <Filter>Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Transition\IrisTransitor.cpp">
+      <Filter>Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="File\ImageFile.cpp">
+      <Filter>File</Filter>
+    </ClCompile>
+    <ClCompile Include="File\ModelFile.cpp">
+      <Filter>File</Filter>
+    </ClCompile>
+    <ClCompile Include="File\SoundFile.cpp">
+      <Filter>File</Filter>
+    </ClCompile>
+    <ClCompile Include="File\File.cpp">
+      <Filter>File</Filter>
+    </ClCompile>
+    <ClCompile Include="File\FileManager.cpp">
+      <Filter>File</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\Slime.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\Enemy.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\EnemyManager.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Background\Background.cpp">
+      <Filter>Background</Filter>
+    </ClCompile>
+    <ClCompile Include="Background\BGPart.cpp">
+      <Filter>Background</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Geometry.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MimicFile.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="StringUtility.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\TitleScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\ContinueScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameoverScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\KeyconfigScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\PauseScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Transition\IrisTransitor.h">
+      <Filter>Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Transition\PushTransitor.h">
+      <Filter>Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Transition\StripTransitor.h">
+      <Filter>Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Transition\TileTransitor.h">
+      <Filter>Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Transition\Transitor.h">
+      <Filter>Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Transition\WipeTransitor.h">
+      <Filter>Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Transition\FadeTransitor.h">
+      <Filter>Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Transition\FallTileTransitor.h">
+      <Filter>Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Transition\FragmentTransitor.h">
+      <Filter>Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="File\ImageFile.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File\ModelFile.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File\SoundFile.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File\File.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File\FileManager.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\EnemyManager.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\Slime.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\Enemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Background\BGPart.h">
+      <Filter>Background</Filter>
+    </ClInclude>
+    <ClInclude Include="Background\Background.h">
+      <Filter>Background</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

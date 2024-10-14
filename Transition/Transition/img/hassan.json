@@ -1,0 +1,3765 @@
+{
+  "frames": [
+    {
+      "filename": "PNG/sp_atk/sp_atk_8.png",
+      "frame": {
+        "x": 4,
+        "y": 4,
+        "w": 288,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 288,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_27.png",
+      "frame": {
+        "x": 4,
+        "y": 140,
+        "w": 288,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 288,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_20.png",
+      "frame": {
+        "x": 4,
+        "y": 276,
+        "w": 122,
+        "h": 62
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 120,
+        "y": 65,
+        "w": 122,
+        "h": 62
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_19.png",
+      "frame": {
+        "x": 134,
+        "y": 276,
+        "w": 122,
+        "h": 60
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 117,
+        "y": 67,
+        "w": 122,
+        "h": 60
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_21.png",
+      "frame": {
+        "x": 300,
+        "y": 4,
+        "w": 126,
+        "h": 54
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 125,
+        "y": 69,
+        "w": 126,
+        "h": 54
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_20.png",
+      "frame": {
+        "x": 300,
+        "y": 138,
+        "w": 114,
+        "h": 54
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 116,
+        "y": 73,
+        "w": 114,
+        "h": 54
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_22.png",
+      "frame": {
+        "x": 300,
+        "y": 260,
+        "w": 122,
+        "h": 48
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 131,
+        "y": 76,
+        "w": 122,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/air_atk/air_atk_6.png",
+      "frame": {
+        "x": 356,
+        "y": 260,
+        "w": 84,
+        "h": 67
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 120,
+        "y": 59,
+        "w": 84,
+        "h": 67
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/air_atk/air_atk_7.png",
+      "frame": {
+        "x": 362,
+        "y": 4,
+        "w": 80,
+        "h": 67
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 125,
+        "y": 60,
+        "w": 80,
+        "h": 67
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_18.png",
+      "frame": {
+        "x": 362,
+        "y": 92,
+        "w": 90,
+        "h": 57
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 120,
+        "y": 70,
+        "w": 90,
+        "h": 57
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/air_atk/air_atk_5.png",
+      "frame": {
+        "x": 356,
+        "y": 352,
+        "w": 84,
+        "h": 61
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 117,
+        "y": 63,
+        "w": 84,
+        "h": 61
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_17.png",
+      "frame": {
+        "x": 134,
+        "y": 344,
+        "w": 71,
+        "h": 65
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 122,
+        "y": 62,
+        "w": 71,
+        "h": 65
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/air_atk/air_atk_4.png",
+      "frame": {
+        "x": 213,
+        "y": 344,
+        "w": 73,
+        "h": 59
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 66,
+        "w": 73,
+        "h": 59
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_18.png",
+      "frame": {
+        "x": 213,
+        "y": 411,
+        "w": 91,
+        "h": 46
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 147,
+        "y": 81,
+        "w": 91,
+        "h": 46
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/air_atk/air_atk_3.png",
+      "frame": {
+        "x": 4,
+        "y": 346,
+        "w": 70,
+        "h": 59
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 66,
+        "w": 70,
+        "h": 59
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_18.png",
+      "frame": {
+        "x": 82,
+        "y": 346,
+        "w": 91,
+        "h": 41
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 80,
+        "y": 83,
+        "w": 91,
+        "h": 41
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_17.png",
+      "frame": {
+        "x": 425,
+        "y": 352,
+        "w": 79,
+        "h": 47
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 147,
+        "y": 80,
+        "w": 79,
+        "h": 47
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_8.png",
+      "frame": {
+        "x": 362,
+        "y": 190,
+        "w": 75,
+        "h": 49
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 118,
+        "y": 78,
+        "w": 75,
+        "h": 49
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_8.png",
+      "frame": {
+        "x": 427,
+        "y": 92,
+        "w": 75,
+        "h": 49
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 118,
+        "y": 78,
+        "w": 75,
+        "h": 49
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_12.png",
+      "frame": {
+        "x": 431,
+        "y": 247,
+        "w": 68,
+        "h": 52
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 111,
+        "y": 75,
+        "w": 68,
+        "h": 52
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_12.png",
+      "frame": {
+        "x": 312,
+        "y": 390,
+        "w": 95,
+        "h": 36
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 65,
+        "y": 91,
+        "w": 95,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/air_atk/air_atk_2.png",
+      "frame": {
+        "x": 425,
+        "y": 439,
+        "w": 53,
+        "h": 66
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 59,
+        "w": 53,
+        "h": 66
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_12.png",
+      "frame": {
+        "x": 437,
+        "y": 4,
+        "w": 73,
+        "h": 45
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 82,
+        "w": 73,
+        "h": 45
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_9.png",
+      "frame": {
+        "x": 4,
+        "y": 413,
+        "w": 74,
+        "h": 44
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 129,
+        "y": 83,
+        "w": 74,
+        "h": 44
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_9.png",
+      "frame": {
+        "x": 131,
+        "y": 417,
+        "w": 74,
+        "h": 44
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 129,
+        "y": 83,
+        "w": 74,
+        "h": 44
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_13.png",
+      "frame": {
+        "x": 213,
+        "y": 465,
+        "w": 78,
+        "h": 39
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 82,
+        "y": 88,
+        "w": 78,
+        "h": 39
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_11.png",
+      "frame": {
+        "x": 56,
+        "y": 445,
+        "w": 66,
+        "h": 45
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 130,
+        "y": 82,
+        "w": 66,
+        "h": 45
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_11.png",
+      "frame": {
+        "x": 445,
+        "y": 175,
+        "w": 66,
+        "h": 45
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 130,
+        "y": 82,
+        "w": 66,
+        "h": 45
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_10.png",
+      "frame": {
+        "x": 484,
+        "y": 85,
+        "w": 64,
+        "h": 46
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 128,
+        "y": 81,
+        "w": 64,
+        "h": 46
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_10.png",
+      "frame": {
+        "x": 490,
+        "y": 4,
+        "w": 64,
+        "h": 46
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 128,
+        "y": 81,
+        "w": 64,
+        "h": 46
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_14.png",
+      "frame": {
+        "x": 480,
+        "y": 323,
+        "w": 65,
+        "h": 41
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 95,
+        "y": 86,
+        "w": 65,
+        "h": 41
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_10.png",
+      "frame": {
+        "x": 356,
+        "y": 444,
+        "w": 52,
+        "h": 47
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 108,
+        "y": 20,
+        "w": 52,
+        "h": 47
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_9.png",
+      "frame": {
+        "x": 491,
+        "y": 228,
+        "w": 53,
+        "h": 46
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 113,
+        "y": 16,
+        "w": 53,
+        "h": 46
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/take_hit/take_hit_4.png",
+      "frame": {
+        "x": 486,
+        "y": 396,
+        "w": 44,
+        "h": 53
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 119,
+        "y": 74,
+        "w": 44,
+        "h": 53
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_11.png",
+      "frame": {
+        "x": 4,
+        "y": 495,
+        "w": 52,
+        "h": 44
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 108,
+        "y": 33,
+        "w": 52,
+        "h": 44
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_13.png",
+      "frame": {
+        "x": 299,
+        "y": 493,
+        "w": 60,
+        "h": 37
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 90,
+        "w": 60,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_2.png",
+      "frame": {
+        "x": 344,
+        "y": 499,
+        "w": 60,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 90,
+        "w": 60,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_3.png",
+      "frame": {
+        "x": 486,
+        "y": 457,
+        "w": 58,
+        "h": 37
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 115,
+        "y": 90,
+        "w": 58,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/1_atk/1_atk_3.png",
+      "frame": {
+        "x": 412,
+        "y": 513,
+        "w": 58,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 115,
+        "y": 90,
+        "w": 58,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_3.png",
+      "frame": {
+        "x": 130,
+        "y": 469,
+        "w": 58,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 115,
+        "y": 90,
+        "w": 58,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_16.png",
+      "frame": {
+        "x": 56,
+        "y": 498,
+        "w": 42,
+        "h": 51
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 131,
+        "y": 76,
+        "w": 42,
+        "h": 51
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_3.png",
+      "frame": {
+        "x": 478,
+        "y": 523,
+        "w": 59,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 113,
+        "y": 91,
+        "w": 59,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_25.png",
+      "frame": {
+        "x": 196,
+        "y": 512,
+        "w": 62,
+        "h": 34
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 160,
+        "y": 93,
+        "w": 62,
+        "h": 34
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/take_hit/take_hit_3.png",
+      "frame": {
+        "x": 106,
+        "y": 514,
+        "w": 41,
+        "h": 51
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 120,
+        "y": 76,
+        "w": 41,
+        "h": 51
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_4.png",
+      "frame": {
+        "x": 519,
+        "y": 157,
+        "w": 59,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 112,
+        "y": 92,
+        "w": 59,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_19.png",
+      "frame": {
+        "x": 538,
+        "y": 76,
+        "w": 63,
+        "h": 32
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 46,
+        "y": 95,
+        "w": 63,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_22.png",
+      "frame": {
+        "x": 544,
+        "y": 4,
+        "w": 59,
+        "h": 34
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 171,
+        "y": 93,
+        "w": 59,
+        "h": 34
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_23.png",
+      "frame": {
+        "x": 529,
+        "y": 289,
+        "w": 59,
+        "h": 34
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 171,
+        "y": 93,
+        "w": 59,
+        "h": 34
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_24.png",
+      "frame": {
+        "x": 545,
+        "y": 200,
+        "w": 59,
+        "h": 34
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 171,
+        "y": 93,
+        "w": 59,
+        "h": 34
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_21.png",
+      "frame": {
+        "x": 538,
+        "y": 356,
+        "w": 59,
+        "h": 34
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 171,
+        "y": 93,
+        "w": 59,
+        "h": 34
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_14.png",
+      "frame": {
+        "x": 538,
+        "y": 423,
+        "w": 66,
+        "h": 30
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 130,
+        "y": 97,
+        "w": 66,
+        "h": 30
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_13.png",
+      "frame": {
+        "x": 545,
+        "y": 497,
+        "w": 66,
+        "h": 30
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 106,
+        "y": 97,
+        "w": 66,
+        "h": 30
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/take_hit/take_hit_2.png",
+      "frame": {
+        "x": 344,
+        "y": 544,
+        "w": 40,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 119,
+        "y": 79,
+        "w": 40,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_7.png",
+      "frame": {
+        "x": 392,
+        "y": 558,
+        "w": 51,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 90,
+        "w": 51,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_7.png",
+      "frame": {
+        "x": 4,
+        "y": 557,
+        "w": 51,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 90,
+        "w": 51,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_12.png",
+      "frame": {
+        "x": 165,
+        "y": 554,
+        "w": 50,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 90,
+        "w": 50,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_1.png",
+      "frame": {
+        "x": 223,
+        "y": 554,
+        "w": 48,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 135,
+        "y": 90,
+        "w": 48,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/1_atk/1_atk_1.png",
+      "frame": {
+        "x": 576,
+        "y": 423,
+        "w": 48,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 135,
+        "y": 90,
+        "w": 48,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_1.png",
+      "frame": {
+        "x": 578,
+        "y": 71,
+        "w": 48,
+        "h": 37
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 135,
+        "y": 90,
+        "w": 48,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_5.png",
+      "frame": {
+        "x": 586,
+        "y": 4,
+        "w": 47,
+        "h": 37
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 90,
+        "w": 47,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_5.png",
+      "frame": {
+        "x": 586,
+        "y": 127,
+        "w": 47,
+        "h": 37
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 90,
+        "w": 47,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_6.png",
+      "frame": {
+        "x": 571,
+        "y": 267,
+        "w": 47,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 90,
+        "w": 47,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_6.png",
+      "frame": {
+        "x": 587,
+        "y": 182,
+        "w": 47,
+        "h": 37
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 90,
+        "w": 47,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_15.png",
+      "frame": {
+        "x": 571,
+        "y": 312,
+        "w": 49,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 112,
+        "y": 92,
+        "w": 49,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_5.png",
+      "frame": {
+        "x": 279,
+        "y": 561,
+        "w": 49,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 148,
+        "y": 92,
+        "w": 49,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_13.png",
+      "frame": {
+        "x": 580,
+        "y": 355,
+        "w": 47,
+        "h": 36
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 113,
+        "y": 91,
+        "w": 47,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_4.png",
+      "frame": {
+        "x": 583,
+        "y": 468,
+        "w": 45,
+        "h": 37
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 90,
+        "w": 45,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_4.png",
+      "frame": {
+        "x": 583,
+        "y": 521,
+        "w": 45,
+        "h": 37
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 90,
+        "w": 45,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/1_atk/1_atk_4.png",
+      "frame": {
+        "x": 336,
+        "y": 600,
+        "w": 45,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 90,
+        "w": 45,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_14.png",
+      "frame": {
+        "x": 63,
+        "y": 557,
+        "w": 47,
+        "h": 35
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 112,
+        "y": 92,
+        "w": 47,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_16.png",
+      "frame": {
+        "x": 4,
+        "y": 602,
+        "w": 39,
+        "h": 41
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 147,
+        "y": 86,
+        "w": 39,
+        "h": 41
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_6.png",
+      "frame": {
+        "x": 106,
+        "y": 563,
+        "w": 45,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 179,
+        "y": 92,
+        "w": 45,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/1_atk/1_atk_6.png",
+      "frame": {
+        "x": 159,
+        "y": 599,
+        "w": 39,
+        "h": 39
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 122,
+        "y": 88,
+        "w": 39,
+        "h": 39
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_15.png",
+      "frame": {
+        "x": 206,
+        "y": 599,
+        "w": 41,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 124,
+        "y": 90,
+        "w": 41,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/defend/defend_7.png",
+      "frame": {
+        "x": 255,
+        "y": 604,
+        "w": 41,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 124,
+        "y": 90,
+        "w": 41,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_17.png",
+      "frame": {
+        "x": 53,
+        "y": 612,
+        "w": 50,
+        "h": 30
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 174,
+        "y": 90,
+        "w": 50,
+        "h": 30
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_16.png",
+      "frame": {
+        "x": 451,
+        "y": 567,
+        "w": 50,
+        "h": 30
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 191,
+        "y": 90,
+        "w": 50,
+        "h": 30
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_10.png",
+      "frame": {
+        "x": 389,
+        "y": 603,
+        "w": 42,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 118,
+        "y": 91,
+        "w": 42,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_8.png",
+      "frame": {
+        "x": 509,
+        "y": 571,
+        "w": 42,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 118,
+        "y": 91,
+        "w": 42,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_9.png",
+      "frame": {
+        "x": 439,
+        "y": 605,
+        "w": 42,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 118,
+        "y": 91,
+        "w": 42,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_11.png",
+      "frame": {
+        "x": 559,
+        "y": 574,
+        "w": 42,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 118,
+        "y": 91,
+        "w": 42,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/defend/defend_2.png",
+      "frame": {
+        "x": 624,
+        "y": 355,
+        "w": 38,
+        "h": 39
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 88,
+        "w": 38,
+        "h": 39
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/run/run_4.png",
+      "frame": {
+        "x": 623,
+        "y": 59,
+        "w": 40,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 123,
+        "y": 90,
+        "w": 40,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_7.png",
+      "frame": {
+        "x": 631,
+        "y": 4,
+        "w": 46,
+        "h": 32
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 192,
+        "y": 95,
+        "w": 46,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/1_atk/1_atk_5.png",
+      "frame": {
+        "x": 631,
+        "y": 104,
+        "w": 40,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 121,
+        "y": 90,
+        "w": 40,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/run/run_2.png",
+      "frame": {
+        "x": 626,
+        "y": 237,
+        "w": 40,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 125,
+        "y": 90,
+        "w": 40,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/j_down/j_down_1.png",
+      "frame": {
+        "x": 628,
+        "y": 282,
+        "w": 32,
+        "h": 46
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 129,
+        "y": 79,
+        "w": 32,
+        "h": 46
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_14.png",
+      "frame": {
+        "x": 632,
+        "y": 149,
+        "w": 34,
+        "h": 43
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 127,
+        "y": 84,
+        "w": 34,
+        "h": 43
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/defend/defend_6.png",
+      "frame": {
+        "x": 609,
+        "y": 574,
+        "w": 34,
+        "h": 43
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 127,
+        "y": 84,
+        "w": 34,
+        "h": 43
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_28.png",
+      "frame": {
+        "x": 628,
+        "y": 468,
+        "w": 43,
+        "h": 34
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 162,
+        "y": 92,
+        "w": 43,
+        "h": 34
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/1_atk/1_atk_7.png",
+      "frame": {
+        "x": 632,
+        "y": 402,
+        "w": 39,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 90,
+        "w": 39,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/run/run_8.png",
+      "frame": {
+        "x": 628,
+        "y": 510,
+        "w": 39,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 124,
+        "y": 90,
+        "w": 39,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/j_down/j_down_2.png",
+      "frame": {
+        "x": 304,
+        "y": 645,
+        "w": 31,
+        "h": 46
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 129,
+        "y": 79,
+        "w": 31,
+        "h": 46
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_26.png",
+      "frame": {
+        "x": 358,
+        "y": 647,
+        "w": 47,
+        "h": 30
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 164,
+        "y": 95,
+        "w": 47,
+        "h": 30
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/run/run_6.png",
+      "frame": {
+        "x": 206,
+        "y": 644,
+        "w": 38,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 127,
+        "y": 90,
+        "w": 38,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_29.png",
+      "frame": {
+        "x": 111,
+        "y": 606,
+        "w": 39,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 148,
+        "y": 91,
+        "w": 39,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_30.png",
+      "frame": {
+        "x": 489,
+        "y": 615,
+        "w": 39,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 91,
+        "w": 39,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/run/run_1.png",
+      "frame": {
+        "x": 536,
+        "y": 618,
+        "w": 39,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 123,
+        "y": 91,
+        "w": 39,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/run/run_5.png",
+      "frame": {
+        "x": 583,
+        "y": 625,
+        "w": 39,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 123,
+        "y": 91,
+        "w": 39,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/roll/roll_1.png",
+      "frame": {
+        "x": 630,
+        "y": 625,
+        "w": 39,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 127,
+        "y": 91,
+        "w": 39,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_15.png",
+      "frame": {
+        "x": 413,
+        "y": 649,
+        "w": 47,
+        "h": 29
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 208,
+        "y": 91,
+        "w": 47,
+        "h": 29
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/take_hit/take_hit_5.png",
+      "frame": {
+        "x": 668,
+        "y": 282,
+        "w": 37,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 119,
+        "y": 90,
+        "w": 37,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/defend/defend_3.png",
+      "frame": {
+        "x": 158,
+        "y": 646,
+        "w": 35,
+        "h": 39
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 88,
+        "w": 35,
+        "h": 39
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/defend/defend_5.png",
+      "frame": {
+        "x": 670,
+        "y": 327,
+        "w": 35,
+        "h": 39
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 88,
+        "w": 35,
+        "h": 39
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/defend/defend_4.png",
+      "frame": {
+        "x": 651,
+        "y": 555,
+        "w": 35,
+        "h": 39
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 88,
+        "w": 35,
+        "h": 39
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/j_down/j_down_3.png",
+      "frame": {
+        "x": 632,
+        "y": 200,
+        "w": 29,
+        "h": 46
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 129,
+        "y": 79,
+        "w": 29,
+        "h": 46
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/run/run_7.png",
+      "frame": {
+        "x": 252,
+        "y": 649,
+        "w": 44,
+        "h": 30
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 121,
+        "y": 88,
+        "w": 44,
+        "h": 30
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/run/run_3.png",
+      "frame": {
+        "x": 677,
+        "y": 602,
+        "w": 44,
+        "h": 30
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 122,
+        "y": 88,
+        "w": 44,
+        "h": 30
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_7.png",
+      "frame": {
+        "x": 675,
+        "y": 510,
+        "w": 34,
+        "h": 38
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 89,
+        "w": 34,
+        "h": 38
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_1.png",
+      "frame": {
+        "x": 674,
+        "y": 237,
+        "w": 34,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 132,
+        "y": 90,
+        "w": 34,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/defend/defend_1.png",
+      "frame": {
+        "x": 674,
+        "y": 149,
+        "w": 34,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 132,
+        "y": 90,
+        "w": 34,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/idle/idle_1.png",
+      "frame": {
+        "x": 671,
+        "y": 4,
+        "w": 34,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 132,
+        "y": 90,
+        "w": 34,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/take_hit/take_hit_1.png",
+      "frame": {
+        "x": 671,
+        "y": 49,
+        "w": 29,
+        "h": 42
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 128,
+        "y": 85,
+        "w": 29,
+        "h": 42
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/idle/idle_7.png",
+      "frame": {
+        "x": 679,
+        "y": 99,
+        "w": 35,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 130,
+        "y": 92,
+        "w": 35,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/idle/idle_5.png",
+      "frame": {
+        "x": 679,
+        "y": 374,
+        "w": 35,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 126,
+        "y": 92,
+        "w": 35,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/idle/idle_8.png",
+      "frame": {
+        "x": 679,
+        "y": 417,
+        "w": 34,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 131,
+        "y": 91,
+        "w": 34,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_17.png",
+      "frame": {
+        "x": 679,
+        "y": 461,
+        "w": 33,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 132,
+        "y": 90,
+        "w": 33,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_18.png",
+      "frame": {
+        "x": 304,
+        "y": 684,
+        "w": 33,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 132,
+        "y": 90,
+        "w": 33,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/take_hit/take_hit_6.png",
+      "frame": {
+        "x": 252,
+        "y": 687,
+        "w": 33,
+        "h": 37
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 132,
+        "y": 90,
+        "w": 33,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/1_atk/1_atk_8.png",
+      "frame": {
+        "x": 345,
+        "y": 685,
+        "w": 33,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 132,
+        "y": 90,
+        "w": 33,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/defend/defend_8.png",
+      "frame": {
+        "x": 677,
+        "y": 654,
+        "w": 33,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 132,
+        "y": 90,
+        "w": 33,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/roll/roll_2.png",
+      "frame": {
+        "x": 4,
+        "y": 649,
+        "w": 40,
+        "h": 30
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 124,
+        "y": 97,
+        "w": 40,
+        "h": 30
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/idle/idle_2.png",
+      "frame": {
+        "x": 468,
+        "y": 659,
+        "w": 33,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 131,
+        "y": 91,
+        "w": 33,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/sp_atk/sp_atk_1.png",
+      "frame": {
+        "x": 386,
+        "y": 686,
+        "w": 32,
+        "h": 37
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 132,
+        "y": 90,
+        "w": 32,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/roll/roll_3.png",
+      "frame": {
+        "x": 509,
+        "y": 662,
+        "w": 34,
+        "h": 34
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 123,
+        "y": 93,
+        "w": 34,
+        "h": 34
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/idle/idle_6.png",
+      "frame": {
+        "x": 4,
+        "y": 687,
+        "w": 33,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 128,
+        "y": 92,
+        "w": 33,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/idle/idle_4.png",
+      "frame": {
+        "x": 45,
+        "y": 687,
+        "w": 32,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 127,
+        "y": 92,
+        "w": 32,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_2.png",
+      "frame": {
+        "x": 85,
+        "y": 650,
+        "w": 30,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 134,
+        "y": 90,
+        "w": 30,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/idle/idle_3.png",
+      "frame": {
+        "x": 123,
+        "y": 689,
+        "w": 31,
+        "h": 35
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 129,
+        "y": 92,
+        "w": 31,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_16.png",
+      "frame": {
+        "x": 166,
+        "y": 689,
+        "w": 29,
+        "h": 37
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 132,
+        "y": 90,
+        "w": 29,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/roll/roll_4.png",
+      "frame": {
+        "x": 551,
+        "y": 669,
+        "w": 34,
+        "h": 31
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 128,
+        "y": 96,
+        "w": 34,
+        "h": 31
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/roll/roll_5.png",
+      "frame": {
+        "x": 593,
+        "y": 669,
+        "w": 34,
+        "h": 31
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 128,
+        "y": 96,
+        "w": 34,
+        "h": 31
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_15.png",
+      "frame": {
+        "x": 264,
+        "y": 276,
+        "w": 26,
+        "h": 40
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 134,
+        "y": 87,
+        "w": 26,
+        "h": 40
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_6.png",
+      "frame": {
+        "x": 635,
+        "y": 669,
+        "w": 28,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 133,
+        "y": 90,
+        "w": 28,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_5.png",
+      "frame": {
+        "x": 720,
+        "y": 461,
+        "w": 28,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 133,
+        "y": 90,
+        "w": 28,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_4.png",
+      "frame": {
+        "x": 708,
+        "y": 49,
+        "w": 28,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 133,
+        "y": 90,
+        "w": 28,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/1_atk/1_atk_2.png",
+      "frame": {
+        "x": 713,
+        "y": 4,
+        "w": 28,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 136,
+        "y": 90,
+        "w": 28,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/2_atk/2_atk_2.png",
+      "frame": {
+        "x": 686,
+        "y": 194,
+        "w": 28,
+        "h": 37
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 136,
+        "y": 90,
+        "w": 28,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_2.png",
+      "frame": {
+        "x": 716,
+        "y": 142,
+        "w": 28,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 136,
+        "y": 90,
+        "w": 28,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_3.png",
+      "frame": {
+        "x": 722,
+        "y": 94,
+        "w": 27,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 134,
+        "y": 90,
+        "w": 27,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_23.png",
+      "frame": {
+        "x": 694,
+        "y": 552,
+        "w": 26,
+        "h": 38
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 131,
+        "y": 89,
+        "w": 26,
+        "h": 38
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/roll/roll_6.png",
+      "frame": {
+        "x": 721,
+        "y": 506,
+        "w": 26,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 132,
+        "y": 90,
+        "w": 26,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_26.png",
+      "frame": {
+        "x": 715,
+        "y": 598,
+        "w": 26,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 132,
+        "y": 90,
+        "w": 26,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/air_atk/air_atk_1.png",
+      "frame": {
+        "x": 728,
+        "y": 551,
+        "w": 24,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 134,
+        "y": 89,
+        "w": 24,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_24.png",
+      "frame": {
+        "x": 431,
+        "y": 686,
+        "w": 26,
+        "h": 33
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 131,
+        "y": 94,
+        "w": 26,
+        "h": 33
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/3_atk/3_atk_25.png",
+      "frame": {
+        "x": 211,
+        "y": 689,
+        "w": 26,
+        "h": 33
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 131,
+        "y": 95,
+        "w": 26,
+        "h": 33
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/j_up/j_up_1.png",
+      "frame": {
+        "x": 721,
+        "y": 417,
+        "w": 22,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 135,
+        "y": 90,
+        "w": 22,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/j_up/j_up_2.png",
+      "frame": {
+        "x": 671,
+        "y": 699,
+        "w": 22,
+        "h": 35
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 135,
+        "y": 90,
+        "w": 22,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/j_up/j_up_3.png",
+      "frame": {
+        "x": 714,
+        "y": 699,
+        "w": 22,
+        "h": 35
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 135,
+        "y": 90,
+        "w": 22,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "PNG/death/death_19.png",
+      "frame": {
+        "x": 545,
+        "y": 267,
+        "w": 13,
+        "h": 14
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 147,
+        "y": 113,
+        "w": 13,
+        "h": 14
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "hassan.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 756,
+      "h": 726
+    },
+    "scale": 1
+  }
+}

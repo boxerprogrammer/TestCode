@@ -1,0 +1,915 @@
+{
+  "frames": [
+    {
+      "filename": "punch5.png",
+      "frame": {
+        "x": 4,
+        "y": 4,
+        "w": 62,
+        "h": 42
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 18,
+        "w": 62,
+        "h": 42
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "punch4.png",
+      "frame": {
+        "x": 74,
+        "y": 4,
+        "w": 63,
+        "h": 41
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 19,
+        "w": 63,
+        "h": 41
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "kick3.png",
+      "frame": {
+        "x": 145,
+        "y": 4,
+        "w": 45,
+        "h": 54
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 6,
+        "w": 45,
+        "h": 54
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "punch3.png",
+      "frame": {
+        "x": 74,
+        "y": 53,
+        "w": 63,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 23,
+        "w": 63,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "punch2.png",
+      "frame": {
+        "x": 4,
+        "y": 54,
+        "w": 59,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 23,
+        "w": 59,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "kick2.png",
+      "frame": {
+        "x": 145,
+        "y": 66,
+        "w": 36,
+        "h": 56
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 29,
+        "y": 4,
+        "w": 36,
+        "h": 56
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "crouch-kick4.png",
+      "frame": {
+        "x": 71,
+        "y": 98,
+        "w": 64,
+        "h": 29
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 31,
+        "w": 64,
+        "h": 29
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "punch6.png",
+      "frame": {
+        "x": 4,
+        "y": 99,
+        "w": 45,
+        "h": 37
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 23,
+        "w": 45,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "crouch-kick3.png",
+      "frame": {
+        "x": 143,
+        "y": 130,
+        "w": 61,
+        "h": 25
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 35,
+        "w": 61,
+        "h": 25
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "hurt1.png",
+      "frame": {
+        "x": 189,
+        "y": 66,
+        "w": 37,
+        "h": 41
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 10,
+        "y": 19,
+        "w": 37,
+        "h": 41
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "hurt2.png",
+      "frame": {
+        "x": 198,
+        "y": 4,
+        "w": 37,
+        "h": 41
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 10,
+        "y": 19,
+        "w": 37,
+        "h": 41
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "kick4.png",
+      "frame": {
+        "x": 57,
+        "y": 135,
+        "w": 45,
+        "h": 33
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 37,
+        "y": 27,
+        "w": 45,
+        "h": 33
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "crouch-kick2.png",
+      "frame": {
+        "x": 212,
+        "y": 115,
+        "w": 55,
+        "h": 25
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 35,
+        "w": 55,
+        "h": 25
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "punch1.png",
+      "frame": {
+        "x": 4,
+        "y": 144,
+        "w": 36,
+        "h": 36
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 11,
+        "y": 24,
+        "w": 36,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "jump1.png",
+      "frame": {
+        "x": 234,
+        "y": 53,
+        "w": 29,
+        "h": 44
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 25,
+        "y": 16,
+        "w": 29,
+        "h": 44
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "jump2.png",
+      "frame": {
+        "x": 271,
+        "y": 4,
+        "w": 29,
+        "h": 44
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 25,
+        "y": 16,
+        "w": 29,
+        "h": 44
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "kick1.png",
+      "frame": {
+        "x": 271,
+        "y": 56,
+        "w": 30,
+        "h": 41
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 27,
+        "y": 19,
+        "w": 30,
+        "h": 41
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "flying-kick2.png",
+      "frame": {
+        "x": 308,
+        "y": 4,
+        "w": 43,
+        "h": 28
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 29,
+        "y": 17,
+        "w": 43,
+        "h": 28
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "flying-kick1.png",
+      "frame": {
+        "x": 275,
+        "y": 105,
+        "w": 43,
+        "h": 28
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 29,
+        "y": 17,
+        "w": 43,
+        "h": 28
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "walk6.png",
+      "frame": {
+        "x": 309,
+        "y": 40,
+        "w": 27,
+        "h": 44
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 26,
+        "y": 16,
+        "w": 27,
+        "h": 44
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "walk3.png",
+      "frame": {
+        "x": 326,
+        "y": 92,
+        "w": 27,
+        "h": 44
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 26,
+        "y": 16,
+        "w": 27,
+        "h": 44
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "crouch-kick5.png",
+      "frame": {
+        "x": 344,
+        "y": 40,
+        "w": 46,
+        "h": 25
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 35,
+        "w": 46,
+        "h": 25
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "kick5.png",
+      "frame": {
+        "x": 359,
+        "y": 4,
+        "w": 41,
+        "h": 28
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 37,
+        "y": 32,
+        "w": 41,
+        "h": 28
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "idle1.png",
+      "frame": {
+        "x": 110,
+        "y": 135,
+        "w": 23,
+        "h": 44
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 29,
+        "y": 16,
+        "w": 23,
+        "h": 44
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "idle2.png",
+      "frame": {
+        "x": 275,
+        "y": 141,
+        "w": 23,
+        "h": 43
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 29,
+        "y": 17,
+        "w": 23,
+        "h": 43
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "idle4.png",
+      "frame": {
+        "x": 48,
+        "y": 176,
+        "w": 23,
+        "h": 40
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 29,
+        "y": 20,
+        "w": 23,
+        "h": 40
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "idle3.png",
+      "frame": {
+        "x": 79,
+        "y": 176,
+        "w": 23,
+        "h": 40
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 29,
+        "y": 20,
+        "w": 23,
+        "h": 40
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "crouch1.png",
+      "frame": {
+        "x": 4,
+        "y": 188,
+        "w": 32,
+        "h": 29
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 22,
+        "y": 31,
+        "w": 32,
+        "h": 29
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "crouch2.png",
+      "frame": {
+        "x": 212,
+        "y": 148,
+        "w": 32,
+        "h": 29
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 22,
+        "y": 31,
+        "w": 32,
+        "h": 29
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "walk1.png",
+      "frame": {
+        "x": 141,
+        "y": 163,
+        "w": 17,
+        "h": 45
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 30,
+        "y": 15,
+        "w": 17,
+        "h": 45
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "fall1.png",
+      "frame": {
+        "x": 110,
+        "y": 187,
+        "w": 22,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 28,
+        "y": 16,
+        "w": 22,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "fall2.png",
+      "frame": {
+        "x": 166,
+        "y": 163,
+        "w": 22,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 28,
+        "y": 16,
+        "w": 22,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "walk4.png",
+      "frame": {
+        "x": 252,
+        "y": 148,
+        "w": 14,
+        "h": 45
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 15,
+        "w": 14,
+        "h": 45
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "walk2.png",
+      "frame": {
+        "x": 306,
+        "y": 141,
+        "w": 11,
+        "h": 46
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 14,
+        "w": 11,
+        "h": 46
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "walk5.png",
+      "frame": {
+        "x": 274,
+        "y": 192,
+        "w": 11,
+        "h": 46
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 33,
+        "y": 14,
+        "w": 11,
+        "h": 46
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "crouch-kick1.png",
+      "frame": {
+        "x": 196,
+        "y": 185,
+        "w": 24,
+        "h": 24
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 36,
+        "w": 24,
+        "h": 24
+      },
+      "sourceSize": {
+        "w": 82,
+        "h": 60
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "monk.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 512,
+      "h": 256
+    },
+    "scale": 1
+  }
+}

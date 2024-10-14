@@ -18,6 +18,75 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Background\Background.cpp" />
+    <ClCompile Include="Background\BGPart.cpp" />
+    <ClCompile Include="Enemy\Enemy.cpp" />
+    <ClCompile Include="Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Enemy\Slime.cpp" />
+    <ClCompile Include="File\File.cpp" />
+    <ClCompile Include="File\FileManager.cpp" />
+    <ClCompile Include="File\ImageFile.cpp" />
+    <ClCompile Include="File\ModelFile.cpp" />
+    <ClCompile Include="File\SoundFile.cpp" />
+    <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MimicFile.cpp" />
+    <ClCompile Include="Scene\ContinueScene.cpp" />
+    <ClCompile Include="Scene\GameoverScene.cpp" />
+    <ClCompile Include="Scene\GameScene.cpp" />
+    <ClCompile Include="Scene\KeyconfigScene.cpp" />
+    <ClCompile Include="Scene\PauseScene.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="StringUtility.cpp" />
+    <ClCompile Include="Transition\FadeTransitor.cpp" />
+    <ClCompile Include="Transition\FallTileTransitor.cpp" />
+    <ClCompile Include="Transition\FragmentTransitor.cpp" />
+    <ClCompile Include="Transition\IrisTransitor.cpp" />
+    <ClCompile Include="Transition\PushTransitor.cpp" />
+    <ClCompile Include="Transition\StripTransitor.cpp" />
+    <ClCompile Include="Transition\TileTransitor.cpp" />
+    <ClCompile Include="Transition\Transitor.cpp" />
+    <ClCompile Include="Transition\WipeTransitor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Background\Background.h" />
+    <ClInclude Include="Background\BGPart.h" />
+    <ClInclude Include="Enemy\Enemy.h" />
+    <ClInclude Include="Enemy\EnemyManager.h" />
+    <ClInclude Include="Enemy\Slime.h" />
+    <ClInclude Include="File\File.h" />
+    <ClInclude Include="File\FileManager.h" />
+    <ClInclude Include="File\ImageFile.h" />
+    <ClInclude Include="File\ModelFile.h" />
+    <ClInclude Include="File\SoundFile.h" />
+    <ClInclude Include="Geometry.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="MimicFile.h" />
+    <ClInclude Include="Scene\ContinueScene.h" />
+    <ClInclude Include="Scene\GameoverScene.h" />
+    <ClInclude Include="Scene\GameScene.h" />
+    <ClInclude Include="Scene\KeyconfigScene.h" />
+    <ClInclude Include="Scene\PauseScene.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Scene\TitleScene.h" />
+    <ClInclude Include="StringUtility.h" />
+    <ClInclude Include="Transition\FadeTransitor.h" />
+    <ClInclude Include="Transition\FallTileTransitor.h" />
+    <ClInclude Include="Transition\FragmentTransitor.h" />
+    <ClInclude Include="Transition\IrisTransitor.h" />
+    <ClInclude Include="Transition\PushTransitor.h" />
+    <ClInclude Include="Transition\StripTransitor.h" />
+    <ClInclude Include="Transition\TileTransitor.h" />
+    <ClInclude Include="Transition\Transitor.h" />
+    <ClInclude Include="Transition\WipeTransitor.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -117,9 +186,10 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(DXLIB_DIR)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(DXLIB_DIR)</AdditionalLibraryDirectories>
     </Link>
@@ -140,9 +210,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
