@@ -60,6 +60,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			GetMousePoint(&mx, &my);
 			auto spos = ConvScreenPosToWorldPos(VGet(mx, my, 0.0f));
 			rayVec = VSub(spos, cameraPos);
+			MV1Intersect
 		}
 		//angle += 0.05f;
 		MV1SetRotationXYZ(model,VGet(0.0f, angle, 0.0f));
