@@ -9,9 +9,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	if (DxLib_Init() == -1) {
 		return -1;
 	}
-	auto model=MV1LoadModel(L"model/tekito.mqo");
+	auto model=MV1LoadModel(L"model/sphere.mv1");
 	assert(model > 0);
-	auto img = LoadGraph(L"img/crismas.png");
+	auto img = LoadGraph(L"img/hole.png");
 	assert(img > 0);
 	auto vs = LoadVertexShader(L"VertexShader.vso");
 	assert(vs > 0);
@@ -27,8 +27,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		auto tmax = MV1GetMeshMaxPosition(model, i);
 		maxpos = VGet(std::max(tmax.x, maxpos.x), std::max(tmax.y, maxpos.y), std::max(tmax.z, maxpos.z));
 	}
-	//minpos.y /= 2;
-	//maxpos.y /= 2;
+
+	
 
 	SetWriteZBuffer3D(true);
 	SetUseZBuffer3D(true);
@@ -46,9 +46,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	UpdateShaderConstantBuffer(cbuffH);
 	SetDrawScreen(DX_SCREEN_BACK);
 	float angle = 0.0f;
+	int mouseInput = 0;
+	int lastMouseInput = 0;
+	VECTOR rayVec = {};
+	VECTOR cameraPos = VGet(150, 150, -500);
 	while (ProcessMessage() != -1) {
 		ClearDrawScreen();
-		angle += 0.05f;
+
+		lastMouseInput = mouseInput;
+		mouseInput=GetMouseInput();
+		if (!(lastMouseInput & MOUSE_INPUT_LEFT) && mouseInput) {
+			int mx, my;
+			GetMousePoint(&mx, &my);
+			auto spos = ConvScreenPosToWorldPos(VGet(mx, my, 0.0f));
+			rayVec = VSub(spos, cameraPos);
+		}
+		//angle += 0.05f;
 		MV1SetRotationXYZ(model,VGet(0.0f, angle, 0.0f));
 		UpdateShaderConstantBuffer(cbuffH);
 		MV1SetUseOrigShader(true);
@@ -57,7 +70,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		SetShaderConstantBuffer(cbuffH, DX_SHADERTYPE_PIXEL, 3);
 		SetUseTextureToShader(3, img);
 		DxLib::SetCameraNearFar(1.0f, 1000.0f);
-		SetCameraPositionAndTarget_UpVecY(VGet(150, 150, -500), VGet(0, 0, 0));
+		SetCameraPositionAndTarget_UpVecY(cameraPos, VGet(0, 0, 0));
 		MV1DrawModel(model);
 		MV1SetUseOrigShader(false);
 
