@@ -50,17 +50,33 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int lastMouseInput = 0;
 	VECTOR rayVec = {};
 	VECTOR cameraPos = VGet(150, 150, -500);
+	VECTOR hitPos;
+	bool isHit = false;
+	VECTOR normVEC;
 	while (ProcessMessage() != -1) {
 		ClearDrawScreen();
-
+		MV1SetupCollInfo(model);
 		lastMouseInput = mouseInput;
 		mouseInput=GetMouseInput();
 		if (!(lastMouseInput & MOUSE_INPUT_LEFT) && mouseInput) {
 			int mx, my;
 			GetMousePoint(&mx, &my);
 			auto spos = ConvScreenPosToWorldPos(VGet(mx, my, 0.0f));
+			auto epos = ConvScreenPosToWorldPos(VGet(mx, my, 1.0f));
 			rayVec = VSub(spos, cameraPos);
-			MV1Intersect
+			auto collInfo = MV1CollCheck_Line(model, 0, spos, epos);
+			if (collInfo.HitFlag) {
+				hitPos = collInfo.HitPosition;
+				isHit = true;
+				normVEC = collInfo.Normal;
+			}
+			else {
+				isHit = false;
+			}
+		}
+		if (isHit) {
+			DrawSphere3D(hitPos, 5.0f, 32, 0xff0000, 0xffffff, true);
+			DrawLine3D(hitPos, VAdd(hitPos, VScale(normVEC,30.0f)), 0xff0000);
 		}
 		//angle += 0.05f;
 		MV1SetRotationXYZ(model,VGet(0.0f, angle, 0.0f));
