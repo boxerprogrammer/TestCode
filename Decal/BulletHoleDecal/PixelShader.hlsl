@@ -21,31 +21,58 @@ cbuffer ConstatnBuffer : register(b3)
     ForDecalCBuff g_decal;
 }
 
+struct Axis3D
+{
+    float3 right;
+    float3 up;
+    float3 front;
+};
+
+struct DecalBox
+{
+    float3 pos;
+    int enable;
+    float3 size;
+    float dummy1;
+    float3 right;
+    float dummy2;
+    float3 up;
+    float dummy3;
+    float3 front;
+    float dummy4;
+};
+cbuffer ConstatnBuffer : register(b4)
+{
+    DecalBox g_decalBox[8];
+}
+
 SamplerState smp : register(s0); 
 Texture2D tex : register(t3);
 
 
 float4 main(PS_INPUT psinput) : SV_TARGET
 {
-    const float pi = 3.1415926535;
-    float2 uv;
-    //円柱マッピング
-    float2 pos = psinput.pos.xz;
-    pos = normalize(pos);
-    uv.x = (atan2(pos.y, pos.x) + pi) / (pi * 2.0);
-    uv.y = (g_decal.maxY - psinput.pos.y) / (g_decal.maxY - g_decal.minY);
-    
-    //球体マップ
-    //float3 pos = normalize(psinput.pos);
-    //float xzradius = length(pos.xz);
-    //float theta = atan2(pos.z, pos.x) + pi; //水平方向角度
-    //float phi = (pi / 2.0) - atan2(pos.y, xzradius); //垂直方向角度
-    //uv.x = theta / (pi * 2.0);
-    //uv.y = phi / pi;
-    
-    
-    float4 decal = tex.Sample(smp, uv);
-    if (decal.a == 0 || uv.y<0.0 || uv.y > 1.0)
+    float3 uvw=0;
+    float4 decal = 0;
+    for (int i = 0; i < 8; ++i)
+    {
+        if (g_decalBox[i].enable)
+        {
+            float3 vec = psinput.pos - g_decalBox[i].pos;
+            uvw = float3(dot(vec, g_decalBox[i].right), dot(vec, g_decalBox[i].up), dot(vec, g_decalBox[i].front));
+        
+            uvw /= g_decalBox[i].size;
+
+            if (abs(uvw.x) < 1.0 && abs(uvw.y) < 1.0 && abs(uvw.z) < 1.0)
+            {
+                uvw.xy += 1.0;
+                uvw.xy /= 2.0;
+                decal = tex.Sample(smp, uvw.xy);
+                break;
+            }
+        }
+    }
+    if (decal.a == 0)
     {
         decal.rgb = 1.0f;
     }
