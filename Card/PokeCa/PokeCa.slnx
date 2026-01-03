@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="PokeCa/PokeCa.vcxproj" Id="4f5b75f8-e59a-4209-9d99-4de15f2d72c3" />
+</Solution>
