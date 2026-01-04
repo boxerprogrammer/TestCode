@@ -5,6 +5,8 @@ Texture2D<float4> grad : register(t2);
 Texture2D<float4> monst : register(t3);
 Texture2D<float4> marble : register(t4);
 
+
+
 struct PSInput
 {
     float4 svpos : SV_POSITION;
@@ -26,7 +28,7 @@ float GenerateRandomFloat(float2 st)
     return frac(sin(dot(st.xy, float2(12.9898, 78.233))) * 43758.5453123);
 }
 
-float2 GenerateRandomFloat2(float2 st)
+float2 GenerateRandomFloat22(float2 st)
 {
     st = float2(dot(st, float2(127.1, 311.7)), dot(st, float2(269.5, 183.3)));
     return -1.0 + 2.0 * frac(sin(st) * 43758.5453123);
@@ -72,7 +74,7 @@ float GetViewAngle(float3 norm)
 
 float3 GenerateAngleRGB(float strength,float3 norm)
 {
-    float pi = 3.141592653589793;
+    const float pi = 3.1415926535;
     float angle = fmod(GetViewAngle(norm) * strength, pi) / pi; // 0.0 ～ 1.0
     float3 colorHSV = float3(angle, 1.0, 1.0);
     return HSB2RGB(colorHSV);
@@ -145,7 +147,7 @@ float hash12(float2 p)
 /// セル内のランダムな位置を取得
 float3 GetCellPosition(float2 cell)
 {
-    float2 randomOffset = GenerateRandomFloat2(cell);
+    float2 randomOffset = GenerateRandomFloat22(cell);
     float sgn = GenerateRandomFloat(cell);
     float affectValue = sign(sgn*2-1.0);
     return float3(cell + randomOffset * 0.5, affectValue);
@@ -257,16 +259,53 @@ float2 PseudoPDOffset(float2 tilt,float2 time,float strength,float damping)
     return delay * amp*strength/10.0;
 }
 
+///ミラーボールシェーダを作る
+///カードの向きで反射インデックスを変化させる
+float GetReflectionIndex(float2 normXY){
+    const float pi = 3.1415926535;
+    float angle = atan2(normXY.x, normXY.y);
+    float len = length(normXY);
+    float index = ((angle + pi) / (2.0 * pi)); //0～1に正規化
+    return frac(index);
+}
+
+//反射板情報構造体
+struct MirrorInfo
+{
+    float maskValue;
+    float reflectionIndex;
+};
+
+//反射板情報取得
+MirrorInfo GetMirrorInfo(float2 uv,float scale,float radius,float aspect)
+{
+    MirrorInfo info;
+    float2 aspectedScale = scale * float2(aspect,1.0);
+    float2 gridId = floor(uv * aspectedScale);
+    float2 cellUv = frac(uv * aspectedScale);
+    float2 randomOffset = GenerateRandomFloat22(gridId)-0.5;
+    float2 center = float2(0.5, 0.5);//    +randomOffset * 0.25;
+    float dist = distance(center, cellUv);
+    info.maskValue = 1.0 - smoothstep(radius - 0.02, radius, dist);
+    info.reflectionIndex = GenerateRandomFloat(gridId*17.31);
+    return info;
+}
+
+/// ピクセルシェーダーメイン関数
 float4 main(PSInput input) : SV_TARGET
 {
-    //float2 uv = input.uv*10;
-    //float2 p_i = floor(uv);
-    //float3 cp= GetCellPosition(p_i);
-    //return float4(frac(cp.xyz), 1);
-    //float celler = GetCellerNoise(input.uv, 4.0);
-    //return float4(celler, celler, celler, 1.0);
+    uint w, h, level;
+    tex.GetDimensions(0,w, h, level);
+    float aspect = float(w) / float(h);
+    const float pi = 3.1415926535;
+    float refIndex = GetReflectionIndex(input.norm.xy);
+    MirrorInfo mirrorInfo = GetMirrorInfo(input.uv, 25.0, 0.5, aspect);
+    float diff = abs(refIndex - mirrorInfo.reflectionIndex);
+    diff = min(diff, 1.0 - diff);
+    float mirrorBall = 1.0 - smoothstep(0.0, 0.25, diff);
+    mirrorBall *= mirrorInfo.maskValue;
     
-    //float2 r2 = GenerateRandomFloat2(input.uv);
+    
     float2 uv = input.uv;
     float tm = sin(time) + 1.0;
     float2 offset = PseudoPDOffset(input.norm.xy, tm, 5.0, 0.25);
@@ -309,24 +348,20 @@ float4 main(PSInput input) : SV_TARGET
         {
             float f = step(2.8, monCol.r + monCol.g + monCol.b);
             normTex.rg = -normTex.rg;
+            float4 mcol = float4(lerp(monCol.rgb+mirrorBall, monCol.rgb*mirrorBall, 0.15), monCol.a);
             float kiraFactor = 1 - saturate(dot(normalize(normTex.xyz * 2.0 - 1.0), input.norm.xyz));
-            float4 col = lerp(monCol, lerp(gcol2, monCol, 0.5), kiraFactor);
-            return lerp(monCol, col, f + 1 - monCol.r);
+            float4 col = lerp(monCol+mirrorBall, lerp(gcol2, monCol, 0.5), kiraFactor);
+            return lerp(mcol, col, f + 1 - monCol.r);
             
         }
         return cardCol;
     }
     
-    
-    const float pi = 3.1415926535;
     float theta = atan2(normal.y, normal.x) + pi;
-    float3 kiraCol = GenerateKiraRGB(HSB2RGB(float3(theta / (2 * pi), 1.0, 1.0)),
+    float3 kiraCol = GenerateKiraRGB(HSB2RGB(float3(theta / (2.0 * pi), 1.0, 1.0)),
                     input.norm.xyz);
     float noise = GenerateValueNoise(input.uv * 3.0 + float2(0.0, 0.0));
     float3 noiseCol = GenerateKiraRGB(HSB2RGB(noise), normal);
-    
-    
-    
     
     float3 eyepos = normalize(float3(0, 0, -10));
     float3 eyeDir = normalize(input.pos.xyz-eyepos);

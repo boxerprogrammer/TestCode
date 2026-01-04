@@ -32,7 +32,7 @@ VSOutput main( VSInput input )
 {
     VSOutput output;
     float4 pos = mul(world, float4(input.pos, 1.0f));
-    float3 norm = mul(world, float4(input.norm, 1.0f));
+    float3 norm = mul(world, float4(input.norm, 0.0f));
     pos = mul(view,pos);
     output.pos = pos;
     pos = mul(projection,pos);
