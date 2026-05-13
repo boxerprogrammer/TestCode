@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="MV1Shader">
+      <UniqueIdentifier>{af0ae547-f67e-41fd-8b3e-a3183cdc2437}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawUtil.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DrawUtil.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\DxShader_DataType_D3D11.h">
+      <Filter>MV1Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\DxShader_PS_D3D11.h">
+      <Filter>MV1Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\DxShader_VS_D3D11.h">
+      <Filter>MV1Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\PixelShader.h">
+      <Filter>MV1Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\VertexShader.h">
+      <Filter>MV1Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\DataType.h">
+      <Filter>MV1Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\DxShader_Common_D3D11.h">
+      <Filter>MV1Shader</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader\MV1PixelShader.hlsl">
+      <Filter>MV1Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\MV1VetexShader.hlsl">
+      <Filter>MV1Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DepthVisualizePS.hlsl" />
+    <FxCompile Include="DepthOfField.hlsl" />
+    <FxCompile Include="OutlinePS.hlsl" />
+    <FxCompile Include="PixelEffect.hlsl" />
+    <FxCompile Include="depthOnlyPS.hlsl" />
+    <FxCompile Include="Shader\ghostShaderPS.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ShaderHeader.hlsli" />
+  </ItemGroup>
+</Project>
