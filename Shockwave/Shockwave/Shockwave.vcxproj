@@ -24,7 +24,7 @@
     <ProjectGuid>{19f3170f-db6b-4db3-876f-4e2e39032584}</ProjectGuid>
     <RootNamespace>SecondShader</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>ThirdShader</ProjectName>
+    <ProjectName>Shockwave</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
