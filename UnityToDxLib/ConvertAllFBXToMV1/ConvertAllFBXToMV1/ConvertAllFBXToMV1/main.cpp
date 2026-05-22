@@ -79,6 +79,7 @@ int main() {
 	std::wstring path = L"./";
 	auto handle = FileRead_findFirst((path + L"*.mv1").c_str(), &info);
 	if (handle != (DWORD_PTR)(-1)) {
+		int y = 10;
 		do {
 			auto modelHandle = MV1LoadModel((path + info.Name).c_str());
 			std::wstring modelWName = info.Name;
@@ -88,9 +89,15 @@ int main() {
 			if (materialMap.contains(modelName)) {
 				auto texName = materialMap[modelName];
 				auto texHandle = LoadGraph((path + GetWideStringFromString(texName)).c_str());
+				
 				assert(texHandle >= 0);
+				auto wtexFilePath = path + GetWideStringFromString(texName);
+				auto texFilePath = wtexFilePath.c_str();
+				DrawFormatString(10, y, 0xffffff, L"%s", texFilePath);
+				MV1AddTexture(modelHandle,GetWideStringFromString(texName).c_str(),texFilePath);
 				MV1SetTextureGraphHandle(modelHandle,0,texHandle,false);
-				MV1SetTextureColorFilePath(modelHandle, 0, (path + GetWideStringFromString(texName)).c_str());
+				MV1SetTextureColorFilePath(modelHandle, 0, texFilePath);
+				MV1SetMaterialDifMapTexture(modelHandle, 0, texHandle);						// 指定のマテリアルでディフューズマップとして使用するテクスチャを指定する
 				MV1SaveModelToMV1File(modelHandle, (path + info.Name).c_str());
 				MV1DeleteModel(modelHandle);
 				DeleteGraph(texHandle);
@@ -98,6 +105,7 @@ int main() {
 			else {
 				MV1DeleteModel(modelHandle);
 			}
+			y += 30;
 		} while (FileRead_findNext(handle, &info)>=0);
 	}
 	WaitKey();
